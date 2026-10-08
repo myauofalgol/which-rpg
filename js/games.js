@@ -20,7 +20,7 @@
  */
 window.RPG_DATA = {
   updated: "October 2026",
-  version: "0.0.1",
+  version: "0.0.2",
 
   platforms: [
     { key: "pc", label: "PC or Steam Deck", short: "PC" },
