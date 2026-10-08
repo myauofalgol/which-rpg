@@ -48,6 +48,7 @@ window.RPG_DATA = {
     "no-combat": { label: "little or no combat", mood: "Little or no combat", group: "play" },
     "open-world": { label: "an open world", mood: "Open world", group: "play" },
     "zelda-like": { label: "Zelda-like adventuring", mood: "Zelda-like", group: "play" },
+    "metroidvania": { label: "metroidvania exploration", mood: "Metroidvania", group: "play" },
     "builds": { label: "deep character builds", mood: "Deep character builds", group: "play" },
     "challenge": { label: "a tough challenge", mood: "A tough challenge", group: "play" },
     "loot": { label: "plenty of loot to chase", mood: "Loot hunting", group: "play" },
@@ -632,7 +633,7 @@ window.RPG_DATA = {
       tags: ["tactics", "party", "fantasy", "builds", "retro"],
       pitch: "Konami's blood-soaked tactics debut: a revenge tale with brutal battle animations and a legendary parting choice." },
     { id: "sotn", title: "Castlevania: Symphony of the Night", year: 1997, platforms: ["ps1", "ps4"], hours: 9,
-      tags: ["action", "solo", "dark-fantasy", "exploration", "builds", "retro"], aka: ["castlevania", "symphony of the night"],
+      tags: ["action", "solo", "dark-fantasy", "exploration", "builds", "metroidvania", "retro"], aka: ["castlevania", "symphony of the night"],
       note: "On PS4 it's part of the Castlevania Requiem bundle.",
       pitch: "Alucard's inverted castle: the action RPG that defined a genre, with loot and secrets behind every wall." },
     { id: "suikoden-1", title: "Suikoden", year: 1996, series: "suikoden", platforms: ["ps1"], hours: 23,
@@ -920,6 +921,25 @@ window.RPG_DATA = {
       pitch: "A sun-goddess wolf paints a dying world back to life; the best-loved Zelda-like not made by Nintendo." },
     { id: "tunic", title: "Tunic", year: 2022, platforms: ["pc", "ps5", "ps4", "xsx", "xb1", "switch"], hours: 15,
       tags: ["action", "solo", "fantasy", "exploration", "challenge", "zelda-like"],
-      pitch: "A small fox, a lost instruction manual, and a world stuffed with secrets; a Zelda-like about the joy of figuring it out." }
+      pitch: "A small fox, a lost instruction manual, and a world stuffed with secrets; a Zelda-like about the joy of figuring it out." },
+
+    // Metroidvanias with RPG mechanics
+    { id: "wonder-boy-mw", title: "Wonder Boy in Monster World", year: 1991, series: "monster-world", platforms: ["megadrive"], hours: 10,
+      tags: ["action", "solo", "fantasy", "exploration", "metroidvania", "retro"], aka: ["wonder boy 5", "monster world"],
+      pitch: "Shops, gear, and one very brave little hero; the Mega Drive's classic blend of platforming and RPG bits." },
+    { id: "dragons-trap", title: "Wonder Boy: The Dragon's Trap", year: 2017, series: "monster-world", platforms: ["pc", "ps4", "xb1", "switch", "mobile"], hours: 7,
+      tags: ["action", "solo", "fantasy", "exploration", "metroidvania", "retro"], aka: ["wonder boy 3"],
+      note: "A loving remake of the Master System original, with its 8-bit mode intact.",
+      pitch: "Cursed into five animal forms beneath a hand-drawn coat of paint; the metroidvania that predates the genre's name." },
+    { id: "asha", title: "Wonder Boy: Asha in Monster World", year: 2021, series: "monster-world", platforms: ["pc", "ps4", "switch"], hours: 10,
+      tags: ["action", "solo", "fantasy", "exploration", "metroidvania"], aka: ["monster world iv", "monster world 4"],
+      note: "A remake of Monster World IV, which never left Japan on the Mega Drive.",
+      pitch: "Asha's adventure finally came west: a sunny, gorgeous remake with sand puzzles and a devoted Pepelogoo." },
+    { id: "monster-boy", title: "Monster Boy and the Cursed Kingdom", year: 2018, series: "monster-world", platforms: ["pc", "ps4", "xb1", "switch"], hours: 15,
+      tags: ["action", "solo", "fantasy", "exploration", "metroidvania"],
+      pitch: "A magical curse, five monster forms, and gear for every problem; the modern heir to the Monster World throne." },
+    { id: "bloodstained", title: "Bloodstained: Ritual of the Night", year: 2019, platforms: ["pc", "ps4", "xb1", "switch", "mobile"], hours: 15,
+      tags: ["action", "solo", "dark-fantasy", "exploration", "metroidvania", "builds"], aka: ["bloodstained"],
+      pitch: "Igarashi's second castle: shard-collecting, crafting, and demons, for everyone who never got over Symphony of the Night." },
   ]
 };
