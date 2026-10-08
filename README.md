@@ -1,6 +1,6 @@
 # Which RPG should I play next?
 
-A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 185 games with a short explanation for each pick.
+A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 190 games with a short explanation for each pick.
 
 There's no build step, no framework, and no server: just HTML, CSS, and a few plain JavaScript files, which makes it a perfect fit for GitHub Pages.
 
