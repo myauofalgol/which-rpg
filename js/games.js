@@ -23,20 +23,20 @@ window.RPG_DATA = {
   version: "0.0.2",
 
   platforms: [
-    { key: "pc", label: "PC or Steam Deck", short: "PC" },
-    { key: "ps5", label: "PlayStation 5", short: "PS5" },
-    { key: "ps4", label: "PlayStation 4", short: "PS4" },
-    { key: "xsx", label: "Xbox Series X|S", short: "Xbox Series" },
-    { key: "xb1", label: "Xbox One", short: "Xbox One" },
-    { key: "switch2", label: "Nintendo Switch 2", short: "Switch 2" },
-    { key: "switch", label: "Nintendo Switch", short: "Switch" },
-    { key: "mobile", label: "Phone or tablet", short: "Mobile" },
-    { key: "snes", label: "Super Nintendo", short: "SNES" },
-    { key: "megadrive", label: "Sega Mega Drive", short: "Mega Drive" },
-    { key: "ps1", label: "PlayStation 1", short: "PS1" },
-    { key: "saturn", label: "Sega Saturn", short: "Saturn" },
-    { key: "n64", label: "Nintendo 64", short: "N64" },
-    { key: "gamecube", label: "Nintendo GameCube", short: "GameCube" }
+    { key: "pc", label: "PC or Steam Deck", short: "PC", coverage: "living" },
+    { key: "ps5", label: "PlayStation 5", short: "PS5", coverage: "living" },
+    { key: "ps4", label: "PlayStation 4", short: "PS4", coverage: "living" },
+    { key: "xsx", label: "Xbox Series X|S", short: "Xbox Series", coverage: "living" },
+    { key: "xb1", label: "Xbox One", short: "Xbox One", coverage: "living" },
+    { key: "switch2", label: "Nintendo Switch 2", short: "Switch 2", coverage: "living" },
+    { key: "switch", label: "Nintendo Switch", short: "Switch", coverage: "living" },
+    { key: "mobile", label: "Phone or tablet", short: "Mobile", coverage: "living" },
+    { key: "snes", label: "Super Nintendo", short: "SNES", coverage: "complete" },
+    { key: "megadrive", label: "Sega Mega Drive", short: "Mega Drive", coverage: "complete" },
+    { key: "ps1", label: "PlayStation 1", short: "PS1", coverage: "partial" },
+    { key: "saturn", label: "Sega Saturn", short: "Saturn", coverage: "complete" },
+    { key: "n64", label: "Nintendo 64", short: "N64", coverage: "partial" },
+    { key: "gamecube", label: "Nintendo GameCube", short: "GameCube", coverage: "complete" }
   ],
 
   // label: how the tag reads in a sentence; mood: offered as an "in the mood for" option

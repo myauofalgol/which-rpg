@@ -595,6 +595,15 @@ button, input { font: inherit; color: inherit; }
 .audit-nav a:hover { border-color: var(--gold); color: var(--ink); }
 
 .audit-count { margin-top: 10px; color: var(--muted); font-size: var(--step--1); }
+.audit-complete {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 8px;
+  border: 1px solid var(--mint);
+  border-radius: 3px;
+  color: var(--mint);
+  font-size: 0.8rem;
+}
 
 .audit-list { margin-top: 8px; }
 .audit-list li {

@@ -74,7 +74,10 @@
 
     main.append(el("section", { class: "window", id: id, "aria-labelledby": id + "-title" }, [
       el("h2", { class: "nameplate", id: id + "-title", text: p.label }),
-      el("p", { class: "audit-count", text: count }),
+      el("p", { class: "audit-count" }, [
+        count,
+        p.coverage === "complete" ? el("span", { class: "audit-complete", text: "Complete NA/EU list" }) : null
+      ]),
       list
     ]));
   });

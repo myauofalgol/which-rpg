@@ -77,7 +77,7 @@ Open `js/games.js` and add an entry to the `games` array:
 A few rules of thumb:
 
 - **`id`** must be unique and URL-safe (lowercase letters, numbers, and hyphens), because it appears in shareable links. Changing an existing id breaks old links that include it.
-- **`platforms`** uses these keys: `pc`, `ps5`, `ps4`, `xsx`, `xb1`, `switch2`, `switch`, `mobile`, `snes`, `megadrive`, `ps1`, `saturn`, and `n64`. Only list where the game is sold natively; backward compatibility is added automatically, so a PS4 game doesn't also need `ps5`.
+- **`platforms`** uses these keys: `pc`, `ps5`, `ps4`, `xsx`, `xb1`, `switch2`, `switch`, `mobile`, `snes`, `megadrive`, `ps1`, `saturn`, `n64`, and `gamecube`. Only list where the game is sold natively; backward compatibility is added automatically, so a PS4 game doesn't also need `ps5`. Each platform's `coverage` (`complete`, `partial` or `living`) tracks how finished its list is; see "Where the lists stand" below.
 - **`hours`** is a rough main-story figure. [HowLongToBeat](https://howlongtobeat.com/)'s "Main Story" number is a sensible source.
 - **`tags`** should come from the `tags` object near the top of the file. Five to eight tags per game works well; too few and the game rarely matches anything, too many and it matches everything a little.
 - **`series`** is optional but worth setting for sequels, so they get grouped sensibly.
@@ -115,6 +115,14 @@ Everything you choose is kept in the address bar, so the "Copy link to these pic
 ## Coming back later
 
 Your most recent selections are also saved in your own browser using `localStorage`, so opening the page again without a saved link picks up where you left off (and the address bar is updated to match, so it can be shared). This stays on your machine; nothing is sent anywhere. If you open someone else's saved link, that link wins for the visit, and "Start over" clears what was remembered.
+
+## Where the lists stand
+
+Each platform in `games.js` carries a `coverage` value, and the audit page at `catalogue.html` shows it. **Complete** means every officially released North American or European RPG we know of is listed; **partial** means that sweep is still to come; **living** machines are curated modern libraries that keep growing rather than chasing completeness. English fan translations are part of the plan for the retro machines, but are not listed yet.
+
+- **Complete (official NA/EU):** Super Nintendo, Mega Drive, Saturn, GameCube
+- **Partial (next up):** PlayStation 1, Nintendo 64
+- **Living lists:** PC, PlayStation, Xbox, Switch, mobile
 
 ## Caveats
 
