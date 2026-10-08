@@ -428,6 +428,20 @@
     return el("div", { class: "gauge", "aria-hidden": "true" }, kids);
   }
 
+  // "I've played this" reads naturally; the hidden tail names the game for screen readers
+  function playedButtonChildren(g) {
+    return ["I've played this", el("span", { class: "sr-only", text: ", add " + g.title + " to games you've played" })];
+  }
+
+  function addFromCard(id) {
+    if (!byId[id]) return;
+    addGame(id);
+    // addGame redraws the picks and throws away the button that was clicked,
+    // so put focus somewhere sensible rather than dropping it on the body
+    const target = $("#results");
+    if (target) target.focus({ preventScroll: true });
+  }
+
   function pickCard(s, rank) {
     const g = s.game;
     const why = s.why;
@@ -461,7 +475,11 @@
         el("dt", { text: "Play on" }),
         el("dd", { text: playLine(s.on) })
       ]),
-      g.note ? el("p", { class: "note", text: g.note }) : null
+      g.note ? el("p", { class: "note", text: g.note }) : null,
+      el("button", {
+        type: "button", class: "btn btn-quiet pick-add",
+        onclick: () => addFromCard(g.id)
+      }, playedButtonChildren(g))
     ]);
   }
 
@@ -479,7 +497,13 @@
         el("span", { class: "more-meta", text: "About " + g.hours + " hours" + (verdict && s.length !== "fits" ? ", " + verdict : "") })
       ]),
       el("span", { class: "more-why", text: reason }),
-      el("span", { class: "more-meta", text: "Play on " + playLine(s.on) })
+      el("span", { class: "more-meta", text: "Play on " + playLine(s.on) }),
+      el("div", { class: "more-actions" }, [
+        el("button", {
+          type: "button", class: "more-add",
+          onclick: () => addFromCard(g.id)
+        }, playedButtonChildren(g))
+      ])
     ]);
   }
 
