@@ -77,7 +77,7 @@ Open `js/games.js` and add an entry to the `games` array:
 A few rules of thumb:
 
 - **`id`** must be unique and URL-safe (lowercase letters, numbers, and hyphens), because it appears in shareable links. Changing an existing id breaks old links that include it.
-- **`platforms`** uses these keys: `pc`, `ps5`, `ps4`, `xsx`, `xb1`, `switch2`, `switch`, `mobile`, `snes`, `megadrive`, `ps1`, `saturn`, `n64`, `gamecube`, `mastersystem`, and `gba`. Only list where the game is sold natively; backward compatibility is added automatically, so a PS4 game doesn't also need `ps5`. Each platform's `coverage` (`complete`, `partial` or `living`) tracks how finished its list is; see "Where the lists stand" below.
+- **`platforms`** uses these keys: `pc`, `ps5`, `ps4`, `xsx`, `xb1`, `switch2`, `switch`, `mobile`, `snes`, `megadrive`, `ps1`, `saturn`, `n64`, `gamecube`, `mastersystem`, `gba`, `xbox`, and `xbox360`. Only list where the game is sold natively; backward compatibility is added automatically, so a PS4 game doesn't also need `ps5`. The exception is Xbox: since only some Xbox 360 and original Xbox games run on modern consoles, the ones that do list `xb1` as well, with a note. Each platform's `coverage` (`complete`, `partial` or `living`) tracks how finished its list is; see "Where the lists stand" below.
 - **`hours`** is a rough main-story figure. [HowLongToBeat](https://howlongtobeat.com/)'s "Main Story" number is a sensible source.
 - **`tags`** should come from the `tags` object near the top of the file. Five to eight tags per game works well; too few and the game rarely matches anything, too many and it matches everything a little.
 - **`series`** is optional but worth setting for sequels, so they get grouped sensibly.
@@ -121,21 +121,23 @@ Your most recent selections are also saved in your own browser using `localStora
 
 Each platform in `games.js` carries a `coverage` value, and the audit page at `catalogue.html` shows it. **Complete** means every officially released North American or European RPG we know of is listed; **partial** means that sweep is still to come; **living** machines are curated modern libraries that keep growing rather than chasing completeness. New machines are added as their games come up, and start out partial until their sweep is done. English fan translations are part of the plan for the retro machines, but are not listed yet.
 
-- **Complete (official NA/EU):** Super Nintendo, Mega Drive, Master System, PlayStation 1, Saturn, Nintendo 64, GameCube, Game Boy Advance
-- **Partial:** none right now
-- **Living lists:** PC, PlayStation, Xbox, Switch, mobile
+- **Complete (official NA/EU):** Super Nintendo, Mega Drive, Master System, PlayStation 1, Saturn, Nintendo 64, GameCube, Game Boy Advance, Xbox
+- **Partial:** Xbox 360
+- **Living lists:** PC, PlayStation, Xbox Series and One, Switch, mobile
 
 ## Caveats
 
 - **Hours are approximate.** They're rough main-story figures, and side content in most of these games can easily double them.
 - **Platforms change.** The lists reflect what could be confirmed as of October 2026, but ports and remasters arrive constantly, so check the store before buying. The footer's `version` looks after itself: the workflow in `.github/workflows/version.yml` bumps the patch number on every push that touches the site, while a hand-edited version is left alone — use that for major bumps (changes that break shared links) and minor ones (new platforms or features). Keep `updated` current for catalogue changes.
 - **"PC or Steam Deck" is one option.** Nearly everything listed for PC is on Steam, but Steam Deck compatibility varies by game, so check its Deck rating.
-- **Xbox 360 era games** like Fallout: New Vegas and Dragon Age: Origins are listed under Xbox One because they run through backward compatibility on both Xbox One and Series consoles.
+- **Xbox 360 and original Xbox games on modern consoles.** Only some of these run through backward compatibility, so games that do (like Fallout: New Vegas, Morrowind, and KOTOR) list Xbox One alongside their original machine and carry a note; the rest are Xbox 360 or Xbox only.
 - **Mobile is thin.** Only a handful of the classics have proper phone ports, so someone who picks only "Phone or tablet" will see a short list.
-- **Retro consoles are covered as their original versions.** Super Nintendo, Mega Drive, PlayStation, Saturn, and Nintendo 64 games list the retro console (and modern platforms too, where the same version is still sold); where a remake or remaster exists, the card's note points to it.
+- **Retro consoles are covered as their original versions.** Super Nintendo, Mega Drive, PlayStation, Saturn, Nintendo 64, GameCube, Game Boy Advance, and Xbox games list the retro console (and modern platforms too, where the same version is still sold); where a remake or remaster exists, the card's note points to it.
 
 ## Ideas for later
 
 - Links from each card to a store page or review.
 - A "show me something different" toggle that deliberately picks games far from your profile.
 - More games, especially for mobile and for genres that are light here, such as monster collecting and farming RPGs.
+- Add support for Japan-only games which have an English fan translation.
+- Add themes which mimic UI windows for other RPGs (The default looks like Final Fantasy).
