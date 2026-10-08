@@ -84,6 +84,7 @@ A few rules of thumb:
 - **`aka`** is an optional list of search aliases, which is how "bg3" finds Baldur's Gate 3 and "ff7" finds every Final Fantasy VII.
 - **`na`/`eu`** is an optional display name for the footer's region toggle, for the handful of games renamed between regions (like Soleil and Crusader of Centy); those games get a small gold ⇄ marker wherever they're listed, with the other name in its tooltip.
 - **`note`** is an optional line shown under the platforms, handy for things like "Xbox via backward compatibility".
+- **One entry per game.** Ports, remasters, and same-generation re-releases fold into a single entry, with the `note` signposting the current edition; genuinely different games (sequels, or cases like Shadowrun on SNES and Mega Drive) stay separate.
 
 If you add a new tag, give it a `label` that reads naturally after "it has" (the cards say things like "Like Baldur's Gate 3, it has choices that matter"), and add a `mood` and `group` if you want it offered as an "In the mood for" option.
 
