@@ -15,7 +15,7 @@ which-rpg/
 ├── css/
 │   └── style.css       all the styling
 └── js/
-    ├── games.js        the catalogue: games, platforms, hours, and tags
+    ├── games.js        the catalogue: games, platforms, hours, tags, and the version
     ├── recommend.js    the scoring engine (no DOM, so it runs in Node too)
     └── app.js          wires the page up and keeps state in the URL
 ```
@@ -114,7 +114,7 @@ Your most recent selections are also saved in your own browser using `localStora
 ## Caveats
 
 - **Hours are approximate.** They're rough main-story figures, and side content in most of these games can easily double them.
-- **Platforms change.** The lists reflect what could be confirmed as of October 2026, but ports and remasters arrive constantly, so check the store before buying. When you update the catalogue, bump the `updated` value at the top of `games.js` and the footer follows.
+- **Platforms change.** The lists reflect what could be confirmed as of October 2026, but ports and remasters arrive constantly, so check the store before buying. When you update the site, bump the `version` at the top of `games.js` using semver — major for changes that break shared links, minor for new platforms or features, patch for catalogue updates and fixes — and keep `updated` current for catalogue changes; the footer follows, so returning visitors can tell something changed.
 - **"PC or Steam Deck" is one option.** Nearly everything listed for PC is on Steam, but Steam Deck compatibility varies by game, so check its Deck rating.
 - **Xbox 360 era games** like Fallout: New Vegas and Dragon Age: Origins are listed under Xbox One because they run through backward compatibility on both Xbox One and Series consoles.
 - **Mobile is thin.** Only a handful of the classics have proper phone ports, so someone who picks only "Phone or tablet" will see a short list.

@@ -671,6 +671,7 @@
   }
 
   $("#updated").textContent = DATA.updated;
+  $("#version").textContent = DATA.version;
   // A link with state in it wins for the visit; otherwise pick up where the
   // last visit left off, and show it in the URL so it can be shared
   if (location.hash.slice(1)) readHash();
