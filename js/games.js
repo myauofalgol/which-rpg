@@ -1118,7 +1118,7 @@ window.RPG_DATA = {
       tags: ["action", "solo", "dark-fantasy", "exploration", "metroidvania", "builds", "retro"], aka: ["castlevania"],
       pitch: "Soma's soul-collecting castle: the best of the GBA trilogy, with a collector's itch behind every enemy." },
     { id: "circle-of-the-moon", title: "Castlevania: Circle of the Moon", year: 2001, series: "castlevania", platforms: ["gba"], hours: 12,
-      tags: ["action", "solo", "dark-fantasy", "exploration", "metroidvania", "challenge", "retro"], aka: ["castlevania"],
+      tags: ["action", "solo", "dark-fantasy", "exploration", "metroidvania", "challenge", "retro"], aka: ["castlevania"], eu: "Castlevania",
       pitch: "The GBA launch castle: dark, tough, and built on card combos." },
     { id: "harmony-of-dissonance", title: "Castlevania: Harmony of Dissonance", year: 2002, series: "castlevania", platforms: ["gba"], hours: 10,
       tags: ["action", "solo", "dark-fantasy", "exploration", "metroidvania", "retro"], aka: ["castlevania"],
