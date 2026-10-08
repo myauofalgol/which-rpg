@@ -12,6 +12,9 @@ which-rpg/
 ├── favicon.svg         the little gold menu cursor in the browser tab
 ├── README.md           this file
 ├── .nojekyll           tells GitHub Pages to serve the files as they are
+├── .github/
+│   └── workflows/
+│       └── version.yml bumps the footer version on every site push
 ├── css/
 │   └── style.css       all the styling
 └── js/
@@ -114,7 +117,7 @@ Your most recent selections are also saved in your own browser using `localStora
 ## Caveats
 
 - **Hours are approximate.** They're rough main-story figures, and side content in most of these games can easily double them.
-- **Platforms change.** The lists reflect what could be confirmed as of October 2026, but ports and remasters arrive constantly, so check the store before buying. When you update the site, bump the `version` at the top of `games.js` using semver — major for changes that break shared links, minor for new platforms or features, patch for catalogue updates and fixes — and keep `updated` current for catalogue changes; the footer follows, so returning visitors can tell something changed.
+- **Platforms change.** The lists reflect what could be confirmed as of October 2026, but ports and remasters arrive constantly, so check the store before buying. The footer's `version` looks after itself: the workflow in `.github/workflows/version.yml` bumps the patch number on every push that touches the site, while a hand-edited version is left alone — use that for major bumps (changes that break shared links) and minor ones (new platforms or features). Keep `updated` current for catalogue changes.
 - **"PC or Steam Deck" is one option.** Nearly everything listed for PC is on Steam, but Steam Deck compatibility varies by game, so check its Deck rating.
 - **Xbox 360 era games** like Fallout: New Vegas and Dragon Age: Origins are listed under Xbox One because they run through backward compatibility on both Xbox One and Series consoles.
 - **Mobile is thin.** Only a handful of the classics have proper phone ports, so someone who picks only "Phone or tablet" will see a short list.

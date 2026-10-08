@@ -1,0 +1,58 @@
+# Bumps the footer's version number whenever the site changes.
+#
+# Pushes made with the default GITHUB_TOKEN do not trigger workflow runs, so
+# this commit does not loop. If the push fails, allow write access under
+# Settings -> Actions -> General -> Workflow permissions.
+name: Version bump
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "css/**"
+      - "js/**"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: version-bump
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Bump the patch version and commit it
+        run: |
+          set -euo pipefail
+
+          before="${{ github.event.before }}"
+          if [ "$before" != "0000000000000000000000000000000000000000" ]; then
+            if git diff "$before" "${{ github.sha }}" -- js/games.js | grep -q '^+.*version: "'; then
+              echo "The version was changed by hand in this push; leaving it alone."
+              exit 0
+            fi
+          fi
+
+          current=$(grep -o 'version: "[0-9]*\.[0-9]*\.[0-9]*"' js/games.js | grep -o '[0-9]*\.[0-9]*\.[0-9]*')
+          major=${current%%.*}
+          rest=${current#*.}
+          minor=${rest%%.*}
+          patch=${rest##*.}
+          next="$major.$minor.$((patch + 1))"
+
+          sed -i "s/version: \"$current\"/version: \"$next\"/" js/games.js
+          sed -i "s/version\">$current</version\">$next</" index.html
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add js/games.js index.html
+          git commit -m "chore: Bump the footer version to $next"
+          git push
