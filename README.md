@@ -1,6 +1,6 @@
 # Which RPG should I play next?
 
-A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 100 games with a short explanation for each pick.
+A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 130 games with a short explanation for each pick.
 
 There's no build step, no framework, and no server: just HTML, CSS, and a few plain JavaScript files, which makes it a perfect fit for GitHub Pages.
 
@@ -72,7 +72,7 @@ Open `js/games.js` and add an entry to the `games` array:
 A few rules of thumb:
 
 - **`id`** must be unique and URL-safe (lowercase letters, numbers, and hyphens), because it appears in shareable links. Changing an existing id breaks old links that include it.
-- **`platforms`** uses these keys: `pc`, `ps5`, `ps4`, `xsx`, `xb1`, `switch2`, `switch`, and `mobile`. Only list where the game is sold natively; backward compatibility is added automatically, so a PS4 game doesn't also need `ps5`.
+- **`platforms`** uses these keys: `pc`, `ps5`, `ps4`, `xsx`, `xb1`, `switch2`, `switch`, `mobile`, `snes`, `megadrive`, `ps1`, `saturn`, and `n64`. Only list where the game is sold natively; backward compatibility is added automatically, so a PS4 game doesn't also need `ps5`.
 - **`hours`** is a rough main-story figure. [HowLongToBeat](https://howlongtobeat.com/)'s "Main Story" number is a sensible source.
 - **`tags`** should come from the `tags` object near the top of the file. Five to eight tags per game works well; too few and the game rarely matches anything, too many and it matches everything a little.
 - **`series`** is optional but worth setting for sequels, so they get grouped sensibly.
@@ -114,6 +114,7 @@ Everything you choose is kept in the address bar, so the "Copy link to these pic
 - **"PC or Steam Deck" is one option.** Nearly everything listed for PC is on Steam, but Steam Deck compatibility varies by game, so check its Deck rating.
 - **Xbox 360 era games** like Fallout: New Vegas and Dragon Age: Origins are listed under Xbox One because they run through backward compatibility on both Xbox One and Series consoles.
 - **Mobile is thin.** Only a handful of the classics have proper phone ports, so someone who picks only "Phone or tablet" will see a short list.
+- **Retro consoles are covered as their original versions.** Super Nintendo, Mega Drive, PlayStation, Saturn, and Nintendo 64 games list the retro console (and modern platforms too, where the same version is still sold); where a remake or remaster exists, the card's note points to it.
 
 ## Ideas for later
 
