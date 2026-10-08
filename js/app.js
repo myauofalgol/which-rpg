@@ -623,12 +623,17 @@
     announce("Cleared. Start again whenever you're ready.");
   });
 
-  document.querySelector(".jump").addEventListener("click", (e) => {
+  function goToResults(e) {
     e.preventDefault();
     const target = $("#results");
     target.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
     target.focus({ preventScroll: true });
-  });
+  }
+
+  document.querySelector(".jump").addEventListener("click", goToResults);
+  // The skip link is another in-page anchor; without this it would fire a
+  // hashchange, which would wipe the state you are looking at
+  document.querySelector(".skip-link").addEventListener("click", goToResults);
 
   // ---------- The one bit of theatre: the intro types itself out ----------
 
