@@ -38,6 +38,7 @@
         if (v === null || v === undefined || v === false) return;
         if (k === "class") node.className = v;
         else if (k === "text") node.textContent = v;
+        else if (k.startsWith("on")) node.addEventListener(k.slice(2), v);
         else node.setAttribute(k, v === true ? "" : v);
       });
     }
@@ -70,6 +71,28 @@
   const nav = document.querySelector("#audit-nav");
   const main = document.querySelector("#audit");
 
+  // Machines start collapsed; whatever the visitor opens stays open across redraws
+  const openMachines = new Set();
+
+  function setMachine(button, open) {
+    const bodyId = button.getAttribute("aria-controls");
+    button.setAttribute("aria-expanded", open ? "true" : "false");
+    const body = document.getElementById(bodyId);
+    if (body) body.hidden = !open;
+    if (open) openMachines.add(bodyId);
+    else openMachines.delete(bodyId);
+  }
+
+  function toggleMachine(button) {
+    setMachine(button, button.getAttribute("aria-expanded") !== "true");
+  }
+
+  function openMachine(id) {
+    const section = document.getElementById(id);
+    const button = section ? section.querySelector(".audit-toggle") : null;
+    if (button) setMachine(button, true);
+  }
+
   function render() {
     nav.textContent = "";
     main.textContent = "";
@@ -78,7 +101,7 @@
       const viaCount = entries.filter((e) => e.via).length;
       const id = "mach-" + p.key;
 
-      nav.append(el("a", { href: "#" + id, text: p.short }));
+      nav.append(el("a", { href: "#" + id, text: p.short, class: "audit-chip" }));
 
       const count = entries.length + (entries.length === 1 ? " game" : " games") +
         (viaCount ? " \u00b7 " + viaCount + " via backward compatibility" : "");
@@ -92,13 +115,25 @@
         ])))
         : el("p", { class: "hint", text: "Nothing listed for this machine yet." });
 
-      main.append(el("section", { class: "window", id: id, "aria-labelledby": id + "-title" }, [
-        el("h2", { class: "nameplate", id: id + "-title", text: p.label }),
+      const bodyId = id + "-body";
+      const open = openMachines.has(bodyId);
+
+      main.append(el("section", { class: "window audit-machine", id: id, "aria-labelledby": id + "-title" }, [
+        el("h2", { class: "nameplate", id: id + "-title" }, [
+          el("button", {
+            type: "button", class: "audit-toggle",
+            "aria-expanded": open ? "true" : "false", "aria-controls": bodyId,
+            onclick: (e) => toggleMachine(e.currentTarget)
+          }, [
+            el("span", { class: "audit-caret", "aria-hidden": "true" }),
+            p.label
+          ])
+        ]),
         el("p", { class: "audit-count" }, [
           count,
           p.coverage === "complete" ? el("span", { class: "audit-complete", text: "Complete NA/EU list" }) : null
         ]),
-        list
+        el("div", { class: "audit-body", id: bodyId, hidden: !open }, [list])
       ]));
     });
   }
@@ -122,6 +157,18 @@
     btn.addEventListener("click", () => setNameMode(btn.dataset.name));
   });
 
+  nav.addEventListener("click", (e) => {
+    const link = e.target.closest("a");
+    if (link) openMachine(link.getAttribute("href").slice(1));
+  });
+
+  document.querySelector("#expand-all").addEventListener("click", () => {
+    document.querySelectorAll(".audit-toggle").forEach((btn) => setMachine(btn, true));
+  });
+  document.querySelector("#collapse-all").addEventListener("click", () => {
+    document.querySelectorAll(".audit-toggle").forEach((btn) => setMachine(btn, false));
+  });
+
   document.querySelector("#audit-summary").textContent =
     DATA.games.length + " games across " + DATA.platforms.length + " machines. " +
     "Entries marked with another machine, like \u201cPS4 version\u201d, run through backward compatibility.";
@@ -131,4 +178,5 @@
 
   syncNameToggle();
   render();
+  if (location.hash) openMachine(location.hash.slice(1));
 })();

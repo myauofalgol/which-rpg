@@ -584,17 +584,33 @@ button, input { font: inherit; color: inherit; }
 /* ---------- Catalogue audit ---------- */
 
 .audit-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
-.audit-nav a {
+.audit-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.audit-chip {
   padding: 4px 10px;
+  background: transparent;
   border: 1px solid var(--faint);
   border-radius: 3px;
   color: var(--mist);
   font-size: var(--step--1);
   text-decoration: none;
+  cursor: pointer;
 }
-.audit-nav a:hover { border-color: var(--gold); color: var(--ink); }
+.audit-chip:hover { border-color: var(--gold); color: var(--ink); }
 
-.audit-count { margin-top: 10px; color: var(--muted); font-size: var(--step--1); }
+.audit-toggle {
+  padding: 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.audit-machine .nameplate:hover { border-color: var(--gold); }
+.audit-caret { margin-right: 7px; color: var(--gold); font-size: 0.7em; }
+.audit-caret::before { content: "\25B6"; }
+.audit-toggle[aria-expanded="true"] .audit-caret::before { content: "\25BC"; }
+
+.audit-count { display: block; margin-top: 10px; color: var(--muted); font-size: var(--step--1); }
 .audit-complete {
   display: inline-block;
   margin-left: 8px;
