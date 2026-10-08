@@ -1,15 +1,16 @@
 # Which RPG should I play next?
 
-A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 130 games with a short explanation for each pick.
+A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 185 games with a short explanation for each pick.
 
 There's no build step, no framework, and no server: just HTML, CSS, and a few plain JavaScript files, which makes it a perfect fit for GitHub Pages.
 
 ## What's in the folder?
 
 ```bash
-rpg-picker/
+which-rpg/
 ├── index.html          the page itself
 ├── favicon.svg         the little gold menu cursor in the browser tab
+├── README.md           this file
 ├── .nojekyll           tells GitHub Pages to serve the files as they are
 ├── css/
 │   └── style.css       all the styling
@@ -26,7 +27,6 @@ The split is deliberate. `games.js` is the file you'll edit most, so it sits on 
 Because the scripts are loaded with ordinary `<script>` tags rather than ES modules, you can simply double-click `index.html` and it works straight from your file system. If you'd rather run it the way GitHub will serve it, any static server does the job:
 
 ```bash
-cd rpg-picker
 python3 -m http.server 8000
 ```
 
