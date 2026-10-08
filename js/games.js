@@ -387,7 +387,7 @@ window.RPG_DATA = {
     { id: "earthbound", title: "EarthBound", year: 1995, platforms: ["snes"], hours: 30,
       tags: ["turn-based", "party", "modern", "humour", "surreal", "story", "retro"], starter: true, aka: ["mother 2", "mother"],
       pitch: "Baseball bats, psychics, and a neighbourhood full of weirdness; funny and heartfelt until it gets quietly devastating." },
-    { id: "secret-of-mana", title: "Secret of Mana", year: 1993, platforms: ["snes"], hours: 20,
+    { id: "secret-of-mana", title: "Secret of Mana", year: 1993, series: "mana", platforms: ["snes"], hours: 20,
       tags: ["action", "party", "fantasy", "exploration", "cosy", "retro"], aka: ["mana"],
       pitch: "Real-time swordplay and a famous soundtrack, built for playing through with a friend beside you." },
     { id: "smrpg-snes", title: "Super Mario RPG: Legend of the Seven Stars", year: 1996, series: "mario-rpg", platforms: ["snes"], hours: 17,
@@ -687,6 +687,30 @@ window.RPG_DATA = {
       pitch: "Mario's first paper caper, with timed-hit battles, a parade of oddball partners, and a very funny script." },
     { id: "ogre-battle-64", title: "Ogre Battle 64: Person of Lordly Caliber", year: 1999, series: "ogre-battle", platforms: ["n64"], hours: 48,
       tags: ["tactics", "party", "fantasy", "story", "builds", "retro"], aka: ["ogre battle"],
-      pitch: "A stat-heavy tactics RPG about leading a revolution, with branching loyalties and unit management for days." }
+      pitch: "A stat-heavy tactics RPG about leading a revolution, with branching loyalties and unit management for days." },
+
+    // Official English releases of games whose originals stayed in Japan
+    { id: "trials-of-mana", title: "Trials of Mana", year: 2020, series: "mana", platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 25,
+      tags: ["action", "party", "jrpg", "fantasy", "story", "builds"], aka: ["seiken densetsu 3"],
+      note: "The 16-bit original is also in the Collection of Mana.",
+      pitch: "The full 3D remake of Seiken Densetsu 3: pick three of six heroes, then take on the Mana Sword quest the West never got." },
+    { id: "star-ocean-fd", title: "Star Ocean: First Departure R", year: 2019, platforms: ["ps4", "switch"], hours: 25,
+      tags: ["action", "party", "jrpg", "sci-fi", "exploration", "story"], aka: ["star ocean"],
+      note: "The Super Famicom original never left Japan.",
+      pitch: "The sci-fi JRPG that started it all, rebuilt with real-time battles, item crafting, and a galaxy to explore." },
+    { id: "dragon-quest-5", title: "Dragon Quest V: Hand of the Heavenly Bride", year: 2015, series: "dragon-quest", platforms: ["mobile"], hours: 30,
+      tags: ["turn-based", "party", "jrpg", "fantasy", "story", "emotional"], aka: ["dq5", "dq v"],
+      pitch: "Recruit monsters, choose a bride, and raise the next generation; the most beloved of the classic Dragon Quests." },
+    { id: "romancing-saga-2", title: "Romancing SaGa 2: Revenge of the Seven", year: 2024, series: "romancing-saga", platforms: ["pc", "ps5", "ps4", "switch2", "switch"], hours: 38,
+      tags: ["turn-based", "party", "jrpg", "fantasy", "exploration", "builds"], aka: ["romancing saga 2"],
+      note: "A full remake of the Japan-only Super Famicom original.",
+      pitch: "A generational war your heroes won't live to finish; SaGa's sprawling empire-builder, remade from scratch." },
+    { id: "romancing-saga-3", title: "Romancing SaGa 3", year: 2019, series: "romancing-saga", platforms: ["pc", "ps4", "xb1", "switch", "mobile"], hours: 30,
+      tags: ["turn-based", "party", "jrpg", "fantasy", "exploration", "story"], aka: ["romancing saga 3"],
+      pitch: "Eight heroes, an approaching celestial flood, and SaGa's gloriously free-form way of telling a story." },
+    { id: "front-mission", title: "Front Mission 1st: Remake", year: 2022, platforms: ["pc", "ps5", "ps4", "xsx", "xb1", "switch"], hours: 20,
+      tags: ["tactics", "party", "sci-fi", "story", "builds"], aka: ["front mission"],
+      note: "A remake of the Japan-only Super Famicom original.",
+      pitch: "Wanzers, mercenary politics, and a properly grown-up mech-tactics story; the original giant-robot SRPG, remade." }
   ]
 };
