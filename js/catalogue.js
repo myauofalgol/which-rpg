@@ -13,6 +13,23 @@
   DATA.platforms.forEach((p) => { platformByKey[p.key] = p; });
   function shortName(key) { return platformByKey[key] ? platformByKey[key].short : key; }
 
+  // The footer toggle flips the few games that were renamed between regions
+  const NAME_KEY = "which-rpg-names";
+  const REGION_NAMES = {};
+  DATA.games.forEach((g) => {
+    if (g.na || g.eu) REGION_NAMES[g.title] = { na: g.na || g.title, eu: g.eu || g.title };
+  });
+  let nameMode = "eu";
+  try {
+    const savedName = localStorage.getItem(NAME_KEY);
+    if (savedName === "na" || savedName === "eu") nameMode = savedName;
+  } catch (err) { /* storage refused; the default stands */ }
+
+  function gameName(g) {
+    const names = REGION_NAMES[g.title];
+    return names ? names[nameMode] : g.title;
+  }
+
   function el(tag, attrs, children) {
     const node = document.createElement(tag);
     if (attrs) {
@@ -53,33 +70,56 @@
   const nav = document.querySelector("#audit-nav");
   const main = document.querySelector("#audit");
 
-  DATA.platforms.forEach((p) => {
-    const entries = entriesFor(p.key);
-    const viaCount = entries.filter((e) => e.via).length;
-    const id = "mach-" + p.key;
+  function render() {
+    nav.textContent = "";
+    main.textContent = "";
+    DATA.platforms.forEach((p) => {
+      const entries = entriesFor(p.key);
+      const viaCount = entries.filter((e) => e.via).length;
+      const id = "mach-" + p.key;
 
-    nav.append(el("a", { href: "#" + id, text: p.short }));
+      nav.append(el("a", { href: "#" + id, text: p.short }));
 
-    const count = entries.length + (entries.length === 1 ? " game" : " games") +
-      (viaCount ? " \u00b7 " + viaCount + " via backward compatibility" : "");
+      const count = entries.length + (entries.length === 1 ? " game" : " games") +
+        (viaCount ? " \u00b7 " + viaCount + " via backward compatibility" : "");
 
-    const list = entries.length
-      ? el("ul", { class: "audit-list" }, entries.map((e) => el("li", null, [
-        el("span", { class: "audit-title", text: e.game.title }),
-        el("span", { class: "audit-meta", text: " " + e.game.year + " \u00b7 " + e.game.hours + " hours" }),
-        e.via ? el("span", { class: "audit-meta audit-via", text: " \u00b7 " + shortName(e.via) + " version" }) : null,
-        e.game.note ? el("p", { class: "audit-note", text: e.game.note }) : null
-      ])))
-      : el("p", { class: "hint", text: "Nothing listed for this machine yet." });
+      const list = entries.length
+        ? el("ul", { class: "audit-list" }, entries.map((e) => el("li", null, [
+          el("span", { class: "audit-title", text: gameName(e.game) }),
+          el("span", { class: "audit-meta", text: " " + e.game.year + " \u00b7 " + e.game.hours + " hours" }),
+          e.via ? el("span", { class: "audit-meta audit-via", text: " \u00b7 " + shortName(e.via) + " version" }) : null,
+          e.game.note ? el("p", { class: "audit-note", text: e.game.note }) : null
+        ])))
+        : el("p", { class: "hint", text: "Nothing listed for this machine yet." });
 
-    main.append(el("section", { class: "window", id: id, "aria-labelledby": id + "-title" }, [
-      el("h2", { class: "nameplate", id: id + "-title", text: p.label }),
-      el("p", { class: "audit-count" }, [
-        count,
-        p.coverage === "complete" ? el("span", { class: "audit-complete", text: "Complete NA/EU list" }) : null
-      ]),
-      list
-    ]));
+      main.append(el("section", { class: "window", id: id, "aria-labelledby": id + "-title" }, [
+        el("h2", { class: "nameplate", id: id + "-title", text: p.label }),
+        el("p", { class: "audit-count" }, [
+          count,
+          p.coverage === "complete" ? el("span", { class: "audit-complete", text: "Complete NA/EU list" }) : null
+        ]),
+        list
+      ]));
+    });
+  }
+
+  function syncNameToggle() {
+    document.querySelectorAll(".name-opt").forEach((btn) => {
+      btn.setAttribute("aria-pressed", btn.dataset.name === nameMode ? "true" : "false");
+    });
+  }
+
+  function setNameMode(mode) {
+    if (mode !== "eu" && mode !== "na") return;
+    if (mode === nameMode) return;
+    nameMode = mode;
+    try { localStorage.setItem(NAME_KEY, mode); } catch (err) { /* not remembered; still switched */ }
+    syncNameToggle();
+    render();
+  }
+
+  document.querySelectorAll(".name-opt").forEach((btn) => {
+    btn.addEventListener("click", () => setNameMode(btn.dataset.name));
   });
 
   document.querySelector("#audit-summary").textContent =
@@ -88,4 +128,7 @@
 
   document.querySelector("#updated").textContent = DATA.updated;
   document.querySelector("#version").textContent = DATA.version;
+
+  syncNameToggle();
+  render();
 })();

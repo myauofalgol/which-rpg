@@ -1,6 +1,6 @@
 # Which RPG should I play next?
 
-A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 365 games with a short explanation for each pick. There's also an audit page at `catalogue.html` that lays every game out machine by machine.
+A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 365 games with a short explanation for each pick. There's also an audit page at `catalogue.html` that lays every game out machine by machine. The footer's flag switch flips between regional game names where they differ.
 
 There's no build step, no framework, and no server: just HTML, CSS, and a few plain JavaScript files, which makes it a perfect fit for GitHub Pages.
 
@@ -82,6 +82,7 @@ A few rules of thumb:
 - **`tags`** should come from the `tags` object near the top of the file. Five to eight tags per game works well; too few and the game rarely matches anything, too many and it matches everything a little.
 - **`series`** is optional but worth setting for sequels, so they get grouped sensibly.
 - **`aka`** is an optional list of search aliases, which is how "bg3" finds Baldur's Gate 3 and "ff7" finds every Final Fantasy VII.
+- **`na`/`eu`** is an optional display name for the footer's region toggle, for the handful of games renamed between regions (like Soleil and Crusader of Centy).
 - **`note`** is an optional line shown under the platforms, handy for things like "Xbox via backward compatibility".
 
 If you add a new tag, give it a `label` that reads naturally after "it has" (the cards say things like "Like Baldur's Gate 3, it has choices that matter"), and add a `mood` and `group` if you want it offered as an "In the mood for" option.

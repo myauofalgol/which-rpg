@@ -621,6 +621,24 @@ button, input { font: inherit; color: inherit; }
 .hint a { color: var(--mist); }
 .hint a:hover { color: var(--ink); }
 
+/* ---------- Game name toggle ---------- */
+
+.name-toggle { display: flex; align-items: center; gap: 6px; margin-top: 10px; }
+.name-toggle-label { color: var(--faint); font-size: var(--step--1); }
+.name-opt {
+  padding: 3px 6px;
+  background: transparent;
+  border: 1px solid var(--faint);
+  border-radius: 3px;
+  line-height: 0;
+  cursor: pointer;
+}
+.name-opt svg { display: block; }
+.name-opt[aria-pressed="false"] svg { opacity: 0.55; }
+.name-opt:hover svg { opacity: 1; }
+.name-opt:hover { border-color: var(--ink); }
+.name-opt[aria-pressed="true"] { border-color: var(--gold); background: rgba(246, 196, 83, 0.1); }
+
 /* ---------- Footer ---------- */
 
 .footer {

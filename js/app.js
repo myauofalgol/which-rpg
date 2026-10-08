@@ -13,6 +13,27 @@
   const platformByKey = {};
   DATA.platforms.forEach((p) => { platformByKey[p.key] = p; });
 
+  // A handful of games were renamed between regions; the footer toggle flips them
+  const NAME_KEY = "which-rpg-names";
+  const REGION_NAMES = {};
+  DATA.games.forEach((g) => {
+    if (g.na || g.eu) REGION_NAMES[g.title] = { na: g.na || g.title, eu: g.eu || g.title };
+  });
+  let nameMode = "eu";
+  try {
+    const savedName = localStorage.getItem(NAME_KEY);
+    if (savedName === "na" || savedName === "eu") nameMode = savedName;
+  } catch (err) { /* storage refused; the default stands */ }
+
+  function gameName(g) {
+    const names = REGION_NAMES[g.title];
+    return names ? names[nameMode] : g.title;
+  }
+  function nameForTitle(title) {
+    const names = REGION_NAMES[title];
+    return names ? names[nameMode] : title;
+  }
+
   const LENGTH_OPTIONS = [
     { key: "short", label: "A weekend or two", detail: "under 20 hours" },
     { key: "medium", label: "A few weeks", detail: "20 to 45 hours" },
@@ -229,7 +250,7 @@
         onmousedown: (e) => e.preventDefault(),
         onclick: () => addGame(g.id),
         onmousemove: () => { if (active !== i) { active = i; paintActive(); } }
-      }, [el("span", { text: g.title }), el("span", { class: "year", text: g.year })]);
+      }, [el("span", { text: gameName(g) }), el("span", { class: "year", text: g.year })]);
       listbox.append(li);
     });
     search.setAttribute("aria-activedescendant", "game-opt-" + active);
@@ -278,7 +299,7 @@
     renderPlayed();
     renderQuick();
     changed();
-    announce("Added " + byId[id].title + " as loved. Change it in the list if it was only fine or not for you.");
+    announce("Added " + gameName(byId[id]) + " as loved. Change it in the list if it was only fine or not for you.");
   }
 
   function removeGame(id) {
@@ -292,7 +313,7 @@
     const rows = document.querySelectorAll(".played-row .remove");
     if (rows.length) rows[Math.min(i, rows.length - 1)].focus();
     else search.focus();
-    announce("Removed " + byId[id].title + ".");
+    announce("Removed " + gameName(byId[id]) + ".");
   }
 
   // ---------- Played games: list and quick add ----------
@@ -304,7 +325,7 @@
       const g = byId[p.id];
       const name = "feel-" + p.id;
       const feel = el("fieldset", { class: "feel" }, [
-        el("legend", { class: "sr-only", text: "How did " + g.title + " go?" })
+        el("legend", { class: "sr-only", text: "How did " + gameName(g) + " go?" })
       ].concat(FEELS.map((f) => el("label", { class: "feel-opt feel-" + f.key }, [
         el("input", {
           type: "radio", name: name, value: f.key, checked: p.feel === f.key,
@@ -313,10 +334,10 @@
         el("span", { text: f.label })
       ]))));
       list.append(el("li", { class: "played-row" }, [
-        el("span", { class: "played-title", text: g.title }),
+        el("span", { class: "played-title", text: gameName(g) }),
         feel,
         el("button", {
-          type: "button", class: "remove", "aria-label": "Remove " + g.title,
+          type: "button", class: "remove", "aria-label": "Remove " + gameName(g),
           title: "Remove", onclick: () => removeGame(p.id)
         }, ["×"])
       ]));
@@ -424,8 +445,8 @@
 
   // "Because you loved A and B" or "Because you loved A and enjoyed B"
   function becauseText(because) {
-    const loved = because.filter((b) => b.feel === "loved").map((b) => b.title);
-    const fine = because.filter((b) => b.feel !== "loved").map((b) => b.title);
+    const loved = because.filter((b) => b.feel === "loved").map((b) => nameForTitle(b.title));
+    const fine = because.filter((b) => b.feel !== "loved").map((b) => nameForTitle(b.title));
     const parts = [];
     if (loved.length) parts.push("loved " + listJoin(loved));
     if (fine.length) parts.push("enjoyed " + listJoin(fine));
@@ -441,7 +462,7 @@
 
   function detailLine(why) {
     if (!why.because.length || !why.shared.length) return null;
-    const names = listJoin(why.like);
+    const names = listJoin(why.like.map(nameForTitle));
     const traits = listJoin(why.shared.map((t) => DATA.tags[t].label));
     return "Like " + names + ", it has " + traits + ".";
   }
@@ -498,7 +519,7 @@
     return el("article", { class: "pick window", "aria-labelledby": "pick-" + g.id }, [
       el("p", { class: "nameplate", text: ORDINALS[rank] }),
       el("h3", { class: "pick-title", id: "pick-" + g.id }, [
-        g.title, el("span", { class: "pick-year", text: g.year })
+        gameName(g), el("span", { class: "pick-year", text: g.year })
       ]),
       el("p", { class: "pitch", text: g.pitch }),
       el("div", { class: "why" }, [
@@ -535,7 +556,7 @@
     const verdict = verdictText(s);
     return el("li", { class: "more-item" }, [
       el("div", { class: "more-top" }, [
-        el("span", { class: "more-title", text: g.title }),
+        el("span", { class: "more-title", text: gameName(g) }),
         el("span", { class: "more-meta", text: "About " + g.hours + " hours" + (verdict && s.length !== "fits" ? ", " + verdict : "") })
       ]),
       el("span", { class: "more-why", text: reason }),
@@ -585,7 +606,7 @@
       ]));
     }
 
-    announce("Top pick: " + result.picks[0].game.title + ".", 600);
+    announce("Top pick: " + gameName(result.picks[0].game) + ".", 600);
   }
 
   // ---------- Buttons ----------
@@ -628,6 +649,26 @@
   // hashchange, which would wipe the state you are looking at
   document.querySelector(".skip-link").addEventListener("click", goToResults);
 
+  function syncNameToggle() {
+    document.querySelectorAll(".name-opt").forEach((btn) => {
+      btn.setAttribute("aria-pressed", btn.dataset.name === nameMode ? "true" : "false");
+    });
+  }
+
+  function setNameMode(mode) {
+    if (mode !== "eu" && mode !== "na") return;
+    if (mode === nameMode) return;
+    nameMode = mode;
+    try { localStorage.setItem(NAME_KEY, mode); } catch (err) { /* not remembered; still switched */ }
+    syncNameToggle();
+    renderAll();
+    announce(mode === "eu" ? "Showing UK and European names." : "Showing North American names.");
+  }
+
+  document.querySelectorAll(".name-opt").forEach((btn) => {
+    btn.addEventListener("click", () => setNameMode(btn.dataset.name));
+  });
+
   // ---------- The one bit of theatre: the intro types itself out ----------
 
   function typeDialogue() {
@@ -665,6 +706,7 @@
 
   $("#updated").textContent = DATA.updated;
   $("#version").textContent = DATA.version;
+  syncNameToggle();
   // A link with state in it wins for the visit; otherwise pick up where the
   // last visit left off, and show it in the URL so it can be shared
   if (location.hash.slice(1)) readHash();

@@ -50,6 +50,7 @@ jobs:
 
           sed -i "s/version: \"$current\"/version: \"$next\"/" js/games.js
           sed -i "s/version\">$current</version\">$next</" index.html
+          sed -i "s/version\">$current</version\">$next</" catalogue.html
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
