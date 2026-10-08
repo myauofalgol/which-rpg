@@ -35,7 +35,7 @@ window.RPG_DATA = {
     { key: "megadrive", label: "Sega Mega Drive", short: "Mega Drive", coverage: "complete" },
     { key: "ps1", label: "PlayStation 1", short: "PS1", coverage: "partial" },
     { key: "saturn", label: "Sega Saturn", short: "Saturn", coverage: "complete" },
-    { key: "n64", label: "Nintendo 64", short: "N64", coverage: "partial" },
+    { key: "n64", label: "Nintendo 64", short: "N64", coverage: "complete" },
     { key: "gamecube", label: "Nintendo GameCube", short: "GameCube", coverage: "complete" }
   ],
 
@@ -691,6 +691,20 @@ window.RPG_DATA = {
     { id: "ogre-battle-64", title: "Ogre Battle 64: Person of Lordly Caliber", year: 1999, series: "ogre-battle", platforms: ["n64"], hours: 48,
       tags: ["tactics", "party", "fantasy", "story", "builds", "retro"], aka: ["ogre battle"],
       pitch: "A stat-heavy tactics RPG about leading a revolution, with branching loyalties and unit management for days." },
+    { id: "quest-64", title: "Quest 64", year: 1998, platforms: ["n64"], hours: 15,
+      tags: ["action", "solo", "fantasy", "exploration", "retro"], aka: ["holy magic century"],
+      note: "Known as Holy Magic Century in Europe.",
+      pitch: "The N64's only home-grown RPG: four elemental spirits and rolling green fields that are emptier than they look." },
+    { id: "aidyn", title: "Aidyn Chronicles: The First Mage", year: 2001, platforms: ["n64"], hours: 32,
+      tags: ["turn-based", "party", "fantasy", "story", "exploration", "retro"], aka: ["aidyn chronicles"],
+      pitch: "An ambitious, buggy epic that tried to be the N64's big Western RPG; patient players find a strange charm." },
+    { id: "hybrid-heaven", title: "Hybrid Heaven", year: 1999, platforms: ["n64"], hours: 15,
+      tags: ["action", "solo", "sci-fi", "story", "challenge", "retro"],
+      pitch: "A conspiracy thriller under the UN, with a grappling battle system like nothing else on the console." },
+    { id: "harvest-moon-64", title: "Harvest Moon 64", year: 1999, series: "harvest-moon", platforms: ["n64"], hours: 28,
+      tags: ["no-combat", "solo", "cosy", "social", "retro"],
+      note: "Never released in Europe.",
+      pitch: "The fan-favourite one: a mountain village, festivals, and three short years to build a life." },
 
     // Nintendo GameCube classics
     { id: "wind-waker", title: "The Legend of Zelda: The Wind Waker", year: 2002, series: "zelda", platforms: ["gamecube"], hours: 25,
