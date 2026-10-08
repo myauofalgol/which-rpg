@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Which RPG should I play next?</title>
+  <meta name="description" content="Tell it what RPGs you've played, what you play on, and how long you've got, and it suggests what to play next.">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#15133a">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=DotGothic16&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#results">Skip to your picks</a>
+
+  <div class="page">
+    <header class="intro window">
+      <h1>Which RPG should I play next?</h1>
+      <p class="dialogue" id="dialogue">Tell me what you've played, what you play on, and how long you've got, and I'll point you somewhere new.</p>
+    </header>
+
+    <noscript>
+      <p class="window noscript">This page needs JavaScript to work out your picks. Turn it on and reload.</p>
+    </noscript>
+
+    <main class="layout">
+      <form class="choices" id="choices" autocomplete="off">
+        <section class="window" aria-labelledby="played-title">
+          <h2 class="nameplate" id="played-title">Games you've played</h2>
+          <p class="hint">Add a few and say how they went. The ones you loved count the most.</p>
+
+          <div class="combo">
+            <label class="sr-only" for="game-search">Search for a game you've played</label>
+            <input id="game-search" class="search" type="text" role="combobox"
+                   aria-autocomplete="list" aria-expanded="false" aria-controls="game-options"
+                   placeholder="Search, e.g. Witcher, Persona, BG3" spellcheck="false">
+            <ul id="game-options" class="options" role="listbox" aria-label="Matching games" hidden></ul>
+          </div>
+
+          <div class="quick" id="quick-wrap">
+            <p class="quick-label" id="quick-label">Or tap a popular one:</p>
+            <div class="quick-list" id="quick-add" role="group" aria-labelledby="quick-label"></div>
+          </div>
+
+          <ul class="played" id="played-list" aria-label="Your played games"></ul>
+        </section>
+
+        <section class="window" aria-labelledby="machines-title">
+          <h2 class="nameplate" id="machines-title">What you play on</h2>
+          <fieldset>
+            <legend class="sr-only">Machines you own</legend>
+            <div class="menu menu-grid" id="machines"></div>
+          </fieldset>
+          <p class="hint">Newer consoles run games from the one before, so a PS5 includes PS4 games, Xbox Series includes Xbox One, and Switch 2 includes Switch.</p>
+        </section>
+
+        <section class="window" aria-labelledby="time-title">
+          <h2 class="nameplate" id="time-title">How long you've got</h2>
+          <fieldset>
+            <legend class="sr-only">How long you want to play for</legend>
+            <div class="menu" id="lengths"></div>
+          </fieldset>
+        </section>
+
+        <section class="window" aria-labelledby="mood-title">
+          <h2 class="nameplate" id="mood-title">In the mood for</h2>
+          <p class="hint">Optional. Handy if you haven't played much, or fancy a change.</p>
+          <div id="moods"></div>
+        </section>
+
+        <a class="jump" href="#results">See your picks</a>
+      </form>
+
+      <section class="results" id="results" aria-labelledby="results-title" tabindex="-1">
+        <div class="results-head">
+          <h2 id="results-title">Your picks</h2>
+          <p class="summary" id="results-summary"></p>
+          <div class="actions">
+            <button type="button" class="btn" id="copy-link">Copy link to these picks</button>
+            <button type="button" class="btn btn-quiet" id="reset">Start over</button>
+          </div>
+        </div>
+        <div id="picks"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Hours are rough main-story estimates; side quests can easily double them. Platform lists were last checked in <span id="updated">October 2026</span>, and ports arrive all the time, so check the store before you buy.</p>
+    </footer>
+  </div>
+
+  <div class="sr-only" id="announcer" aria-live="polite"></div>
+
+  <script src="js/games.js"></script>
+  <script src="js/recommend.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
