@@ -107,6 +107,10 @@ Everything you choose is kept in the address bar, so the "Copy link to these pic
 
 `p` is the played list (`.l` loved, `.f` fine, `.d` not for me), `m` is machines, `t` is the length (`short`, `medium`, `long`, or `epic`), and `v` is moods. Because it's a hash rather than a query string, none of it is sent to GitHub's servers.
 
+## Coming back later
+
+Your most recent selections are also saved in your own browser using `localStorage`, so opening the page again without a saved link picks up where you left off (and the address bar is updated to match, so it can be shared). This stays on your machine; nothing is sent anywhere. If you open someone else's saved link, that link wins for the visit, and "Start over" clears what was remembered.
+
 ## Caveats
 
 - **Hours are approximate.** They're rough main-story figures, and side content in most of these games can easily double them.
@@ -121,4 +125,3 @@ Everything you choose is kept in the address bar, so the "Copy link to these pic
 - Links from each card to a store page or review.
 - A "show me something different" toggle that deliberately picks games far from your profile.
 - More games, especially for mobile and for genres that are light here, such as monster collecting and farming RPGs.
-- Remembering your last selections between visits with `localStorage`.

@@ -82,8 +82,10 @@
 
   // ---------- URL state ----------
 
-  function readHash() {
-    const params = new URLSearchParams(location.hash.slice(1));
+  const SAVED_KEY = "which-rpg-state";
+
+  function applyState(encoded) {
+    const params = new URLSearchParams(encoded);
     const p = params.get("p");
     if (p) {
       p.split(",").forEach((pair) => {
@@ -102,19 +104,55 @@
     if (v) state.moods = v.split(",").filter((k) => DATA.tags[k] && DATA.tags[k].mood);
   }
 
-  function writeHash() {
-    // Built by hand so the commas stay readable rather than turning into %2C
+  function readHash() {
+    applyState(location.hash.slice(1));
+  }
+
+  function hasState() {
+    return !!(state.played.length || state.machines.length || state.moods.length || state.length !== "any");
+  }
+
+  // Built by hand so the commas stay readable rather than turning into %2C
+  function encodeState() {
     const parts = [];
     if (state.played.length) parts.push("p=" + state.played.map((x) => x.id + "." + CODE_BY_FEEL[x.feel]).join(","));
     if (state.machines.length) parts.push("m=" + state.machines.join(","));
     if (state.length !== "any") parts.push("t=" + state.length);
     if (state.moods.length) parts.push("v=" + state.moods.join(","));
-    const url = parts.length ? "#" + parts.join("&") : location.pathname + location.search;
+    return parts.join("&");
+  }
+
+  function writeHash() {
+    const encoded = encodeState();
+    const url = encoded ? "#" + encoded : location.pathname + location.search;
     history.replaceState(null, "", url);
+  }
+
+  // Selections are also remembered in localStorage, so a return visit picks up
+  // where you left off. Private modes and some file:// setups refuse storage,
+  // so the guard matters; the picker works either way.
+  function saveState() {
+    try {
+      const encoded = encodeState();
+      if (encoded) localStorage.setItem(SAVED_KEY, encoded);
+      else localStorage.removeItem(SAVED_KEY);
+    } catch (err) { /* nothing remembered, and nothing breaks */ }
+  }
+
+  function restoreSaved() {
+    try {
+      const saved = localStorage.getItem(SAVED_KEY);
+      if (!saved) return false;
+      applyState(saved);
+      return hasState();
+    } catch (err) {
+      return false;
+    }
   }
 
   function changed() {
     writeHash();
+    saveState();
     renderResults();
   }
 
@@ -578,6 +616,7 @@
     state.length = "any";
     state.moods = [];
     search.value = "";
+    try { localStorage.removeItem(SAVED_KEY); } catch (err) { /* nothing to clear */ }
     renderAll();
     writeHash();
     search.focus();
@@ -627,7 +666,10 @@
   }
 
   $("#updated").textContent = DATA.updated;
-  readHash();
+  // A link with state in it wins for the visit; otherwise pick up where the
+  // last visit left off, and show it in the URL so it can be shared
+  if (location.hash.slice(1)) readHash();
+  else if (restoreSaved()) writeHash();
   renderAll();
   typeDialogue();
 
