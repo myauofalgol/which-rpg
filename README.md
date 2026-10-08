@@ -1,6 +1,6 @@
 # Which RPG should I play next?
 
-A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 290 games with a short explanation for each pick. There's also an audit page at `catalogue.html` that lays every game out machine by machine.
+A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 335 games with a short explanation for each pick. There's also an audit page at `catalogue.html` that lays every game out machine by machine.
 
 There's no build step, no framework, and no server: just HTML, CSS, and a few plain JavaScript files, which makes it a perfect fit for GitHub Pages.
 
@@ -120,8 +120,8 @@ Your most recent selections are also saved in your own browser using `localStora
 
 Each platform in `games.js` carries a `coverage` value, and the audit page at `catalogue.html` shows it. **Complete** means every officially released North American or European RPG we know of is listed; **partial** means that sweep is still to come; **living** machines are curated modern libraries that keep growing rather than chasing completeness. New machines are added as their games come up, and start out partial until their sweep is done. English fan translations are part of the plan for the retro machines, but are not listed yet.
 
-- **Complete (official NA/EU):** Super Nintendo, Mega Drive, Master System, Saturn, Nintendo 64, GameCube
-- **Partial (next up):** PlayStation 1, Game Boy Advance
+- **Complete (official NA/EU):** Super Nintendo, Mega Drive, Master System, PlayStation 1, Saturn, Nintendo 64, GameCube
+- **Partial (next up):** Game Boy Advance
 - **Living lists:** PC, PlayStation, Xbox, Switch, mobile
 
 ## Caveats
