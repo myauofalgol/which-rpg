@@ -40,7 +40,7 @@ So under the hood, this is a small content-based recommender, the same broad ide
 
 **Your played games become a taste profile.** Loved games add their vector at full weight, "it was fine" adds about a third, and "not for me" subtracts. What this means is that if you loved Elden Ring but disliked Skyrim, open-world exploration on its own gets pulled down while the challenge and dark-fantasy side of Elden Ring still counts.
 
-**Moods are a second, optional profile.** If you tick "Little or no combat" and "A strong story", those tags get blended in alongside your played games (or used on their own if you haven't added any).
+**Moods are a second, optional profile.** If you tick "Little or no combat" and "A strong story", those tags get blended in alongside your played games (or used on their own if you haven't added any). A ticked mood pulls harder than your history does, so a craving can genuinely reshape the list; your played games still decide the pecking order among games that fit it.
 
 **Each game you could actually play is scored as:**
 

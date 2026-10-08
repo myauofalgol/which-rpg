@@ -6,7 +6,8 @@
  *      across the catalogue (inverse document frequency), then normalised.
  *   2. Your played games are added together into a taste profile: loved games count
  *      fully, "it was fine" a little, and "not for me" pulls the profile away.
- *   3. Anything you are "in the mood for" becomes a second profile, blended in.
+ *   3. Anything you are "in the mood for" becomes a second profile, blended in with
+ *      more pull than your history, so a craving can reshape the list.
  *   4. Each unplayed game you can actually run gets a score:
  *        taste match (cosine similarity)
  *      + how well its length fits the time you have
@@ -30,8 +31,10 @@
   };
 
   var WEIGHTS = {
-    played: 0.65,
-    mood: 0.45,
+    // A ticked mood pulls nearly twice as hard as your played history, so it
+    // changes the shape of the list rather than just nudging it
+    played: 0.5,
+    mood: 0.9,
     lengthFit: 0.4,
     sameSeriesLoved: 0.08,
     sameSeriesDisliked: -0.15,
