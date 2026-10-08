@@ -1,6 +1,6 @@
 # Which RPG should I play next?
 
-A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 235 games with a short explanation for each pick.
+A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 235 games with a short explanation for each pick. There's also an audit page at `catalogue.html` that lays every game out machine by machine.
 
 There's no build step, no framework, and no server: just HTML, CSS, and a few plain JavaScript files, which makes it a perfect fit for GitHub Pages.
 
@@ -8,7 +8,8 @@ There's no build step, no framework, and no server: just HTML, CSS, and a few pl
 
 ```bash
 which-rpg/
-├── index.html          the page itself
+├── index.html          the picker page
+├── catalogue.html      the audit page: every game, machine by machine
 ├── favicon.svg         the little gold menu cursor in the browser tab
 ├── README.md           this file
 ├── .nojekyll           tells GitHub Pages to serve the files as they are
@@ -20,6 +21,7 @@ which-rpg/
 └── js/
     ├── games.js        the catalogue: games, platforms, hours, tags, and the version
     ├── recommend.js    the scoring engine (no DOM, so it runs in Node too)
+    ├── catalogue.js    renders the audit page
     └── app.js          wires the page up and keeps state in the URL
 ```
 

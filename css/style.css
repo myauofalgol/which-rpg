@@ -581,6 +581,37 @@ button, input { font: inherit; color: inherit; }
 }
 .more-add:hover { border-color: var(--gold); color: var(--ink); }
 
+/* ---------- Catalogue audit ---------- */
+
+.audit-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+.audit-nav a {
+  padding: 4px 10px;
+  border: 1px solid var(--faint);
+  border-radius: 3px;
+  color: var(--mist);
+  font-size: var(--step--1);
+  text-decoration: none;
+}
+.audit-nav a:hover { border-color: var(--gold); color: var(--ink); }
+
+.audit-count { margin-top: 10px; color: var(--muted); font-size: var(--step--1); }
+
+.audit-list { margin-top: 8px; }
+.audit-list li {
+  padding: 8px 2px;
+  border-top: 1px solid rgba(180, 187, 226, 0.18);
+  font-size: var(--step--1);
+}
+.audit-list li:first-child { border-top: 0; }
+.audit-title { font-weight: 700; color: var(--ink); }
+.audit-meta { color: var(--muted); }
+.audit-via { color: var(--gold); }
+.audit-note { margin-top: 2px; color: var(--faint); }
+
+.dialogue a { color: var(--gold); }
+.hint a { color: var(--mist); }
+.hint a:hover { color: var(--ink); }
+
 /* ---------- Footer ---------- */
 
 .footer {
