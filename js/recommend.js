@@ -230,7 +230,28 @@
         seriesCount[key] = count + 1;
       }
     });
-    for (var i = 0; i < deferred.length && picks.length < limit; i++) picks.push(deferred[i]);
+
+    // Second chances: a series runner-up that outranks the filler should still
+    // make the list, displacing the lowest pick rather than being lost behind it
+    function byScore(a, b) { return b.score - a.score || a.game.title.localeCompare(b.game.title); }
+    for (var i = 0; i < deferred.length; i++) {
+      var d = deferred[i];
+      var dKey = d.game.series || d.game.id;
+      if ((seriesCount[dKey] || 0) >= 2) continue;
+      if (picks.length < limit) {
+        picks.push(d);
+        seriesCount[dKey] = (seriesCount[dKey] || 0) + 1;
+        continue;
+      }
+      if (d.score > picks[picks.length - 1].score) {
+        var out = picks.pop();
+        var outKey = out.game.series || out.game.id;
+        if (seriesCount[outKey]) seriesCount[outKey]--;
+        picks.push(d);
+        seriesCount[dKey] = (seriesCount[dKey] || 0) + 1;
+        picks.sort(byScore);
+      }
+    }
 
     picks.forEach(function (s) { s.why = explain(index, s.game, played, moods, warm); });
 
