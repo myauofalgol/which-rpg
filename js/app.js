@@ -412,8 +412,12 @@
     if (n) lead = "Matched against " + n + " game" + (n === 1 ? "" : "s") + " you've played";
     else if (state.moods.length) lead = "Matched to what you're in the mood for";
     else lead = "Well-loved starting points, since you haven't added any games yet";
-    const machines = listJoin(state.machines.map(shortName));
     const len = state.length === "any" ? "of any length" : "aiming for " + lengthOption().detail;
+    if (!state.machines.length) {
+      return lead + ", from every machine, " + len + ". " +
+        result.eligible + " games in the list are in the running.";
+    }
+    const machines = listJoin(state.machines.map(shortName));
     return lead + ", playable on " + machines + ", " + len + ". " +
       result.eligible + " games in the list run on your machines.";
   }
@@ -558,18 +562,7 @@
     const summary = $("#results-summary");
     out.textContent = "";
 
-    $(".actions").hidden = !state.machines.length;
-
-    if (!state.machines.length) {
-      summary.textContent = "";
-      out.append(emptyState(
-        "Choose at least one machine you play on and your picks will show up here.",
-        "Adding a few games you've played makes them much sharper."
-      ));
-      announce("");
-      return;
-    }
-
+    // No machines ticked means no constraint; the engine treats it that way
     const result = Engine.recommend(index, state, { limit: 9 });
     summary.textContent = summaryText(result);
 

@@ -88,8 +88,12 @@
     Object.keys(v).forEach(function (k) { target[k] = (target[k] || 0) + v[k] * scale; });
   }
 
-  // Which of your machines can play this game, and how
+  // Which of your machines can play this game, and how. With none chosen,
+  // there is no constraint: every platform the game runs on counts, natively.
   function playableOn(game, machines) {
+    if (!machines.length) {
+      return game.platforms.map(function (k) { return { machine: k, via: null }; });
+    }
     var out = [];
     machines.forEach(function (m) {
       if (game.platforms.indexOf(m) !== -1) {

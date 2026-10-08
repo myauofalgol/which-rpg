@@ -56,7 +56,7 @@ Length is a soft preference with a hard edge: a game a little over your range ju
 
 **The top three are kept varied.** Only one game per series can appear in the top three, so a Souls fan gets one Souls game and two other ideas rather than three FromSoftware titles in a row.
 
-**Backward compatibility is handled for you.** A PS5 owner sees PS4 games, an Xbox Series owner sees Xbox One games, and a Switch 2 owner sees Switch games, and each card says which version you'd be playing. That mapping lives in `BACKWARD` at the top of `recommend.js`.
+**Backward compatibility is handled for you.** A PS5 owner sees PS4 games, an Xbox Series owner sees Xbox One games, and a Switch 2 owner sees Switch games, and each card says which version you'd be playing. That mapping lives in `BACKWARD` at the top of `recommend.js`. Tick no machines at all and there's no constraint: the whole catalogue is in play, with each card showing where the game natively runs.
 
 All the weights live in the `WEIGHTS` object in `recommend.js`, so if you think length should matter more, or moods should count less, that's the place to tune.
 
