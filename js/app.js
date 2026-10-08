@@ -34,6 +34,19 @@
     return names ? names[nameMode] : title;
   }
 
+  // A small marker for the games that were renamed between regions
+  function regionMark(g) {
+    const names = REGION_NAMES[g.title];
+    if (!names) return null;
+    const other = nameMode === "eu" ? names.na : names.eu;
+    const where = nameMode === "eu" ? "North America" : "Europe";
+    const note = "Also known as " + other + " in " + where;
+    return el("span", { class: "region-mark", title: note }, [
+      el("span", { "aria-hidden": "true", text: "\u21C4" }),
+      el("span", { class: "sr-only", text: " (" + note + ")" })
+    ]);
+  }
+
   const LENGTH_OPTIONS = [
     { key: "short", label: "A weekend or two", detail: "under 20 hours" },
     { key: "medium", label: "A few weeks", detail: "20 to 45 hours" },
@@ -250,7 +263,7 @@
         onmousedown: (e) => e.preventDefault(),
         onclick: () => addGame(g.id),
         onmousemove: () => { if (active !== i) { active = i; paintActive(); } }
-      }, [el("span", { text: gameName(g) }), el("span", { class: "year", text: g.year })]);
+      }, [el("span", null, [gameName(g), regionMark(g)]), el("span", { class: "year", text: g.year })]);
       listbox.append(li);
     });
     search.setAttribute("aria-activedescendant", "game-opt-" + active);
@@ -334,7 +347,7 @@
         el("span", { text: f.label })
       ]))));
       list.append(el("li", { class: "played-row" }, [
-        el("span", { class: "played-title", text: gameName(g) }),
+        el("span", { class: "played-title" }, [gameName(g), regionMark(g)]),
         feel,
         el("button", {
           type: "button", class: "remove", "aria-label": "Remove " + gameName(g),
@@ -519,7 +532,7 @@
     return el("article", { class: "pick window", "aria-labelledby": "pick-" + g.id }, [
       el("p", { class: "nameplate", text: ORDINALS[rank] }),
       el("h3", { class: "pick-title", id: "pick-" + g.id }, [
-        gameName(g), el("span", { class: "pick-year", text: g.year })
+        gameName(g), regionMark(g), el("span", { class: "pick-year", text: g.year })
       ]),
       el("p", { class: "pitch", text: g.pitch }),
       el("div", { class: "why" }, [
@@ -556,7 +569,7 @@
     const verdict = verdictText(s);
     return el("li", { class: "more-item" }, [
       el("div", { class: "more-top" }, [
-        el("span", { class: "more-title", text: gameName(g) }),
+        el("span", { class: "more-title" }, [gameName(g), regionMark(g)]),
         el("span", { class: "more-meta", text: "About " + g.hours + " hours" + (verdict && s.length !== "fits" ? ", " + verdict : "") })
       ]),
       el("span", { class: "more-why", text: reason }),

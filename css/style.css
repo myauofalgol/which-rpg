@@ -629,6 +629,8 @@ button, input { font: inherit; color: inherit; }
 }
 .audit-list li:first-child { border-top: 0; }
 .audit-title { font-weight: 700; color: var(--ink); }
+
+.region-mark { margin-left: 6px; color: var(--gold); font-size: 0.9em; cursor: help; }
 .audit-meta { color: var(--muted); }
 .audit-via { color: var(--gold); }
 .audit-note { margin-top: 2px; color: var(--faint); }

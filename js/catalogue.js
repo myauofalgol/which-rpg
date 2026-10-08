@@ -30,6 +30,19 @@
     return names ? names[nameMode] : g.title;
   }
 
+  // A small marker for the games that were renamed between regions
+  function regionMark(g) {
+    const names = REGION_NAMES[g.title];
+    if (!names) return null;
+    const other = nameMode === "eu" ? names.na : names.eu;
+    const where = nameMode === "eu" ? "North America" : "Europe";
+    const note = "Also known as " + other + " in " + where;
+    return el("span", { class: "region-mark", title: note }, [
+      el("span", { "aria-hidden": "true", text: "\u21C4" }),
+      el("span", { class: "sr-only", text: " (" + note + ")" })
+    ]);
+  }
+
   function el(tag, attrs, children) {
     const node = document.createElement(tag);
     if (attrs) {
@@ -108,7 +121,7 @@
 
       const list = entries.length
         ? el("ul", { class: "audit-list" }, entries.map((e) => el("li", null, [
-          el("span", { class: "audit-title", text: gameName(e.game) }),
+          el("span", { class: "audit-title" }, [gameName(e.game), regionMark(e.game)]),
           el("span", { class: "audit-meta", text: " " + e.game.year + " \u00b7 " + e.game.hours + " hours" }),
           e.via ? el("span", { class: "audit-meta audit-via", text: " \u00b7 " + shortName(e.via) + " version" }) : null,
           e.game.note ? el("p", { class: "audit-note", text: e.game.note }) : null

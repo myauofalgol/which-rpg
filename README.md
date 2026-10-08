@@ -82,7 +82,7 @@ A few rules of thumb:
 - **`tags`** should come from the `tags` object near the top of the file. Five to eight tags per game works well; too few and the game rarely matches anything, too many and it matches everything a little.
 - **`series`** is optional but worth setting for sequels, so they get grouped sensibly.
 - **`aka`** is an optional list of search aliases, which is how "bg3" finds Baldur's Gate 3 and "ff7" finds every Final Fantasy VII.
-- **`na`/`eu`** is an optional display name for the footer's region toggle, for the handful of games renamed between regions (like Soleil and Crusader of Centy).
+- **`na`/`eu`** is an optional display name for the footer's region toggle, for the handful of games renamed between regions (like Soleil and Crusader of Centy); those games get a small gold ⇄ marker wherever they're listed, with the other name in its tooltip.
 - **`note`** is an optional line shown under the platforms, handy for things like "Xbox via backward compatibility".
 
 If you add a new tag, give it a `label` that reads naturally after "it has" (the cards say things like "Like Baldur's Gate 3, it has choices that matter"), and add a `mood` and `group` if you want it offered as an "In the mood for" option.
