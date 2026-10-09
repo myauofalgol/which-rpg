@@ -58,6 +58,7 @@
   const FEELS = [
     { key: "loved", label: "Loved it", code: "l" },
     { key: "fine", label: "It was fine", code: "f" },
+    { key: "bad", label: "It wasn't good", code: "b" },
     { key: "disliked", label: "Not for me", code: "d" }
   ];
   const FEEL_BY_CODE = {};
@@ -315,12 +316,14 @@
     const name = gameName(byId[id]);
     if (feel === "disliked") {
       announce("Marked " + name + " as not for me; it won't be suggested again.");
+    } else if (feel === "bad") {
+      announce("Marked " + name + " as not good; its style won't count against anything else.");
     } else if (feel === "fine") {
       announce("Added " + name + " as fine.");
     } else if (feel) {
       announce("Added " + name + " as loved.");
     } else {
-      announce("Added " + name + " as loved. Change it in the list if it was only fine or not for you.");
+      announce("Added " + name + " as loved. Change it in the list if it was only fine, not good, or not for you.");
     }
   }
 
@@ -513,7 +516,7 @@
     return el("div", { class: "gauge", "aria-hidden": "true" }, kids);
   }
 
-  // The card buttons are the same three verdicts as the played list; the hidden tail
+  // The card buttons are the same four verdicts as the played list; the hidden tail
   // names the game and the verdict for screen readers
   function lovedButtonChildren(g) {
     return ["Loved it", el("span", { class: "sr-only", text: ", mark " + g.title + " as loved" })];
@@ -521,6 +524,10 @@
 
   function fineButtonChildren(g) {
     return ["It was fine", el("span", { class: "sr-only", text: ", mark " + g.title + " as fine" })];
+  }
+
+  function badButtonChildren(g) {
+    return ["It wasn't good", el("span", { class: "sr-only", text: ", mark " + g.title + " as not good and stop suggesting it" })];
   }
 
   function dismissButtonChildren(g) {
@@ -580,6 +587,10 @@
           onclick: () => addFromCard(g.id, "fine")
         }, fineButtonChildren(g)),
         el("button", {
+          type: "button", class: "btn btn-quiet pick-bad",
+          onclick: () => addFromCard(g.id, "bad")
+        }, badButtonChildren(g)),
+        el("button", {
           type: "button", class: "btn btn-quiet pick-dismiss",
           onclick: () => addFromCard(g.id, "disliked")
         }, dismissButtonChildren(g))
@@ -611,6 +622,10 @@
           type: "button", class: "more-add more-fine",
           onclick: () => addFromCard(g.id, "fine")
         }, fineButtonChildren(g)),
+        el("button", {
+          type: "button", class: "more-add more-bad",
+          onclick: () => addFromCard(g.id, "bad")
+        }, badButtonChildren(g)),
         el("button", {
           type: "button", class: "more-add more-dismiss",
           onclick: () => addFromCard(g.id, "disliked")

@@ -5,7 +5,9 @@
  *   1. Every game becomes a vector of its tags, each weighted by how rare the tag is
  *      across the catalogue (inverse document frequency), then normalised.
  *   2. Your played games are added together into a taste profile: loved games count
- *      fully, "it was fine" a little, and "not for me" pulls the profile away.
+ *      fully, "it was fine" a little, "not for me" pulls the profile away, and
+ *      "it wasn't good" is for a game that fell short without blaming its genre,
+ *      so it counts as played but leaves the profile alone.
  *   3. Anything you are "in the mood for" becomes a second profile, blended in with
  *      more pull than your history, so a craving can reshape the list.
  *   4. Each unplayed game you can actually run gets a score:
@@ -21,7 +23,9 @@
   // A console that can run games made for an older one
   var BACKWARD = { ps5: ["ps4"], xsx: ["xb1"], switch2: ["switch"] };
 
-  var FEEL_WEIGHT = { loved: 1, fine: 0.35, disliked: -0.8 };
+  // "bad" says the game fell short, not the genre: it counts as played but does
+  // not move the taste profile
+  var FEEL_WEIGHT = { loved: 1, fine: 0.35, bad: 0, disliked: -0.8 };
 
   var LENGTHS = {
     any: null,
@@ -39,6 +43,8 @@
     lengthFit: 0.4,
     sameSeriesLoved: 0.08,
     sameSeriesDisliked: -0.15,
+    // A poor game says less about its series than an outright bad fit does
+    sameSeriesBad: -0.08,
     starterCold: 0.12,
     starterWarm: 0.02
   };
@@ -174,11 +180,13 @@
 
     var lovedSeries = {};
     var dislikedSeries = {};
+    var badSeries = {};
     played.forEach(function (p) {
       var g = index.byId[p.id];
       if (!g || !g.series) return;
       if (p.feel === "loved") lovedSeries[g.series] = true;
       if (p.feel === "disliked") dislikedSeries[g.series] = true;
+      if (p.feel === "bad") badSeries[g.series] = true;
     });
 
     var eligible = 0;
@@ -194,6 +202,7 @@
       var series = 0;
       if (g.series && lovedSeries[g.series]) series += WEIGHTS.sameSeriesLoved;
       if (g.series && dislikedSeries[g.series]) series += WEIGHTS.sameSeriesDisliked;
+      if (g.series && badSeries[g.series]) series += WEIGHTS.sameSeriesBad;
       var starter = g.starter ? (warm ? WEIGHTS.starterWarm : WEIGHTS.starterCold) : 0;
 
       scored.push({

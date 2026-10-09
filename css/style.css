@@ -17,6 +17,7 @@
   --gold: #f6c453;
   --mint: #8bdda6;
   --rose: #f29393;
+  --amber: #e8a15d;
   --mist: #c9cff0;
 
   --display: "DotGothic16", ui-monospace, "Courier New", monospace;
@@ -314,6 +315,7 @@ button, input { font: inherit; color: inherit; }
 .feel-opt input:checked + span { color: var(--night-deep); font-weight: 700; }
 .feel-loved input:checked + span { background: var(--mint); border-color: var(--mint); }
 .feel-fine input:checked + span { background: var(--mist); border-color: var(--mist); }
+.feel-bad input:checked + span { background: var(--amber); border-color: var(--amber); }
 .feel-disliked input:checked + span { background: var(--rose); border-color: var(--rose); }
 .feel-opt input:focus-visible + span { outline: 2px dashed var(--gold); outline-offset: 2px; }
 .feel-opt input:not(:checked):hover + span { border-color: var(--ink); color: var(--ink); }

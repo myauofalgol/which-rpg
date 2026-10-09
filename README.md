@@ -1,6 +1,6 @@
 # Which RPG should I play next?
 
-A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 365 games with a short explanation for each pick. There's also an audit page at `catalogue.html` that lays every game out machine by machine. The footer's flag switch flips between regional game names where they differ.
+A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, found them lacking, or bounced off them), which machines you own, and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 365 games with a short explanation for each pick. There's also an audit page at `catalogue.html` that lays every game out machine by machine. The footer's flag switch flips between regional game names where they differ.
 
 There's no build step, no framework, and no server: just HTML, CSS, and a few plain JavaScript files, which makes it a perfect fit for GitHub Pages.
 
@@ -43,7 +43,7 @@ So under the hood, this is a small content-based recommender, the same broad ide
 
 **Every game is a set of tags.** Things like `turn-based`, `open-world`, `choices`, `dark-fantasy`, or `social`. Each tag is weighted by how rare it is across the catalogue (inverse document frequency, damped so it doesn't go wild), because sharing a rare trait such as `roguelite` or `no-combat` says far more about two games than both being `fantasy`. Each game's weighted tags are then normalised into a unit vector.
 
-**Your played games become a taste profile.** Loved games add their vector at full weight, "it was fine" adds about a third, and "not for me" subtracts. What this means is that if you loved Elden Ring but disliked Skyrim, open-world exploration on its own gets pulled down while the challenge and dark-fantasy side of Elden Ring still counts.
+**Your played games become a taste profile.** Loved games add their vector at full weight, "it was fine" adds about a third, and "not for me" subtracts — that's the verdict for a style that isn't yours. There's a fourth, "it wasn't good", for a game that fell short on its own merits: it counts as played but leaves the profile alone, so one duff strategy RPG doesn't turn the picker off strategy RPGs. What this means is that if you loved Elden Ring but disliked Skyrim, open-world exploration on its own gets pulled down while the challenge and dark-fantasy side of Elden Ring still counts.
 
 **Moods are a second, optional profile.** If you tick "Little or no combat" and "A strong story", those tags get blended in alongside your played games (or used on their own if you haven't added any). A ticked mood pulls harder than your history does, so a craving can genuinely reshape the list; your played games still decide the pecking order among games that fit it.
 
@@ -112,7 +112,7 @@ Everything you choose is kept in the address bar, so the "Copy link to these pic
 #p=bg3.l,dos2.l,skyrim.d&m=pc,ps5&t=long&v=sci-fi
 ```
 
-`p` is the played list (`.l` loved, `.f` fine, `.d` not for me), `m` is machines, `t` is the length (`short`, `medium`, `long`, or `epic`), and `v` is moods. Because it's a hash rather than a query string, none of it is sent to GitHub's servers.
+`p` is the played list (`.l` loved, `.f` fine, `.b` wasn't good, `.d` not for me), `m` is machines, `t` is the length (`short`, `medium`, `long`, or `epic`), and `v` is moods. Because it's a hash rather than a query string, none of it is sent to GitHub's servers.
 
 ## Coming back later
 
@@ -142,3 +142,4 @@ Each platform in `games.js` carries a `coverage` value, and the audit page at `c
 - More games, especially for mobile and for genres that are light here, such as monster collecting and farming RPGs.
 - Add support for Japan-only games which have an English fan translation.
 - Add themes which mimic UI windows for other RPGs (The default looks like Final Fantasy).
+- A "weight by popularity" slider in the spirit of Steam's interactive recommender, leaning the picks between crowd-pleasers and hidden gems.
