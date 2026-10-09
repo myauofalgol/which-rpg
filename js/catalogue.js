@@ -122,7 +122,7 @@
       const list = entries.length
         ? el("ul", { class: "audit-list" }, entries.map((e) => el("li", null, [
           el("span", { class: "audit-title" }, [gameName(e.game), regionMark(e.game)]),
-          el("span", { class: "audit-meta", text: " " + e.game.year + " \u00b7 " + e.game.hours + " hours" }),
+          el("span", { class: "audit-meta", text: " " + e.game.year + " \u00b7 " + e.game.hours + " hours \u00b7 fame " + (e.game.fame || "?") }),
           e.via ? el("span", { class: "audit-meta audit-via", text: " \u00b7 " + shortName(e.via) + " version" }) : null,
           e.game.note ? el("p", { class: "audit-note", text: e.game.note }) : null
         ])))
@@ -184,7 +184,8 @@
 
   document.querySelector("#audit-summary").textContent =
     DATA.games.length + " games across " + DATA.platforms.length + " machines. " +
-    "Entries marked with another machine, like \u201cPS4 version\u201d, run through backward compatibility.";
+    "Entries marked with another machine, like \u201cPS4 version\u201d, run through backward compatibility. " +
+    "Fame is the 1-4 popularity tier the picker\u2019s slider leans on.";
 
   document.querySelector("#updated").textContent = DATA.updated;
   document.querySelector("#version").textContent = DATA.version;

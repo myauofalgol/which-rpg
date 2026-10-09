@@ -65,6 +65,19 @@
           </fieldset>
         </section>
 
+        <section class="window" aria-labelledby="fame-title">
+          <h2 class="nameplate" id="fame-title">How famous should it be?</h2>
+          <div class="fame-slider">
+            <label class="sr-only" for="fame-range">How far to lean between hidden gems and crowd-pleasers</label>
+            <input type="range" id="fame-range" min="0" max="100" step="10" value="50">
+            <div class="fame-ends" aria-hidden="true">
+              <span>Hidden gems</span>
+              <span>Crowd-pleasers</span>
+            </div>
+          </div>
+          <p class="hint">Leave it in the middle for the usual mix, or slide towards one end to favour famous favourites or deeper cuts.</p>
+        </section>
+
         <section class="window" aria-labelledby="mood-title">
           <h2 class="nameplate" id="mood-title">In the mood for</h2>
           <p class="hint">Optional. Handy if you haven't played much, or fancy a change.</p>
@@ -88,7 +101,7 @@
     </main>
 
     <footer class="footer">
-      <p>Hours are rough main-story estimates; side quests can easily double them. Platform lists were last checked in <span id="updated">October 2026</span>, and ports arrive all the time, so check the store before you buy. Site v<span id="version">0.1.0</span>. <a href="catalogue.html">Every game, machine by machine.</a></p>
+      <p>Hours are rough main-story estimates; side quests can easily double them. Platform lists were last checked in <span id="updated">October 2026</span>, and ports arrive all the time, so check the store before you buy. Site v<span id="version">0.2.0</span>. <a href="catalogue.html">Every game, machine by machine.</a></p>
       <div class="name-toggle" role="group" aria-label="Game names">
         <span class="name-toggle-label" aria-hidden="true">Names</span>
         <button type="button" class="name-opt" data-name="eu" aria-pressed="true" aria-label="UK and European names">

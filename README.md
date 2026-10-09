@@ -52,7 +52,10 @@ So under the hood, this is a small content-based recommender, the same broad ide
 - how closely it matches your profile (cosine similarity),
 - plus how well its length fits the time you said you have,
 - plus a small nudge if it shares a series with something you loved (or a penalty if it shares one with something you didn't),
-- plus a tiny bonus for widely loved "starter" games, which matters most when there's nothing else to go on.
+- plus a tiny bonus for widely loved "starter" games, which matters most when there's nothing else to go on,
+- plus a nudge for famous games, or against them, when the popularity slider is off-centre.
+
+**The popularity slider leans the list.** Every game carries a hand-set fame tier from 1 (a deep cut) to 4 (a household name). Sliding towards crowd-pleasers nudges the famous games up and the obscure ones down; sliding towards hidden gems does the reverse. In the middle it does nothing at all, and your taste profile still decides the order within each leaning.
 
 Length is a soft preference with a hard edge: a game a little over your range just loses a few points and gets flagged as "longer than you asked for", but anything more than double (or less than half) your range is held back until everything that fits has been shown. A 100-hour Persona game is never your top pick for a weekend.
 
@@ -67,7 +70,7 @@ All the weights live in the `WEIGHTS` object in `recommend.js`, so if you think 
 Open `js/games.js` and add an entry to the `games` array:
 
 ```js
-{ id: "sea-of-stars", title: "Sea of Stars", year: 2023,
+{ id: "sea-of-stars", title: "Sea of Stars", year: 2023, fame: 2,
   platforms: ["pc", "ps5", "ps4", "xsx", "xb1", "switch"], hours: 28,
   tags: ["turn-based", "party", "jrpg", "fantasy", "retro", "cosy"],
   starter: true,
@@ -79,6 +82,7 @@ A few rules of thumb:
 - **`id`** must be unique and URL-safe (lowercase letters, numbers, and hyphens), because it appears in shareable links. Changing an existing id breaks old links that include it.
 - **`platforms`** uses these keys: `pc`, `ps5`, `ps4`, `xsx`, `xb1`, `switch2`, `switch`, `mobile`, `snes`, `megadrive`, `ps1`, `saturn`, `n64`, `gamecube`, `mastersystem`, `gba`, `xbox`, and `xbox360`. Only list where the game is sold natively; backward compatibility is added automatically, so a PS4 game doesn't also need `ps5`. The exception is Xbox: since only some Xbox 360 and original Xbox games run on modern consoles, the ones that do list `xb1` as well, with a note. Each platform's `coverage` (`complete`, `partial` or `living`) tracks how finished its list is; see "Where the lists stand" below.
 - **`hours`** is a rough main-story figure. [HowLongToBeat](https://howlongtobeat.com/)'s "Main Story" number is a sensible source.
+- **`fame`** is the 1-4 popularity tier the slider leans on: 1 a deep cut, 2 known to RPG fans, 3 a well-known name, 4 a household name. The audit page shows every game's tier, which makes sweeping for outliers easy.
 - **`tags`** should come from the `tags` object near the top of the file. Five to eight tags per game works well; too few and the game rarely matches anything, too many and it matches everything a little.
 - **`series`** is optional but worth setting for sequels, so they get grouped sensibly.
 - **`aka`** is an optional list of search aliases, which is how "bg3" finds Baldur's Gate 3 and "ff7" finds every Final Fantasy VII.
@@ -112,7 +116,7 @@ Everything you choose is kept in the address bar, so the "Copy link to these pic
 #p=bg3.l,dos2.l,skyrim.d&m=pc,ps5&t=long&v=sci-fi
 ```
 
-`p` is the played list (`.l` loved, `.f` fine, `.b` wasn't good, `.d` not for me), `m` is machines, `t` is the length (`short`, `medium`, `long`, or `epic`), and `v` is moods. Because it's a hash rather than a query string, none of it is sent to GitHub's servers.
+`p` is the played list (`.l` loved, `.f` fine, `.b` wasn't good, `.d` not for me), `m` is machines, `t` is the length (`short`, `medium`, `long`, or `epic`), `v` is moods, and `w` is the popularity slider (0 hidden gems to 100 crowd-pleasers; omitted when it's in the middle). Because it's a hash rather than a query string, none of it is sent to GitHub's servers.
 
 ## Coming back later
 
@@ -129,6 +133,7 @@ Each platform in `games.js` carries a `coverage` value, and the audit page at `c
 ## Caveats
 
 - **Hours are approximate.** They're rough main-story figures, and side content in most of these games can easily double them.
+- **Fame tiers are rough guesses.** The 1-4 fame tier is a hand-set hunch rather than sales data, so treat the slider as a lean rather than a ranking. If a result feels wrong, check the game's tier on the audit page and adjust it in `games.js`.
 - **Platforms change.** The lists reflect what could be confirmed as of October 2026, but ports and remasters arrive constantly, so check the store before buying. The footer's `version` looks after itself: the workflow in `.github/workflows/version.yml` bumps the patch number on every push that touches the site, while a hand-edited version is left alone — use that for major bumps (changes that break shared links) and minor ones (new platforms or features). Keep `updated` current for catalogue changes.
 - **"PC or Steam Deck" is one option.** Nearly everything listed for PC is on Steam, but Steam Deck compatibility varies by game, so check its Deck rating.
 - **Xbox 360 and original Xbox games on modern consoles.** Only some of these run through backward compatibility, so games that do (like Fallout: New Vegas, Morrowind, and KOTOR) list Xbox One alongside their original machine and carry a note; the rest are Xbox 360 or Xbox only.
@@ -142,4 +147,3 @@ Each platform in `games.js` carries a `coverage` value, and the audit page at `c
 - More games, especially for mobile and for genres that are light here, such as monster collecting and farming RPGs.
 - Add support for Japan-only games which have an English fan translation.
 - Add themes which mimic UI windows for other RPGs (The default looks like Final Fantasy).
-- A "weight by popularity" slider in the spirit of Steam's interactive recommender, leaning the picks between crowd-pleasers and hidden gems.

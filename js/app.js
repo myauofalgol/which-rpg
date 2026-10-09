@@ -71,7 +71,7 @@
   const ORDINALS = ["Top pick", "Second pick", "Third pick"];
   const GAUGE_MAX = 120;
 
-  const state = { played: [], machines: [], length: "any", moods: [] };
+  const state = { played: [], machines: [], length: "any", moods: [], fame: 50 };
 
   // ---------- Small helpers ----------
 
@@ -137,6 +137,11 @@
     if (t && LENGTH_OPTIONS.some((o) => o.key === t)) state.length = t;
     const v = params.get("v");
     if (v) state.moods = v.split(",").filter((k) => DATA.tags[k] && DATA.tags[k].mood);
+    const w = params.get("w");
+    if (w) {
+      const n = Number(w);
+      if (Number.isFinite(n) && n >= 0 && n <= 100) state.fame = n;
+    }
   }
 
   function readHash() {
@@ -144,7 +149,7 @@
   }
 
   function hasState() {
-    return !!(state.played.length || state.machines.length || state.moods.length || state.length !== "any");
+    return !!(state.played.length || state.machines.length || state.moods.length || state.length !== "any" || state.fame !== 50);
   }
 
   // Built by hand so the commas stay readable rather than turning into %2C
@@ -154,6 +159,7 @@
     if (state.machines.length) parts.push("m=" + state.machines.join(","));
     if (state.length !== "any") parts.push("t=" + state.length);
     if (state.moods.length) parts.push("v=" + state.moods.join(","));
+    if (state.fame !== 50) parts.push("w=" + state.fame);
     return parts.join("&");
   }
 
@@ -421,6 +427,24 @@
     });
   }
 
+  const fameRange = $("#fame-range");
+
+  function fameWords(v) {
+    if (v === 50) return "An even mix";
+    return v > 50 ? "Leaning towards crowd-pleasers" : "Leaning towards hidden gems";
+  }
+
+  function renderFame() {
+    fameRange.value = state.fame;
+    fameRange.setAttribute("aria-valuetext", fameWords(state.fame));
+  }
+
+  fameRange.addEventListener("input", () => {
+    state.fame = Number(fameRange.value);
+    renderFame();
+    changed();
+  });
+
   function renderMoods() {
     const box = $("#moods");
     box.textContent = "";
@@ -459,12 +483,14 @@
     else if (state.moods.length) lead = "Matched to what you're in the mood for";
     else lead = "Well-loved starting points, since you haven't added any games yet";
     const len = state.length === "any" ? "of any length" : "aiming for " + lengthOption().detail;
+    const fame = state.fame === 50 ? "" :
+      (state.fame > 50 ? ", leaning towards crowd-pleasers" : ", leaning towards hidden gems");
     if (!state.machines.length) {
-      return lead + ", from every machine, " + len + ". " +
+      return lead + ", from every machine, " + len + fame + ". " +
         result.eligible + " games in the list are in the running.";
     }
     const machines = listJoin(state.machines.map(shortName));
-    return lead + ", playable on " + machines + ", " + len + ". " +
+    return lead + ", playable on " + machines + ", " + len + fame + ". " +
       result.eligible + " games in the list run on your machines.";
   }
 
@@ -693,6 +719,7 @@
     state.machines = [];
     state.length = "any";
     state.moods = [];
+    state.fame = 50;
     search.value = "";
     try { localStorage.removeItem(SAVED_KEY); } catch (err) { /* nothing to clear */ }
     renderAll();
@@ -764,6 +791,7 @@
     renderQuick();
     renderMachines();
     renderLengths();
+    renderFame();
     renderMoods();
     renderResults();
   }
@@ -779,7 +807,7 @@
   typeDialogue();
 
   window.addEventListener("hashchange", () => {
-    state.played = []; state.machines = []; state.length = "any"; state.moods = [];
+    state.played = []; state.machines = []; state.length = "any"; state.moods = []; state.fame = 50;
     search.value = "";
     closeOptions();
     readHash();

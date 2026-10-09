@@ -14,6 +14,8 @@
  *        taste match (cosine similarity)
  *      + how well its length fits the time you have
  *      + a small nudge for sequels or siblings of games you loved
+ *      + a popularity nudge when the slider leans towards crowd-pleasers
+ *        or hidden gems
  *   5. The top picks are spread across series so you don't get three Souls games -
  *      unless you asked for a mood, in which case its games all come first.
  */
@@ -45,6 +47,8 @@
     sameSeriesDisliked: -0.15,
     // A poor game says less about its series than an outright bad fit does
     sameSeriesBad: -0.08,
+    // The most the popularity slider can move a game at either extreme
+    fame: 0.2,
     starterCold: 0.12,
     starterWarm: 0.02
   };
@@ -72,7 +76,15 @@
       vectors[g.id] = normalise(v);
     });
 
-    return { data: data, idf: idf, vectors: vectors, byId: byId };
+    // Hand-set fame tiers (1-4) become a centred score from -1 to 1, so the
+    // popularity slider can lean on them; a missing tier stays neutral
+    var fame = {};
+    games.forEach(function (g) {
+      var t = g.fame;
+      fame[g.id] = (typeof t === "number" && t >= 1 && t <= 4) ? (t - 2.5) / 1.5 : 0;
+    });
+
+    return { data: data, idf: idf, vectors: vectors, byId: byId, fame: fame };
   }
 
   function normalise(v) {
@@ -144,6 +156,9 @@
     var machines = state.machines || [];
     var moods = state.moods || [];
     var lengthKey = state.length || "any";
+    // 0 = hidden gems, 100 = crowd-pleasers; 50 leaves the ranking alone
+    var fameRaw = typeof state.fame === "number" ? state.fame : 50;
+    var fameLean = (Math.max(0, Math.min(100, fameRaw)) - 50) / 50;
 
     var playedIds = {};
     played.forEach(function (p) { playedIds[p.id] = p.feel; });
@@ -204,6 +219,7 @@
       if (g.series && dislikedSeries[g.series]) series += WEIGHTS.sameSeriesDisliked;
       if (g.series && badSeries[g.series]) series += WEIGHTS.sameSeriesBad;
       var starter = g.starter ? (warm ? WEIGHTS.starterWarm : WEIGHTS.starterCold) : 0;
+      var fameNudge = WEIGHTS.fame * fameLean * (index.fame[g.id] || 0);
 
       scored.push({
         game: g,
@@ -212,7 +228,7 @@
         fit: fit,
         moodMatch: hasMood && g.tags.some(function (t) { return moodSet[t] === true; }),
         length: lengthVerdict(g.hours, lengthKey),
-        score: taste + WEIGHTS.lengthFit * fit + series + starter
+        score: taste + WEIGHTS.lengthFit * fit + series + starter + fameNudge
       });
     });
 
