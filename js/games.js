@@ -21,7 +21,7 @@
  */
 window.RPG_DATA = {
   updated: "October 2026",
-  version: "0.3.0",
+  version: "0.4.0",
 
   platforms: [
     { key: "pc", label: "PC or Steam Deck", short: "PC", coverage: "living" },
@@ -39,6 +39,7 @@ window.RPG_DATA = {
     { key: "n64", label: "Nintendo 64", short: "N64", coverage: "complete" },
     { key: "gamecube", label: "Nintendo GameCube", short: "GameCube", coverage: "complete" },
     { key: "mastersystem", label: "Sega Master System", short: "Master System", coverage: "complete" },
+    { key: "gamegear", label: "Sega Game Gear", short: "Game Gear", coverage: "partial" },
     { key: "gba", label: "Game Boy Advance", short: "GBA", coverage: "complete" },
     { key: "xbox", label: "Xbox", short: "Xbox", coverage: "complete" },
     { key: "xbox360", label: "Xbox 360", short: "Xbox 360", coverage: "partial" }
@@ -846,7 +847,7 @@ window.RPG_DATA = {
       tags: ["tactics", "party", "jrpg", "fantasy", "story", "builds", "retro"], starter: true, aka: ["shining force"],
       pitch: "A tactical war story told from three sides at once; the West only ever saw the first scenario." },
     { id: "shining-holy-ark", title: "Shining the Holy Ark", year: 1996, fame: 1, series: "shining", platforms: ["saturn"], hours: 30,
-      tags: ["turn-based", "party", "fantasy", "challenge", "retro"], aka: ["shining"],
+      tags: ["turn-based", "party", "fantasy", "challenge", "retro", "dungeon-crawl"], aka: ["shining"],
       pitch: "A first-person dungeon crawler with lovely pre-rendered corridors and a difficulty that keeps you mapping carefully." },
     { id: "dragon-force", title: "Dragon Force", year: 1996, fame: 2, platforms: ["saturn"], hours: 35,
       tags: ["tactics", "party", "fantasy", "builds", "retro", "army-command"], starter: true,
@@ -1043,7 +1044,7 @@ window.RPG_DATA = {
     { id: "wonder-boy-mw", title: "Wonder Boy in Monster World", year: 1991, fame: 1, series: "monster-world", platforms: ["megadrive"], hours: 10,
       tags: ["action", "solo", "fantasy", "exploration", "metroidvania", "retro"], aka: ["wonder boy 5", "monster world"],
       pitch: "Shops, gear, and one very brave little hero; the Mega Drive's classic blend of platforming and RPG bits." },
-    { id: "dragons-trap", title: "Wonder Boy III: The Dragon's Trap", year: 1989, fame: 2, series: "monster-world", platforms: ["pc", "ps4", "xb1", "switch", "mobile", "mastersystem"], hours: 7,
+    { id: "dragons-trap", title: "Wonder Boy III: The Dragon's Trap", year: 1989, fame: 2, series: "monster-world", platforms: ["pc", "ps4", "xb1", "switch", "mobile", "mastersystem", "gamegear"], hours: 7,
       tags: ["action", "solo", "fantasy", "exploration", "metroidvania", "retro"], aka: ["wonder boy 3", "dragon's trap"],
       note: "On modern platforms it's the 2017 remake.",
       pitch: "Cursed into five animal forms beneath a hand-drawn coat of paint; the metroidvania that predates the genre's name." },
@@ -1073,7 +1074,7 @@ window.RPG_DATA = {
     { id: "golvellius", title: "Golvellius: Valley of Doom", year: 1988, fame: 1, platforms: ["mastersystem"], hours: 8,
       tags: ["action", "solo", "fantasy", "exploration", "zelda-like", "retro"],
       pitch: "Compile's answer to Zelda: caves, shops, and an underworld to clear, with a cracking soundtrack." },
-    { id: "golden-axe-warrior", title: "Golden Axe Warrior", year: 1989, fame: 1, platforms: ["mastersystem"], hours: 8,
+    { id: "golden-axe-warrior", title: "Golden Axe Warrior", year: 1989, fame: 1, series: "golden-axe", platforms: ["mastersystem"], hours: 8,
       tags: ["action", "solo", "fantasy", "exploration", "zelda-like", "retro"],
       pitch: "A straight-faced Zelda-like wearing Golden Axe's clothes; surprisingly good, surprisingly big." },
     { id: "monster-land", title: "Wonder Boy in Monster Land", year: 1987, fame: 1, series: "monster-world", platforms: ["mastersystem"], hours: 6,
@@ -1086,6 +1087,29 @@ window.RPG_DATA = {
       tags: ["turn-based", "party", "fantasy", "story", "exploration", "choices", "retro"], aka: ["ultima iv"],
       note: "Released only in Europe on the Master System.",
       pitch: "The Avatar's quest for virtue, in a fine 8-bit port; still the most thoughtful Ultima." },
+    { id: "dragon-crystal", title: "Dragon Crystal", year: 1990, fame: 1, platforms: ["mastersystem", "gamegear"], hours: 8,
+      tags: ["turn-based", "roguelite", "fantasy", "challenge", "retro"],
+      note: "Released only in Europe on the Master System.",
+      pitch: "Sega's friendlier answer to Fatal Labyrinth: thirty floors of foggy, randomly built mazes, items to identify, and an egg that hatches into a dragon." },
+    { id: "heroes-of-the-lance", title: "Advanced Dungeons & Dragons: Heroes of the Lance", year: 1991, fame: 1, platforms: ["mastersystem"], hours: 4,
+      tags: ["action", "party", "fantasy", "exploration", "retro"], aka: ["heroes of the lance", "dragonlance"],
+      note: "Released only in Europe on the Master System.",
+      pitch: "Dragonlance's heroes in a side-scrolling dungeon bash: switch between all eight companions as you search the ruins for the Disks of Mishakal." },
+    { id: "lord-of-the-sword", title: "Lord of the Sword", year: 1988, fame: 1, platforms: ["mastersystem"], hours: 6,
+      tags: ["action", "solo", "fantasy", "exploration", "challenge", "retro"], aka: ["lord of sword"],
+      pitch: "Sega's scrappy side-scrolling adventure: towns to visit, a sword and bow to upgrade, and a demon lord to depose." },
+
+    // Sega Game Gear
+    { id: "ax-battler", title: "Ax Battler: A Legend of Golden Axe", year: 1991, fame: 1, series: "golden-axe", platforms: ["gamegear"], hours: 5,
+      tags: ["action", "solo", "fantasy", "zelda-like", "exploration", "retro"], aka: ["golden axe"],
+      pitch: "Golden Axe Warrior's handheld follow-up: a Zelda II-style adventure with a top-down overworld, side-scrolling scraps, and magic vases to collect." },
+    { id: "defenders-of-oasis", title: "Defenders of Oasis", year: 1992, fame: 1, platforms: ["gamegear"], hours: 12,
+      tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro"], aka: ["shadam crusader"],
+      pitch: "A proper Arabian Nights JRPG, and one of the Game Gear's few: rally a princess, a genie, and a thief against the wizard Ahriman." },
+    { id: "shining-force-hajya", title: "Shining Force: The Sword of Hajya", year: 1993, fame: 1, series: "shining", platforms: ["gamegear"], hours: 12,
+      tags: ["turn-based", "tactics", "party", "fantasy", "story", "retro"], aka: ["shining force gaiden ii", "sword of hajya"],
+      note: "Never released in Europe on the Game Gear.",
+      pitch: "The full Shining Force experience in your pocket: grid battles, class promotions, and a stolen sword to win back." },
 
     // Game Boy Advance classics
     { id: "golden-sun", title: "Golden Sun", year: 2001, fame: 3, series: "golden-sun", platforms: ["gba"], hours: 25,
