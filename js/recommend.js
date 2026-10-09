@@ -12,7 +12,8 @@
  *        taste match (cosine similarity)
  *      + how well its length fits the time you have
  *      + a small nudge for sequels or siblings of games you loved
- *   5. The top picks are spread across series so you don't get three Souls games.
+ *   5. The top picks are spread across series so you don't get three Souls games -
+ *      unless you asked for a mood, in which case its games all come first.
  */
 (function (root) {
   "use strict";
@@ -153,7 +154,8 @@
     });
 
     var moodVec = {};
-    moods.forEach(function (t) { if (index.idf[t]) moodVec[t] = index.idf[t]; });
+    var moodSet = {};
+    moods.forEach(function (t) { if (index.idf[t]) { moodVec[t] = index.idf[t]; moodSet[t] = true; } });
     var hasMood = Object.keys(moodVec).length > 0;
 
     var profile = {};
@@ -199,12 +201,14 @@
         on: on,
         taste: taste,
         fit: fit,
+        moodMatch: hasMood && g.tags.some(function (t) { return moodSet[t] === true; }),
         length: lengthVerdict(g.hours, lengthKey),
         score: taste + WEIGHTS.lengthFit * fit + series + starter
       });
     });
 
     scored.sort(function (a, b) {
+      if (a.moodMatch !== b.moodMatch) return a.moodMatch ? -1 : 1;
       return b.score - a.score || a.game.title.localeCompare(b.game.title);
     });
 
@@ -213,14 +217,16 @@
     scored = scored.filter(function (s) { return s.fit > 0; })
       .concat(scored.filter(function (s) { return s.fit === 0; }));
 
-    // Keep the headline picks varied: one per series in the top few, two per series overall
+    // Keep the headline picks varied: one per series in the top few, two per series overall.
+    // A mood switches this off: everything tagged with the mood comes before anything merely
+    // related, even if that means three Castlevanias in a row.
     var picks = [];
     var deferred = [];
     var seriesCount = {};
     scored.forEach(function (s) {
       var key = s.game.series || s.game.id;
       var count = seriesCount[key] || 0;
-      var cap = picks.length < topDistinct ? 1 : 2;
+      var cap = hasMood ? Infinity : (picks.length < topDistinct ? 1 : 2);
       if (count >= cap) {
         deferred.push(s);
         return;

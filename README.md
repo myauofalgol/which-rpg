@@ -56,7 +56,7 @@ So under the hood, this is a small content-based recommender, the same broad ide
 
 Length is a soft preference with a hard edge: a game a little over your range just loses a few points and gets flagged as "longer than you asked for", but anything more than double (or less than half) your range is held back until everything that fits has been shown. A 100-hour Persona game is never your top pick for a weekend.
 
-**The top three are kept varied.** Only one game per series can appear in the top three, so a Souls fan gets one Souls game and two other ideas rather than three FromSoftware titles in a row.
+**The top three are kept varied.** Only one game per series can appear in the top three, so a Souls fan gets one Souls game and two other ideas rather than three FromSoftware titles in a row. Setting a mood switches this off: every game tagged with the mood is shown before anything merely related, so asking for metroidvanias can put the whole Castlevania trilogy at the top.
 
 **Backward compatibility is handled for you.** A PS5 owner sees PS4 games, an Xbox Series owner sees Xbox One games, and a Switch 2 owner sees Switch games, and each card says which version you'd be playing. That mapping lives in `BACKWARD` at the top of `recommend.js`. Tick no machines at all and there's no constraint: the whole catalogue is in play, with each card showing where the game natively runs.
 
