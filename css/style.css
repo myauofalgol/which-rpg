@@ -288,9 +288,11 @@ button, input { font: inherit; color: inherit; }
 .feel { grid-area: feel; display: flex; flex-wrap: wrap; gap: 4px; }
 .remove { grid-area: remove; }
 
-@media (min-width: 640px) and (max-width: 999px), (min-width: 1180px) {
+/* Beside the title when the page is one wide column. The two-column layout's
+   sidebar is too narrow for four verdicts, so there they stay underneath. */
+@media (min-width: 640px) and (max-width: 999px) {
   .played-row {
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(14rem, 1fr) auto auto;
     grid-template-areas: "title feel remove";
   }
 }
