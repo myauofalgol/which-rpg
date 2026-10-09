@@ -1086,9 +1086,13 @@ window.RPG_DATA = {
       pitch: "A co-op dungeon crawler where your Digimon levels up with you; grind, loot, repeat." },
 
     // Official English releases of games whose originals stayed in Japan
+    { id: "trials-of-mana-snes", title: "Trials of Mana", year: 1995, fame: 2, series: "mana", platforms: ["switch"], hours: 25,
+      tags: ["action", "party", "jrpg", "fantasy", "story", "retro", "zelda-like"], aka: ["seiken densetsu 3"],
+      note: "On Switch it's part of the Collection of Mana, its first official English release.",
+      pitch: "The legendary Japan-only Seiken Densetsu 3, finally in English: six heroes, three storylines, and a world that branches around your choices." },
     { id: "trials-of-mana", title: "Trials of Mana", year: 2020, fame: 2, series: "mana", platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 25,
       tags: ["action", "party", "jrpg", "fantasy", "story", "builds", "zelda-like"], aka: ["seiken densetsu 3"],
-      note: "The 16-bit original is also in the Collection of Mana.",
+      note: "A full 3D remake of the 16-bit original.",
       pitch: "The full 3D remake of Seiken Densetsu 3: pick three of six heroes, then take on the Mana Sword quest the West never got." },
     { id: "star-ocean-fd", title: "Star Ocean: First Departure R", year: 2019, fame: 1, series: "star-ocean", platforms: ["ps4", "switch"], hours: 25,
       tags: ["action", "party", "jrpg", "sci-fi", "exploration", "story"], aka: ["star ocean"],
