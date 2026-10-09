@@ -80,7 +80,7 @@ Open `js/games.js` and add an entry to the `games` array:
 A few rules of thumb:
 
 - **`id`** must be unique and URL-safe (lowercase letters, numbers, and hyphens), because it appears in shareable links. Changing an existing id breaks old links that include it.
-- **`platforms`** uses these keys: `pc`, `ps5`, `ps4`, `xsx`, `xb1`, `switch2`, `switch`, `mobile`, `snes`, `megadrive`, `ps1`, `saturn`, `n64`, `gamecube`, `mastersystem`, `gamegear`, `gba`, `xbox`, and `xbox360`. Only list where the game is sold natively; backward compatibility is added automatically, so a PS4 game doesn't also need `ps5`. The exception is Xbox: since only some Xbox 360 and original Xbox games run on modern consoles, the ones that do list `xb1` as well, with a note. Each platform's `coverage` (`complete`, `partial` or `living`) tracks how finished its list is; see "Where the lists stand" below.
+- **`platforms`** uses these keys: `pc`, `ps5`, `ps4`, `xsx`, `xb1`, `switch2`, `switch`, `mobile`, `snes`, `megadrive`, `megacd`, `ps1`, `saturn`, `dreamcast`, `n64`, `gamecube`, `mastersystem`, `gamegear`, `gba`, `xbox`, and `xbox360`. Only list where the game is sold natively; backward compatibility is added automatically, so a PS4 game doesn't also need `ps5`. The exception is Xbox: since only some Xbox 360 and original Xbox games run on modern consoles, the ones that do list `xb1` as well, with a note. Each platform's `coverage` (`complete`, `partial` or `living`) tracks how finished its list is; see "Where the lists stand" below.
 - **`hours`** is a rough main-story figure. [HowLongToBeat](https://howlongtobeat.com/)'s "Main Story" number is a sensible source.
 - **`fame`** is the 1-4 popularity tier the slider leans on: 1 a deep cut, 2 known to RPG fans, 3 a well-known name, 4 a household name. The audit page shows every game's tier, which makes sweeping for outliers easy.
 - **`tags`** should come from the `tags` object near the top of the file. Five to eight tags per game works well; too few and the game rarely matches anything, too many and it matches everything a little.
@@ -88,7 +88,7 @@ A few rules of thumb:
 - **`aka`** is an optional list of search aliases, which is how "bg3" finds Baldur's Gate 3 and "ff7" finds every Final Fantasy VII.
 - **`na`/`eu`** is an optional display name for the footer's region toggle, for the handful of games renamed between regions (like Soleil and Crusader of Centy); those games get a small gold ⇄ marker wherever they're listed, with the other name in its tooltip.
 - **`note`** is an optional line shown under the platforms, handy for things like "Xbox via backward compatibility".
-- **One entry per game.** Ports, remasters, and same-generation re-releases fold into a single entry, with the `note` signposting the current edition; genuinely different games (sequels, or cases like Shadowrun on SNES and Mega Drive) stay separate.
+- **One entry per game.** Ports, remasters, and same-generation re-releases fold into a single entry, with the `note` signposting the current edition; genuinely different games (sequels, or cases like Shadowrun on SNES and Mega Drive) stay separate. Multi-game packages never get a package entry of their own: the games inside stay as individual entries, each listing the bundle's platforms and carrying a note that names it, as with the Suikoden I & II HD Remaster or Evolution Worlds.
 
 If you add a new tag, give it a `label` that reads naturally after "it has" (the cards say things like "Like Baldur's Gate 3, it has choices that matter"), and add a `mood` and `group` if you want it offered as an "In the mood for" option.
 
@@ -127,7 +127,7 @@ Your most recent selections are also saved in your own browser using `localStora
 Each platform in `games.js` carries a `coverage` value, and the audit page at `catalogue.html` shows it. **Complete** means every officially released North American or European RPG we know of is listed; **partial** means that sweep is still to come; **living** machines are curated modern libraries that keep growing rather than chasing completeness. New machines are added as their games come up, and start out partial until their sweep is done. English fan translations are part of the plan for the retro machines, but are not listed yet.
 
 - **Complete (official NA/EU):** Super Nintendo, Mega Drive, Master System, PlayStation 1, Saturn, Nintendo 64, GameCube, Game Boy Advance, Xbox
-- **Partial:** Xbox 360, Game Gear
+- **Partial:** Xbox 360, Game Gear, Mega-CD, Dreamcast
 - **Living lists:** PC, PlayStation, Xbox Series and One, Switch, mobile
 
 ## Caveats
@@ -138,7 +138,7 @@ Each platform in `games.js` carries a `coverage` value, and the audit page at `c
 - **"PC or Steam Deck" is one option.** Nearly everything listed for PC is on Steam, but Steam Deck compatibility varies by game, so check its Deck rating.
 - **Xbox 360 and original Xbox games on modern consoles.** Only some of these run through backward compatibility, so games that do (like Fallout: New Vegas, Morrowind, and KOTOR) list Xbox One alongside their original machine and carry a note; the rest are Xbox 360 or Xbox only.
 - **Mobile is thin.** Only a handful of the classics have proper phone ports, so someone who picks only "Phone or tablet" will see a short list.
-- **Game Gear is just starting.** Only the dedicated RPGs are listed so far, so a Game Gear owner sees a short list until the sweep is done.
+- **Game Gear, Mega-CD and Dreamcast are just starting.** Only the dedicated RPGs are listed so far, so owners of any of them see a short list until each sweep is done.
 - **Retro consoles are covered as their original versions.** Super Nintendo, Mega Drive, PlayStation, Saturn, Nintendo 64, GameCube, Game Boy Advance, and Xbox games list the retro console (and modern platforms too, where the same version is still sold); where a remake or remaster exists, the card's note points to it.
 
 ## Ideas for later
