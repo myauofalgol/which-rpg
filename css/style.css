@@ -619,6 +619,7 @@ button, input { font: inherit; color: inherit; }
 .more-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 12px; }
 .more-title { font-weight: 700; }
 .more-meta { font-size: var(--step--1); color: var(--muted); }
+.more-pitch { max-width: 62ch; }
 .more-why { font-size: var(--step--1); color: var(--mist); }
 
 .more-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }

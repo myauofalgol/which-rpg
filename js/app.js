@@ -627,17 +627,17 @@
   function moreItem(s) {
     const g = s.game;
     const why = s.why;
-    let reason;
+    let reason = null;
     if (why.because.length) reason = becauseText(why.because.slice(0, 1));
     else if (why.moods.length) reason = "Matches " + listJoin(why.moods.map((t) => DATA.tags[t].mood.toLowerCase()));
-    else reason = g.pitch;
     const verdict = verdictText(s);
     return el("li", { class: "more-item" }, [
       el("div", { class: "more-top" }, [
         el("span", { class: "more-title" }, [gameName(g), regionMark(g)]),
         el("span", { class: "more-meta", text: "About " + g.hours + " hours" + (verdict && s.length !== "fits" ? ", " + verdict : "") })
       ]),
-      el("span", { class: "more-why", text: reason }),
+      el("span", { class: "more-pitch", text: g.pitch }),
+      reason ? el("span", { class: "more-why", text: reason }) : null,
       el("span", { class: "more-meta", text: "Play on " + playLine(s.on) }),
       el("div", { class: "more-actions" }, [
         el("button", {
