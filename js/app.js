@@ -304,15 +304,24 @@
 
   $("#choices").addEventListener("submit", (e) => e.preventDefault());
 
-  function addGame(id) {
+  function addGame(id, feel) {
     if (!byId[id] || state.played.some((p) => p.id === id)) return;
-    state.played.push({ id: id, feel: "loved" });
+    state.played.push({ id: id, feel: feel || "loved" });
     search.value = "";
     closeOptions();
     renderPlayed();
     renderQuick();
     changed();
-    announce("Added " + gameName(byId[id]) + " as loved. Change it in the list if it was only fine or not for you.");
+    const name = gameName(byId[id]);
+    if (feel === "disliked") {
+      announce("Marked " + name + " as not for me; it won't be suggested again.");
+    } else if (feel === "fine") {
+      announce("Added " + name + " as fine.");
+    } else if (feel) {
+      announce("Added " + name + " as loved.");
+    } else {
+      announce("Added " + name + " as loved. Change it in the list if it was only fine or not for you.");
+    }
   }
 
   function removeGame(id) {
@@ -504,14 +513,23 @@
     return el("div", { class: "gauge", "aria-hidden": "true" }, kids);
   }
 
-  // "I've played this" reads naturally; the hidden tail names the game for screen readers
-  function playedButtonChildren(g) {
-    return ["I've played this", el("span", { class: "sr-only", text: ", add " + g.title + " to games you've played" })];
+  // The card buttons are the same three verdicts as the played list; the hidden tail
+  // names the game and the verdict for screen readers
+  function lovedButtonChildren(g) {
+    return ["Loved it", el("span", { class: "sr-only", text: ", mark " + g.title + " as loved" })];
   }
 
-  function addFromCard(id) {
+  function fineButtonChildren(g) {
+    return ["It was fine", el("span", { class: "sr-only", text: ", mark " + g.title + " as fine" })];
+  }
+
+  function dismissButtonChildren(g) {
+    return ["Not for me", el("span", { class: "sr-only", text: ", mark " + g.title + " as not for me and stop suggesting it" })];
+  }
+
+  function addFromCard(id, feel) {
     if (!byId[id]) return;
-    addGame(id);
+    addGame(id, feel);
     // addGame redraws the picks and throws away the button that was clicked,
     // so put focus somewhere sensible rather than dropping it on the body
     const target = $("#results");
@@ -552,10 +570,20 @@
         el("dd", { text: playLine(s.on) })
       ]),
       g.note ? el("p", { class: "note", text: g.note }) : null,
-      el("button", {
-        type: "button", class: "btn btn-quiet pick-add",
-        onclick: () => addFromCard(g.id)
-      }, playedButtonChildren(g))
+      el("div", { class: "pick-actions" }, [
+        el("button", {
+          type: "button", class: "btn btn-quiet pick-add",
+          onclick: () => addFromCard(g.id, "loved")
+        }, lovedButtonChildren(g)),
+        el("button", {
+          type: "button", class: "btn btn-quiet pick-fine",
+          onclick: () => addFromCard(g.id, "fine")
+        }, fineButtonChildren(g)),
+        el("button", {
+          type: "button", class: "btn btn-quiet pick-dismiss",
+          onclick: () => addFromCard(g.id, "disliked")
+        }, dismissButtonChildren(g))
+      ])
     ]);
   }
 
@@ -577,8 +605,16 @@
       el("div", { class: "more-actions" }, [
         el("button", {
           type: "button", class: "more-add",
-          onclick: () => addFromCard(g.id)
-        }, playedButtonChildren(g))
+          onclick: () => addFromCard(g.id, "loved")
+        }, lovedButtonChildren(g)),
+        el("button", {
+          type: "button", class: "more-add more-fine",
+          onclick: () => addFromCard(g.id, "fine")
+        }, fineButtonChildren(g)),
+        el("button", {
+          type: "button", class: "more-add more-dismiss",
+          onclick: () => addFromCard(g.id, "disliked")
+        }, dismissButtonChildren(g))
       ])
     ]);
   }
