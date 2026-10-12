@@ -23,7 +23,11 @@
   "use strict";
 
   // A console that can run games made for an older one
-  var BACKWARD = { ps5: ["ps4"], xsx: ["xb1"], switch2: ["switch"] };
+  var BACKWARD = {
+    ps5: ["ps4"], xsx: ["xb1"], switch2: ["switch"],
+    "3ds": ["ds"], wiiu: ["wii"], wii: ["gamecube"],
+    ds: ["gba"], gba: ["gb", "gbc"], ps2: ["ps1"], psvita: ["psp"]
+  };
 
   // "bad" says the game fell short, not the genre: it counts as played but does
   // not move the taste profile
