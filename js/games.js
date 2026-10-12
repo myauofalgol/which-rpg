@@ -3132,6 +3132,27 @@ window.RPG_DATA = {
       pitch: "A 2D soulslike with a huge, interconnected map and punishing combat; Salt and Sacrifice is the sequel." },
     { id: "mortal-shell", title: "Mortal Shell", year: 2020, fame: 1, platforms: ["pc", "ps4", "xb1"], hours: 15,
       tags: ["action", "solo", "dark-fantasy", "challenge", "builds", "souls-like"], aka: ["mortal shell"],
-      pitch: "A short, atmospheric soulslike where you possess different bodies for different playstyles." }
+      pitch: "A short, atmospheric soulslike where you possess different bodies for different playstyles." },
+    { id: "south-park-stick-of-truth", title: "South Park: The Stick of Truth", year: 2014, fame: 2, series: "south-park", platforms: ["pc", "ps4", "xb1", "switch", "ps3", "xbox360"], hours: 15,
+      tags: ["turn-based", "party", "crpg", "fantasy", "humour", "story", "modern"], aka: ["stick of truth"],
+      pitch: "A shockingly good South Park RPG; it plays like a paper-craft Paper Mario with the show's sharpest writers." },
+    { id: "south-park-fractured-but-whole", title: "South Park: The Fractured But Whole", year: 2017, fame: 2, series: "south-park", platforms: ["pc", "ps4", "xb1", "switch"], hours: 20,
+      tags: ["turn-based", "tactics", "party", "crpg", "modern", "humour", "story"], aka: ["fractured but whole"],
+      pitch: "The superhero sequel: a grid-based tactics system and a bigger, dafter story than the first." },
+    { id: "child-of-light", title: "Child of Light", year: 2014, fame: 2, platforms: ["pc", "ps4", "xb1", "switch", "wiiu", "psvita"], hours: 12,
+      tags: ["turn-based", "party", "jrpg", "fantasy", "story", "emotional", "retro"], aka: ["child of light"],
+      pitch: "A gorgeous, watercolour fairy tale with a light turn-based battle system and a lovely soundtrack." },
+    { id: "costume-quest", title: "Costume Quest", year: 2011, fame: 1, platforms: ["pc", "xbox360", "mobile"], hours: 10,
+      tags: ["turn-based", "party", "jrpg", "fantasy", "humour", "cosy"], aka: ["costume quest"],
+      pitch: "A charming Halloween RPG from Double Fine; trick-or-treat as a transforming robot, knight or unicorn." },
+    { id: "dust-an-elysian-tail", title: "Dust: An Elysian Tail", year: 2012, fame: 1, platforms: ["pc", "ps4", "switch", "xbox360", "mobile"], hours: 15,
+      tags: ["action", "solo", "fantasy", "metroidvania", "story", "retro"], aka: ["dust an elysian tail"],
+      pitch: "A hand-animated action-RPG with a talking sword and a lovely, melodramatic story." },
+    { id: "transistor", title: "Transistor", year: 2014, fame: 2, platforms: ["pc", "ps4", "switch", "mobile"], hours: 8,
+      tags: ["action", "solo", "sci-fi", "story", "builds"], aka: ["transistor"],
+      pitch: "Supergiant's stylish sci-fi action-RPG; a talking sword, a frozen city, and a superb soundtrack." },
+    { id: "grounded", title: "Grounded", year: 2022, fame: 2, platforms: ["pc", "ps5", "ps4", "xsx", "xb1", "switch"], hours: 30,
+      tags: ["action", "party", "open-world", "exploration", "builds"], aka: ["grounded"],
+      pitch: "Shrunk to ant size in a back garden; a survival-crafting RPG with spiders that are genuinely terrifying." }
   ]
 };
