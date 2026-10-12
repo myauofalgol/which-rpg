@@ -1946,7 +1946,7 @@ window.RPG_DATA = {
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro", "builds"], aka: ["dq6", "dragon quest 6"],
       pitch: "Two worlds to flip between and a job system to master; the loosest and dreamiest of the Zenithia trilogy." },
     { id: "dq8", title: "Dragon Quest VIII: Journey of the Cursed King", year: 2004, fame: 3, series: "dragon-quest", platforms: ["ps2", "3ds", "mobile"], hours: 40,
-      tags: ["turn-based", "party", "jrpg", "fantasy", "story", "exploration", "cosy"], aka: ["dq8", "dragon quest 8"],
+      tags: ["turn-based", "party", "jrpg", "fantasy", "story", "exploration", "cosy"], aka: ["dq8", "dragon quest 8"], eu: "Dragon Quest: The Journey of the Cursed King",
       note: "The 3DS version adds two extra party members and faster battles.",
       pitch: "The one that brought Dragon Quest west in force: a huge, warm world and a beloved cast." },
     { id: "dq9", title: "Dragon Quest IX: Sentinels of the Starry Skies", year: 2009, fame: 2, series: "dragon-quest", platforms: ["ds"], hours: 45,
