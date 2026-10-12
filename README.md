@@ -61,7 +61,7 @@ Length is a soft preference with a hard edge: a game a little over your range ju
 
 **The top three are kept varied.** Only one game per series can appear in the top three, so a Souls fan gets one Souls game and two other ideas rather than three FromSoftware titles in a row. Setting a mood switches this off: every game tagged with the mood is shown before anything merely related, so asking for metroidvanias can put the whole Castlevania trilogy at the top.
 
-**Backward compatibility is handled for you.** A PS5 owner sees PS4 games, an Xbox Series owner sees Xbox One games, and a Switch 2 owner sees Switch games, and each card says which version you'd be playing. That mapping lives in `BACKWARD` at the top of `recommend.js`. Tick no machines at all and there's no constraint: the whole catalogue is in play, with each card showing where the game natively runs.
+**Backward compatibility is handled for you.** A PS5 owner sees PS4 games, an Xbox Series owner sees Xbox One games, and a Switch 2 owner sees Switch games, and each card says which version you'd be playing. That mapping lives in `BACKWARD` at the top of `recommend.js`. Tick no machines at all and there's no constraint: the whole catalogue is in play, with each card showing where the game natively runs. If you'd rather have nothing but games actually made for your machines, tick "Only games made for these machines" under the machine list; it's off by default and does nothing until at least one machine is ticked.
 
 All the weights live in the `WEIGHTS` object in `recommend.js`, so if you think length should matter more, or moods should count less, that's the place to tune.
 
@@ -116,7 +116,7 @@ Everything you choose is kept in the address bar, so the "Copy link to these pic
 #p=bg3.l,dos2.l,skyrim.d&m=pc,ps5&t=long&v=sci-fi
 ```
 
-`p` is the played list (`.l` loved, `.f` fine, `.b` wasn't good, `.d` not for me), `m` is machines, `t` is the length (`short`, `medium`, `long`, or `epic`), `v` is moods, and `w` is the popularity slider (0 hidden gems to 100 crowd-pleasers; omitted when it's in the middle). Because it's a hash rather than a query string, none of it is sent to GitHub's servers.
+`p` is the played list (`.l` loved, `.f` fine, `.b` wasn't good, `.d` not for me), `m` is machines, `n=1` restricts to games made for those machines (ignored when no machines are chosen), `t` is the length (`short`, `medium`, `long`, or `epic`), `v` is moods, and `w` is the popularity slider (0 hidden gems to 100 crowd-pleasers; omitted when it's in the middle). Because it's a hash rather than a query string, none of it is sent to GitHub's servers.
 
 ## Coming back later
 

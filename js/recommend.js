@@ -113,7 +113,9 @@
 
   // Which of your machines can play this game, and how. With none chosen,
   // there is no constraint: every platform the game runs on counts, natively.
-  function playableOn(game, machines) {
+  // When nativeOnly is set, a game only counts if it was made for the machine
+  // itself, so backward-compatible picks are left out.
+  function playableOn(game, machines, nativeOnly) {
     if (!machines.length) {
       return game.platforms.map(function (k) { return { machine: k, via: null }; });
     }
@@ -123,6 +125,7 @@
         out.push({ machine: m, via: null });
         return;
       }
+      if (nativeOnly) return;
       var older = BACKWARD[m] || [];
       for (var i = 0; i < older.length; i++) {
         if (game.platforms.indexOf(older[i]) !== -1) {
@@ -158,6 +161,7 @@
     var games = index.data.games;
     var played = state.played || [];
     var machines = state.machines || [];
+    var nativeOnly = !!state.native;
     var moods = state.moods || [];
     var lengthKey = state.length || "any";
     // 0 = hidden gems, 100 = crowd-pleasers; 50 leaves the ranking alone
@@ -212,7 +216,7 @@
     var scored = [];
     games.forEach(function (g) {
       if (playedIds[g.id]) return;
-      var on = playableOn(g, machines);
+      var on = playableOn(g, machines, nativeOnly);
       if (!on.length) return;
       eligible++;
 

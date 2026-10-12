@@ -71,7 +71,7 @@
   const ORDINALS = ["Top pick", "Second pick", "Third pick"];
   const GAUGE_MAX = 120;
 
-  const state = { played: [], machines: [], length: "any", moods: [], fame: 50 };
+  const state = { played: [], machines: [], native: false, length: "any", moods: [], fame: 50 };
 
   // ---------- Small helpers ----------
 
@@ -133,6 +133,7 @@
     }
     const m = params.get("m");
     if (m) state.machines = m.split(",").filter((k) => platformByKey[k]);
+    if (params.get("n") === "1") state.native = true;
     const t = params.get("t");
     if (t && LENGTH_OPTIONS.some((o) => o.key === t)) state.length = t;
     const v = params.get("v");
@@ -149,7 +150,7 @@
   }
 
   function hasState() {
-    return !!(state.played.length || state.machines.length || state.moods.length || state.length !== "any" || state.fame !== 50);
+    return !!(state.played.length || state.machines.length || state.native || state.moods.length || state.length !== "any" || state.fame !== 50);
   }
 
   // Built by hand so the commas stay readable rather than turning into %2C
@@ -157,6 +158,7 @@
     const parts = [];
     if (state.played.length) parts.push("p=" + state.played.map((x) => x.id + "." + CODE_BY_FEEL[x.feel]).join(","));
     if (state.machines.length) parts.push("m=" + state.machines.join(","));
+    if (state.native) parts.push("n=1");
     if (state.length !== "any") parts.push("t=" + state.length);
     if (state.moods.length) parts.push("v=" + state.moods.join(","));
     if (state.fame !== 50) parts.push("w=" + state.fame);
@@ -403,6 +405,7 @@
             // Keep machines in catalogue order so links and summaries are stable
             state.machines = DATA.platforms.map((x) => x.key).filter((k) => state.machines.includes(k));
             changed();
+            renderNativeToggle();
           }
         }),
         el("span", { class: "mark", "aria-hidden": "true" }),
@@ -410,6 +413,24 @@
       ]));
     });
   }
+
+  // The native-only filter only has meaning once a machine is ticked, so it is
+  // hidden until then. It never clears a saved preference on its own.
+  const nativeBox = $("#native-only");
+  const nativeWrap = $("#machine-filter");
+
+  function renderNativeToggle() {
+    nativeBox.checked = state.native;
+    nativeWrap.hidden = !state.machines.length;
+  }
+
+  nativeBox.addEventListener("change", (e) => {
+    state.native = e.target.checked;
+    changed();
+    announce(state.native
+      ? "Showing only games made for your machines."
+      : "Including older games your machines can play.");
+  });
 
   function renderLengths() {
     const box = $("#lengths");
@@ -490,6 +511,10 @@
         result.eligible + " games in the list are in the running.";
     }
     const machines = listJoin(state.machines.map(shortName));
+    if (state.native) {
+      return lead + ", made for " + machines + ", " + len + fame + ". " +
+        result.eligible + " games in the list were released for your machines.";
+    }
     return lead + ", playable on " + machines + ", " + len + fame + ". " +
       result.eligible + " games in the list run on your machines.";
   }
@@ -680,7 +705,9 @@
     if (!result.picks.length) {
       out.append(emptyState(
         "Nothing left to suggest for those machines.",
-        "Try adding another machine, or remove a game from your played list."
+        state.native
+          ? "Try turning off \u201cOnly games made for these machines\u201d, adding another machine, or removing a game from your played list."
+          : "Try adding another machine, or remove a game from your played list."
       ));
       announce("No picks for those machines.", 500);
       return;
@@ -717,6 +744,7 @@
   $("#reset").addEventListener("click", () => {
     state.played = [];
     state.machines = [];
+    state.native = false;
     state.length = "any";
     state.moods = [];
     state.fame = 50;
@@ -790,6 +818,7 @@
     renderPlayed();
     renderQuick();
     renderMachines();
+    renderNativeToggle();
     renderLengths();
     renderFame();
     renderMoods();
@@ -807,7 +836,7 @@
   typeDialogue();
 
   window.addEventListener("hashchange", () => {
-    state.played = []; state.machines = []; state.length = "any"; state.moods = []; state.fame = 50;
+    state.played = []; state.machines = []; state.native = false; state.length = "any"; state.moods = []; state.fame = 50;
     search.value = "";
     closeOptions();
     readHash();
