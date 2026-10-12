@@ -47,6 +47,8 @@ So under the hood, this is a small content-based recommender, the same broad ide
 
 **Moods are a second, optional profile.** If you tick "Little or no combat" and "A strong story", those tags get blended in alongside your played games (or used on their own if you haven't added any). A ticked mood pulls harder than your history does, so a craving can genuinely reshape the list; your played games still decide the pecking order among games that fit it.
 
+**You can ask for something different.** The "Show me something different" toggle flips the ranking away from your taste: rather than the closest matches, it favours the games least like the ones you've played, while still respecting your machines and the time you have. It appears once you've added at least one played game or a mood, and it is for when you want a change of genre instead of another game in your comfort zone.
+
 **Each game you could actually play is scored as:**
 
 - how closely it matches your profile (cosine similarity),
@@ -116,7 +118,7 @@ Everything you choose is kept in the address bar, so the "Copy link to these pic
 #p=bg3.l,dos2.l,skyrim.d&m=pc,ps5&t=long&v=sci-fi
 ```
 
-`p` is the played list (`.l` loved, `.f` fine, `.b` wasn't good, `.d` not for me), `m` is machines, `n=1` restricts to games made for those machines (ignored when no machines are chosen), `t` is the length (`short`, `medium`, `long`, or `epic`), `v` is moods, and `w` is the popularity slider (0 hidden gems to 100 crowd-pleasers; omitted when it's in the middle). Because it's a hash rather than a query string, none of it is sent to GitHub's servers.
+`p` is the played list (`.l` loved, `.f` fine, `.b` wasn't good, `.d` not for me), `m` is machines, `n=1` restricts to games made for those machines (ignored when no machines are chosen), `d=1` turns on "show me something different", `t` is the length (`short`, `medium`, `long`, or `epic`), `v` is moods, and `w` is the popularity slider (0 hidden gems to 100 crowd-pleasers; omitted when it's in the middle). Because it's a hash rather than a query string, none of it is sent to GitHub's servers.
 
 ## Coming back later
 
@@ -145,7 +147,7 @@ Each platform in `games.js` carries a `coverage` value, and the audit page at `c
 ## Ideas for later
 
 - Links from each card to a store page or review.
-- A "show me something different" toggle that deliberately picks games far from your profile.
 - More games, especially for mobile and for genres that are light here, such as monster collecting and farming RPGs.
 - Add support for Japan-only games which have an English fan translation.
 - Add themes which mimic UI windows for other RPGs (The default looks like Final Fantasy).
+- Note which PC games run natively on macOS or Linux, for players without a Windows machine. Keep "PC or Steam Deck" as the machine and flag only the exceptions, rather than splitting PC into Windows, Mac and Linux.

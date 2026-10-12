@@ -55,7 +55,9 @@
     // The most the popularity slider can move a game at either extreme
     fame: 0.2,
     starterCold: 0.12,
-    starterWarm: 0.02
+    starterWarm: 0.02,
+    // How hard "show me something different" pulls against your taste profile
+    different: 1
   };
 
   function buildIndex(data) {
@@ -163,6 +165,7 @@
     var played = state.played || [];
     var machines = state.machines || [];
     var nativeOnly = !!state.native;
+    var different = !!state.different;
     var moods = state.moods || [];
     var lengthKey = state.length || "any";
     // 0 = hidden gems, 100 = crowd-pleasers; 50 leaves the ranking alone
@@ -223,21 +226,27 @@
 
       var taste = dot(profile, index.vectors[g.id]);
       var fit = lengthFit(g.hours, lengthKey);
+      // Series nudges reward staying near your history, so they are left out
+      // when the whole point is to steer away from it
       var series = 0;
-      if (g.series && lovedSeries[g.series]) series += WEIGHTS.sameSeriesLoved;
-      if (g.series && dislikedSeries[g.series]) series += WEIGHTS.sameSeriesDisliked;
-      if (g.series && badSeries[g.series]) series += WEIGHTS.sameSeriesBad;
+      if (!different) {
+        if (g.series && lovedSeries[g.series]) series += WEIGHTS.sameSeriesLoved;
+        if (g.series && dislikedSeries[g.series]) series += WEIGHTS.sameSeriesDisliked;
+        if (g.series && badSeries[g.series]) series += WEIGHTS.sameSeriesBad;
+      }
       var starter = g.starter ? (warm ? WEIGHTS.starterWarm : WEIGHTS.starterCold) : 0;
       var fameNudge = WEIGHTS.fame * fameLean * (index.fame[g.id] || 0);
+      // Normally the closest match wins; "something different" rewards the least similar
+      var base = different ? WEIGHTS.different * -taste : taste;
 
       scored.push({
         game: g,
         on: on,
         taste: taste,
         fit: fit,
-        moodMatch: hasMood && g.tags.some(function (t) { return moodSet[t] === true; }),
+        moodMatch: !different && hasMood && g.tags.some(function (t) { return moodSet[t] === true; }),
         length: lengthVerdict(g.hours, lengthKey),
-        score: taste + WEIGHTS.lengthFit * fit + series + starter + fameNudge
+        score: base + WEIGHTS.lengthFit * fit + series + starter + fameNudge
       });
     });
 
@@ -311,13 +320,17 @@
       });
     }
 
-    picks.forEach(function (s) { s.why = explain(index, s.game, played, moods, warm); });
+    picks.forEach(function (s) { s.why = explain(index, s.game, played, moods, warm, different); });
 
-    return { picks: picks, eligible: eligible, warm: warm };
+    return { picks: picks, eligible: eligible, warm: warm, different: different };
   }
 
   // Build the "because you loved" reasoning for one game
-  function explain(index, game, played, moods, warm) {
+  function explain(index, game, played, moods, warm, different) {
+    // In "something different" mode there is no shared-taste reason to give
+    if (different) {
+      return { because: [], like: [], shared: [], moods: [], cold: false, different: true };
+    }
     var vec = index.vectors[game.id];
     var matches = [];
     played.forEach(function (p) {
@@ -360,7 +373,8 @@
       like: like.map(function (m) { return m.game.title; }),
       shared: shared.slice(0, 3),
       moods: moodHits,
-      cold: !warm
+      cold: !warm,
+      different: false
     };
   }
 

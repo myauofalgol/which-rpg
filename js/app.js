@@ -71,7 +71,7 @@
   const ORDINALS = ["Top pick", "Second pick", "Third pick"];
   const GAUGE_MAX = 120;
 
-  const state = { played: [], machines: [], native: false, length: "any", moods: [], fame: 50 };
+  const state = { played: [], machines: [], native: false, different: false, length: "any", moods: [], fame: 50 };
 
   // ---------- Small helpers ----------
 
@@ -134,6 +134,7 @@
     const m = params.get("m");
     if (m) state.machines = m.split(",").filter((k) => platformByKey[k]);
     if (params.get("n") === "1") state.native = true;
+    if (params.get("d") === "1") state.different = true;
     const t = params.get("t");
     if (t && LENGTH_OPTIONS.some((o) => o.key === t)) state.length = t;
     const v = params.get("v");
@@ -150,7 +151,7 @@
   }
 
   function hasState() {
-    return !!(state.played.length || state.machines.length || state.native || state.moods.length || state.length !== "any" || state.fame !== 50);
+    return !!(state.played.length || state.machines.length || state.native || state.different || state.moods.length || state.length !== "any" || state.fame !== 50);
   }
 
   // Built by hand so the commas stay readable rather than turning into %2C
@@ -159,6 +160,7 @@
     if (state.played.length) parts.push("p=" + state.played.map((x) => x.id + "." + CODE_BY_FEEL[x.feel]).join(","));
     if (state.machines.length) parts.push("m=" + state.machines.join(","));
     if (state.native) parts.push("n=1");
+    if (state.different) parts.push("d=1");
     if (state.length !== "any") parts.push("t=" + state.length);
     if (state.moods.length) parts.push("v=" + state.moods.join(","));
     if (state.fame !== 50) parts.push("w=" + state.fame);
@@ -196,6 +198,7 @@
   function changed() {
     writeHash();
     saveState();
+    renderDifferentToggle();
     renderResults();
   }
 
@@ -432,6 +435,24 @@
       : "Including older games your machines can play.");
   });
 
+  // "Show me something different" flips the ranking away from your taste. It only
+  // means anything once there is a profile to differ from, so it hides until then.
+  const differentBox = $("#different-toggle");
+  const differentSection = $("#different-section");
+
+  function renderDifferentToggle() {
+    differentBox.checked = state.different;
+    differentSection.hidden = !(state.played.length || state.moods.length);
+  }
+
+  differentBox.addEventListener("change", (e) => {
+    state.different = e.target.checked;
+    changed();
+    announce(state.different
+      ? "Looking for something different from your usual taste."
+      : "Back to the closest matches to your taste.");
+  });
+
   function renderLengths() {
     const box = $("#lengths");
     box.textContent = "";
@@ -500,7 +521,11 @@
   function summaryText(result) {
     const n = state.played.length;
     let lead;
-    if (n) lead = "Matched against " + n + " game" + (n === 1 ? "" : "s") + " you've played";
+    if (state.different) {
+      lead = n
+        ? "A departure from the " + n + " game" + (n === 1 ? "" : "s") + " you've played"
+        : "A departure from what you're in the mood for";
+    } else if (n) lead = "Matched against " + n + " game" + (n === 1 ? "" : "s") + " you've played";
     else if (state.moods.length) lead = "Matched to what you're in the mood for";
     else lead = "Well-loved starting points, since you haven't added any games yet";
     const len = state.length === "any" ? "of any length" : "aiming for " + lengthOption().detail;
@@ -530,6 +555,7 @@
   }
 
   function becauseLine(why) {
+    if (why.different) return "Deliberately outside your usual taste";
     if (why.because.length) return becauseText(why.because);
     if (why.moods.length) return "Matches what you're in the mood for";
     if (why.cold) return "A widely loved place to start";
@@ -745,6 +771,7 @@
     state.played = [];
     state.machines = [];
     state.native = false;
+    state.different = false;
     state.length = "any";
     state.moods = [];
     state.fame = 50;
@@ -819,6 +846,7 @@
     renderQuick();
     renderMachines();
     renderNativeToggle();
+    renderDifferentToggle();
     renderLengths();
     renderFame();
     renderMoods();
@@ -836,7 +864,7 @@
   typeDialogue();
 
   window.addEventListener("hashchange", () => {
-    state.played = []; state.machines = []; state.native = false; state.length = "any"; state.moods = []; state.fame = 50;
+    state.played = []; state.machines = []; state.native = false; state.different = false; state.length = "any"; state.moods = []; state.fame = 50;
     search.value = "";
     closeOptions();
     readHash();
