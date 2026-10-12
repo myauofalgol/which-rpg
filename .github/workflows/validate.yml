@@ -5,18 +5,11 @@
 # stops the whole catalogue from loading. This job runs "node --check" on every
 # file in js/ and fails the run if any of them will not parse.
 #
-# Note: GitHub Pages is served straight from the branch, so this is a loud
-# signal rather than a hard gate on the deploy. Watch the run, or switch Pages
-# to a build-and-deploy action if you want a failing check to block it.
+# Pull requests only: pushes to main are covered by the deploy workflow, which
+# runs the same check before it will publish.
 name: Validate
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "js/**"
-      - "index.html"
-      - "catalogue.html"
   pull_request:
     paths:
       - "js/**"

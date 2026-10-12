@@ -15,8 +15,8 @@ which-rpg/
 ├── .nojekyll           tells GitHub Pages to serve the files as they are
 ├── .github/
 │   └── workflows/
-│       ├── version.yml  bumps the footer version on every site push
-│       └── validate.yml checks the JavaScript parses, so a typo can't break the site
+│       ├── deploy.yml   checks, bumps the footer version, and deploys the site
+│       └── validate.yml checks the JavaScript parses on pull requests
 ├── css/
 │   └── style.css       all the styling
 └── js/
@@ -138,7 +138,7 @@ Each platform in `games.js` carries a `coverage` value, and the audit page at `c
 
 - **Hours are approximate.** They're rough main-story figures, and side content in most of these games can easily double them.
 - **Fame tiers are rough guesses.** The 1-4 fame tier is a hand-set hunch rather than sales data, so treat the slider as a lean rather than a ranking. If a result feels wrong, check the game's tier on the audit page and adjust it in `games.js`.
-- **Platforms change.** The lists reflect what could be confirmed as of October 2026, but ports and remasters arrive constantly, so check the store before buying. The footer's `version` looks after itself: the workflow in `.github/workflows/version.yml` bumps the patch number on every push that touches the site, while a hand-edited version is left alone — use that for major bumps (changes that break shared links) and minor ones (new platforms or features). Keep `updated` current for catalogue changes.
+- **Platforms change.** The lists reflect what could be confirmed as of October 2026, but ports and remasters arrive constantly, so check the store before buying. The footer's `version` looks after itself: the deploy workflow in `.github/workflows/deploy.yml` bumps the patch number on every push that touches the site, while a hand-edited version is left alone — use that for major bumps (changes that break shared links) and minor ones (new platforms or features). Keep `updated` current for catalogue changes.
 - **"PC or Steam Deck" is one option.** Nearly everything listed for PC is on Steam, but Steam Deck compatibility varies by game, so check its Deck rating.
 - **Xbox 360 and original Xbox games on modern consoles.** Only some of these run through backward compatibility, so games that do (like Fallout: New Vegas, Morrowind, and KOTOR) list Xbox One alongside their original machine and carry a note; the rest are Xbox 360 or Xbox only.
 - **Mobile is thin.** Only a handful of the classics have proper phone ports, so someone who picks only "Phone or tablet" will see a short list.

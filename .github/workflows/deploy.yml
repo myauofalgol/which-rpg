@@ -1,9 +1,15 @@
-# Bumps the footer's version number whenever the site changes.
+# Builds and deploys the site through GitHub Actions, and is the only thing
+# that publishes it once Pages is set to the "GitHub Actions" source.
 #
-# Pushes made with the default GITHUB_TOKEN do not trigger workflow runs, so
-# this commit does not loop. If the push fails, allow write access under
-# Settings -> Actions -> General -> Workflow permissions.
-name: Version bump
+# Set Settings -> Pages -> Build and deployment -> Source to "GitHub Actions"
+# to stop the old branch-based build from republishing on every push.
+#
+# The version bump is folded in here on purpose: a commit pushed with the
+# default GITHUB_TOKEN does not trigger other workflow runs, so a separate
+# version-bump workflow could never hand the bumped files to a deploy step.
+# Doing it in one run means the artifact we upload already carries the new
+# version, and the bump commit it pushes does not loop back into another run.
+name: Deploy
 
 on:
   push:
@@ -13,16 +19,19 @@ on:
       - "catalogue.html"
       - "css/**"
       - "js/**"
+  workflow_dispatch:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
-  group: version-bump
+  group: pages
   cancel-in-progress: false
 
 jobs:
-  bump:
+  build:
     runs-on: ubuntu-26.04
     steps:
       - name: Check out the repo
@@ -30,12 +39,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Check JavaScript syntax
+        run: |
+          set -euo pipefail
+          for f in js/*.js; do
+            echo "node --check $f"
+            node --check "$f"
+          done
+
       - name: Bump the patch version and commit it
         run: |
           set -euo pipefail
 
           before="${{ github.event.before }}"
-          if [ "$before" != "0000000000000000000000000000000000000000" ]; then
+          if [ -n "$before" ] && [ "$before" != "0000000000000000000000000000000000000000" ]; then
             if git diff "$before" "${{ github.sha }}" -- js/games.js | grep -q '^+.*version: "'; then
               echo "The version was changed by hand in this push; leaving it alone."
               exit 0
@@ -58,3 +75,22 @@ jobs:
           git add js/games.js index.html catalogue.html
           git commit -m "chore: Bump the footer version to $next"
           git push
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-26.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
