@@ -17,7 +17,8 @@
  *      + a popularity nudge when the slider leans towards crowd-pleasers
  *        or hidden gems
  *   5. The top picks are spread across series so you don't get three Souls games -
- *      unless you asked for a mood, in which case its games all come first.
+ *      unless you asked for a mood, in which case its games all come first, or
+ *      unless the spread would leave the list short, in which case it is filled up.
  */
 (function (root) {
   "use strict";
@@ -290,6 +291,24 @@
         seriesCount[dKey] = (seriesCount[dKey] || 0) + 1;
         picks.sort(byScore);
       }
+    }
+
+    // The per-series cap keeps the list varied, but it should never shrink it:
+    // if holding series-mates back left us short of a full set, top up with the
+    // best of the rest, cap or no cap, so variety never costs a suggestion.
+    if (picks.length < limit) {
+      var chosen = {};
+      picks.forEach(function (s) { chosen[s.game.id] = true; });
+      for (var j = 0; j < scored.length && picks.length < limit; j++) {
+        var cand = scored[j];
+        if (chosen[cand.game.id]) continue;
+        chosen[cand.game.id] = true;
+        picks.push(cand);
+      }
+      picks.sort(function (a, b) {
+        if (a.moodMatch !== b.moodMatch) return a.moodMatch ? -1 : 1;
+        return b.score - a.score || a.game.title.localeCompare(b.game.title);
+      });
     }
 
     picks.forEach(function (s) { s.why = explain(index, s.game, played, moods, warm); });
