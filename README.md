@@ -149,5 +149,6 @@ Each platform in `games.js` carries a `coverage` value, and the audit page at `c
 - Links from each card to a store page or review.
 - More games, especially for mobile and for genres that are light here, such as monster collecting and farming RPGs.
 - Add support for Japan-only games which have an English fan translation.
+- Add the original Japanese titles, either as search aliases or as a third "Japan" option in the footer's name toggle (a `jp` field alongside `na`/`eu`). Examples: Secret of Mana / Seiken Densetsu 2, Suikoden / Genso Suikoden, Etrian Odyssey / Sekaiju no Meikyu.
 - Add themes which mimic UI windows for other RPGs (The default looks like Final Fantasy).
 - Note which PC games run natively on macOS or Linux, for players without a Windows machine. Keep "PC or Steam Deck" as the machine and flag only the exceptions, rather than splitting PC into Windows, Mac and Linux.
