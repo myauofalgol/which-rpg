@@ -1,28 +1,23 @@
-# Builds and deploys the site through GitHub Actions, and is the only thing
-# that publishes it once Pages is set to the "GitHub Actions" source.
+# Builds and deploys the site, but only once the version has actually changed.
+#
+# It is triggered by the "Version bump" workflow finishing rather than by the
+# push itself, because a bump commit pushed with the default GITHUB_TOKEN does
+# not fire push-based workflows. It then looks for a changed "version: x.y.z"
+# line in the latest commit: if there isn't one, the build is skipped.
 #
 # Set Settings -> Pages -> Build and deployment -> Source to "GitHub Actions"
-# to stop the old branch-based build from republishing on every push.
-#
-# The version bump is folded in here on purpose: a commit pushed with the
-# default GITHUB_TOKEN does not trigger other workflow runs, so a separate
-# version-bump workflow could never hand the bumped files to a deploy step.
-# Doing it in one run means the artifact we upload already carries the new
-# version, and the bump commit it pushes does not loop back into another run.
+# so this is the only thing that publishes the site.
 name: Deploy
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Version bump"]
+    types: [completed]
     branches: [main]
-    paths:
-      - "index.html"
-      - "catalogue.html"
-      - "css/**"
-      - "js/**"
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -32,51 +27,36 @@ concurrency:
 
 jobs:
   build:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-26.04
+    outputs:
+      deploy: ${{ steps.detect.outputs.changed }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v7
         with:
+          ref: ${{ github.event.workflow_run.head_branch || 'main' }}
           fetch-depth: 0
 
-      - name: Check JavaScript syntax
+      - name: Detect a version update
+        id: detect
         run: |
           set -euo pipefail
-          for f in js/*.js; do
-            echo "node --check $f"
-            node --check "$f"
-          done
-
-      - name: Bump the patch version and commit it
-        run: |
-          set -euo pipefail
-
-          before="${{ github.event.before }}"
-          if [ -n "$before" ] && [ "$before" != "0000000000000000000000000000000000000000" ]; then
-            if git diff "$before" "${{ github.sha }}" -- js/games.js | grep -q '^+.*version: "'; then
-              echo "The version was changed by hand in this push; leaving it alone."
-              exit 0
-            fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "Manual run; building."
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if git show --format= HEAD -- js/games.js | grep -qE '^[+-].*version: "[0-9]+\.[0-9]+\.[0-9]+"'; then
+            echo "The version was updated; building."
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "No version change in the latest commit; skipping the build."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
           fi
 
-          current=$(grep -o 'version: "[0-9]*\.[0-9]*\.[0-9]*"' js/games.js | grep -o '[0-9]*\.[0-9]*\.[0-9]*')
-          major=${current%%.*}
-          rest=${current#*.}
-          minor=${rest%%.*}
-          patch=${rest##*.}
-          next="$major.$minor.$((patch + 1))"
-
-          sed -i "s/version: \"$current\"/version: \"$next\"/" js/games.js
-          sed -i "s/version\">$current</version\">$next</" index.html
-          sed -i "s/version\">$current</version\">$next</" catalogue.html
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add js/games.js index.html catalogue.html
-          git commit -m "chore: Bump the footer version to $next"
-          git push
-
       - name: Assemble the site
+        if: steps.detect.outputs.changed == 'true'
         run: |
           set -euo pipefail
           mkdir -p _site
@@ -84,15 +64,18 @@ jobs:
           [ -f .nojekyll ] && cp .nojekyll _site/ || true
 
       - name: Configure Pages
+        if: steps.detect.outputs.changed == 'true'
         uses: actions/configure-pages@v5
 
       - name: Upload the site
+        if: steps.detect.outputs.changed == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
 
   deploy:
     needs: build
+    if: needs.build.outputs.deploy == 'true'
     runs-on: ubuntu-26.04
     environment:
       name: github-pages
