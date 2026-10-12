@@ -3347,6 +3347,16 @@ window.RPG_DATA = {
       pitch: "A remake of the first two Langrisser games (the original Warsong); classic grid tactics with branching paths." },
     { id: "fragile-dreams", title: "Fragile Dreams: Farewell Ruins of the Moon", year: 2009, fame: 1, platforms: ["wii"], hours: 20,
       tags: ["action", "solo", "post-apoc", "story", "emotional", "exploration"], aka: ["fragile dreams"],
-      pitch: "A lonely, atmospheric Wii RPG about a boy searching a depopulated world; melancholy and oddly moving." }
+      pitch: "A lonely, atmospheric Wii RPG about a boy searching a depopulated world; melancholy and oddly moving." },
+    { id: "labyrinth-of-refrain", title: "Labyrinth of Refrain: Coven of Dusk", year: 2016, fame: 1, platforms: ["pc", "ps4", "psvita", "switch"], hours: 60,
+      tags: ["turn-based", "party", "jrpg", "dungeon-crawl", "dark-fantasy", "builds"], aka: ["labyrinth of refrain"],
+      note: "Its sequel is Labyrinth of Galleria: The Moon Society.",
+      pitch: "A deep, gloomy NIS dungeon crawler with puppet-soldier parties and a lot of dark humour." },
+    { id: "legend-of-grimrock", title: "Legend of Grimrock", year: 2012, fame: 2, series: "legend-of-grimrock", platforms: ["pc", "mobile"], hours: 20,
+      tags: ["action", "party", "dungeon-crawl", "fantasy", "challenge", "retro"], aka: ["legend of grimrock"],
+      pitch: "A modern take on Dungeon Master: grid-based, real-time, and unapologetically old-school." },
+    { id: "legend-of-grimrock-2", title: "Legend of Grimrock 2", year: 2014, fame: 1, series: "legend-of-grimrock", platforms: ["pc"], hours: 25,
+      tags: ["action", "party", "dungeon-crawl", "fantasy", "challenge", "exploration", "retro"], aka: ["legend of grimrock 2"],
+      pitch: "The sequel opens out to an island overworld; more puzzles, more secrets, same grid-based tension." }
   ]
 };
