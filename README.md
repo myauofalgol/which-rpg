@@ -15,7 +15,8 @@ which-rpg/
 ├── .nojekyll           tells GitHub Pages to serve the files as they are
 ├── .github/
 │   └── workflows/
-│       └── version.yml bumps the footer version on every site push
+│       ├── version.yml  bumps the footer version on every site push
+│       └── validate.yml checks the JavaScript parses, so a typo can't break the site
 ├── css/
 │   └── style.css       all the styling
 └── js/
