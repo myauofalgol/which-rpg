@@ -76,13 +76,20 @@ jobs:
           git commit -m "chore: Bump the footer version to $next"
           git push
 
+      - name: Assemble the site
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          cp -r index.html catalogue.html favicon.svg css js _site/
+          [ -f .nojekyll ] && cp .nojekyll _site/ || true
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
       - name: Upload the site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
 
   deploy:
     needs: build
