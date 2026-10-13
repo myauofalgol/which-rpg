@@ -62,6 +62,17 @@
     return node;
   }
 
+  // The 1-4 fame tier as a small chip, with its meaning in the tooltip
+  function fameChip(g) {
+    const lv = DATA.fameLevels && DATA.fameLevels[g.fame];
+    if (!lv) return null;
+    return el("span", {
+      class: "fame-chip fame-" + g.fame,
+      title: "Fame " + g.fame + " of 4: " + lv.label + " \u2014 " + lv.blurb,
+      text: lv.label
+    });
+  }
+
   function entriesFor(platformKey) {
     const older = Engine.BACKWARD[platformKey] || [];
     const entries = [];
@@ -120,12 +131,16 @@
         (viaCount ? " \u00b7 " + viaCount + " via backward compatibility" : "");
 
       const list = entries.length
-        ? el("ul", { class: "audit-list" }, entries.map((e) => el("li", null, [
-          el("span", { class: "audit-title" }, [gameName(e.game), regionMark(e.game)]),
-          el("span", { class: "audit-meta", text: " " + e.game.year + " \u00b7 " + e.game.hours + " hours \u00b7 fame " + (e.game.fame || "?") }),
-          e.via ? el("span", { class: "audit-meta audit-via", text: " \u00b7 " + shortName(e.via) + " version" }) : null,
-          e.game.note ? el("p", { class: "audit-note", text: e.game.note }) : null
-        ])))
+        ? el("ul", { class: "audit-list" }, entries.map((e) => {
+          const chip = fameChip(e.game);
+          return el("li", null, [
+            el("span", { class: "audit-title" }, [gameName(e.game), regionMark(e.game)]),
+            el("span", { class: "audit-meta", text: " " + e.game.year + " \u00b7 " + e.game.hours + " hours" + (chip ? " \u00b7 " : "") }),
+            chip,
+            e.via ? el("span", { class: "audit-meta audit-via", text: " \u00b7 " + shortName(e.via) + " version" }) : null,
+            e.game.note ? el("p", { class: "audit-note", text: e.game.note }) : null
+          ]);
+        }))
         : el("p", { class: "hint", text: "Nothing listed for this machine yet." });
 
       const bodyId = id + "-body";
@@ -185,7 +200,19 @@
   document.querySelector("#audit-summary").textContent =
     DATA.games.length + " games across " + DATA.platforms.length + " machines. " +
     "Entries marked with another machine, like \u201cPS4 version\u201d, run through backward compatibility. " +
-    "Fame is the 1-4 popularity tier the picker\u2019s slider leans on.";
+    "Each game carries a 1-4 fame tier, shown beside it, that the picker\u2019s slider leans on:";
+
+  const fameKey = document.querySelector("#fame-key");
+  if (fameKey && DATA.fameLevels) {
+    [1, 2, 3, 4].forEach((n) => {
+      const lv = DATA.fameLevels[n];
+      if (!lv) return;
+      fameKey.append(el("li", null, [
+        el("span", { class: "fame-chip fame-" + n, text: lv.label }),
+        el("span", { text: lv.blurb })
+      ]));
+    });
+  }
 
   document.querySelector("#updated").textContent = DATA.updated;
   document.querySelector("#version").textContent = DATA.version;

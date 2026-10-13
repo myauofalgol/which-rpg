@@ -96,6 +96,17 @@
     return node;
   }
 
+  // The 1-4 fame tier as a small chip, with its meaning in the tooltip
+  function fameChip(g) {
+    const lv = DATA.fameLevels && DATA.fameLevels[g.fame];
+    if (!lv) return null;
+    return el("span", {
+      class: "fame-chip fame-" + g.fame,
+      title: "Fame " + g.fame + " of 4: " + lv.label + " \u2014 " + lv.blurb,
+      text: lv.label
+    });
+  }
+
   // "A", "A and B", "A, B, and C" (Oxford comma, always)
   function listJoin(items) {
     if (items.length <= 1) return items.join("");
@@ -665,6 +676,7 @@
     const g = s.game;
     const why = s.why;
     const verdict = verdictText(s);
+    const fame = fameChip(g);
     const moodChips = why.moods.length
       ? el("div", { class: "why-moods" }, [
         el("span", { class: "why-moods-label", id: "mood-" + g.id, text: "Matches your mood:" }),
@@ -692,7 +704,9 @@
           gauge(g.hours)
         ]),
         el("dt", { text: "Play on" }),
-        el("dd", { text: playLine(s.on) })
+        el("dd", { text: playLine(s.on) }),
+        fame ? el("dt", { text: "Fame" }) : null,
+        fame ? el("dd", null, [fame]) : null
       ]),
       g.note ? el("p", { class: "note", text: g.note }) : null,
       el("div", { class: "pick-actions" }, [
@@ -723,10 +737,14 @@
     if (why.because.length) reason = becauseText(why.because.slice(0, 1));
     else if (why.moods.length) reason = "Matches " + listJoin(why.moods.map((t) => DATA.tags[t].mood.toLowerCase()));
     const verdict = verdictText(s);
+    const fame = fameChip(g);
     return el("li", { class: "more-item" }, [
       el("div", { class: "more-top" }, [
         el("span", { class: "more-title" }, [gameName(g), regionMark(g)]),
-        el("span", { class: "more-meta", text: "About " + g.hours + " hours" + (verdict && s.length !== "fits" ? ", " + verdict : "") })
+        el("span", { class: "more-meta" }, [
+          "About " + g.hours + " hours" + (verdict && s.length !== "fits" ? ", " + verdict : "") + (fame ? " \u00b7 " : ""),
+          fame
+        ])
       ]),
       el("span", { class: "more-pitch", text: g.pitch }),
       reason ? el("span", { class: "more-why", text: reason }) : null,

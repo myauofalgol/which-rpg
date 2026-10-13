@@ -692,6 +692,33 @@ button, input { font: inherit; color: inherit; }
 .audit-via { color: var(--gold); }
 .audit-note { margin-top: 2px; color: var(--faint); }
 
+/* ---------- Fame tiers ---------- */
+
+.fame-chip {
+  display: inline-block;
+  padding: 0 6px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--muted);
+  white-space: nowrap;
+  cursor: help;
+}
+.fame-1 { color: var(--faint); }
+.fame-2 { color: var(--mist); }
+.fame-3 { color: var(--mint); }
+.fame-4 { color: var(--gold); }
+
+.fame-key {
+  display: grid;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: var(--step--1);
+  color: var(--muted);
+}
+.fame-key li { display: flex; align-items: baseline; gap: 8px; }
+
 .dialogue a { color: var(--gold); }
 .hint a { color: var(--mist); }
 .hint a:hover { color: var(--ink); }

@@ -108,6 +108,14 @@ window.RPG_DATA = {
     "surreal": { label: "a surreal streak" }
   },
 
+  // How each game's 1-4 fame tier reads; shown on the cards and the audit page
+  fameLevels: {
+    1: { label: "Deep cut", blurb: "a hidden gem most people have not heard of" },
+    2: { label: "Known to RPG fans", blurb: "a favourite among RPG players" },
+    3: { label: "Well-known", blurb: "recognised by most gamers" },
+    4: { label: "Household name", blurb: "famous well beyond RPG fans" }
+  },
+
   games: [
     // Open worlds and western action RPGs
     { id: "witcher3", title: "The Witcher 3: Wild Hunt", year: 2015, fame: 4, series: "witcher", platforms: ["pc", "ps5", "ps4", "xsx", "xb1", "switch"], hours: 50,
