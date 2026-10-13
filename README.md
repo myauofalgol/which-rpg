@@ -130,10 +130,10 @@ Your most recent selections are also saved in your own browser using `localStora
 
 Each platform in `games.js` carries a `coverage` value, and the audit page at `catalogue.html` shows it. **Complete** means every officially released North American or European RPG we know of is listed; **partial** means that sweep is still to come; **living** machines are curated modern libraries that keep growing rather than chasing completeness. New machines are added as their games come up, and start out partial until their sweep is done. English fan translations are part of the plan for the retro machines, but are not listed yet.
 
-- **Complete (official NA/EU):** Super Nintendo, Mega Drive, Master System, PlayStation 1, Saturn, Nintendo 64, GameCube, Game Boy Advance, Xbox
-- **Partial:** Xbox 360, Game Gear, Mega-CD, Dreamcast, TurboGrafx-16, TurboGrafx-CD
+- **Complete (official NA/EU):** Super Nintendo, Mega Drive, Master System, Game Boy, Game Boy Color, Game Gear, Nintendo Entertainment System, PlayStation 1, Saturn, Nintendo 64, GameCube, Game Boy Advance, Xbox
+- **Partial:** Xbox 360, Mega-CD, Dreamcast, TurboGrafx-16, TurboGrafx-CD
 - **Living lists:** PC, PlayStation, Xbox Series and One, Switch, mobile
-- **Newly added (partial):** Nintendo Entertainment System, PlayStation 3, PlayStation 2, Game Boy, Game Boy Color, Nintendo DS, Nintendo 3DS, PlayStation Portable, PlayStation Vita, Wii, Wii U — dedicated RPGs only for now, until each sweep is done
+- **Newly added (partial):** PlayStation 3, PlayStation 2, Nintendo DS, Nintendo 3DS, PlayStation Portable, PlayStation Vita, Wii, Wii U — dedicated RPGs only for now, until each sweep is done
 
 ## Caveats
 
