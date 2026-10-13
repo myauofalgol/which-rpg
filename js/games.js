@@ -294,7 +294,7 @@ window.RPG_DATA = {
       pitch: "A small-town murder mystery with one of the warmest casts in any JRPG." },
     { id: "p3r", title: "Persona 3", year: 2006, fame: 2, series: "persona", platforms: ["pc", "ps5", "ps4", "xsx", "xb1"], hours: 60,
       tags: ["turn-based", "party", "jrpg", "modern", "social", "story", "emotional"], aka: ["p3r", "persona 3", "p3"],
-      note: "Persona 3 Reload (2024) is the modern remake.",
+      note: "Persona 3 Reload (2024) is the modern remake; Persona 3 FES (2007) is the expanded version, adding the epilogue The Answer.",
       pitch: "A moody, modern-day RPG about students who fight shadows in a hidden hour of the night." },
     { id: "metaphor", title: "Metaphor: ReFantazio", year: 2024, fame: 2, platforms: ["pc", "ps5", "ps4", "xsx"], hours: 75,
       tags: ["turn-based", "party", "jrpg", "fantasy", "social", "story"], aka: ["refantazio"],
