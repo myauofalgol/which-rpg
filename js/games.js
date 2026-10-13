@@ -14,6 +14,13 @@
  *   aka        optional search aliases
  *   starter    optional; widely loved, approachable picks used when there is little to go on
  *   note       optional; shown under the platforms line
+ *   of         optional; the id of the base game this entry is an edition of (a remaster or port)
+ *   preferred  optional, set on the base game; the id of the edition to show by default
+ *
+ * Editions: where a game has both an original and a modern edition worth its own card,
+ * the modern one sets `of` to the original's id, and the original sets `preferred` to the
+ * modern one. The picker shows the preferred edition by default and the original when
+ * "Prefer original releases" is ticked, counting the whole lineage as one game.
  *
  * Backward compatibility is handled in recommend.js, so a PS4 game only needs "ps4"
  * to show up for someone with a PS5, an Xbox One game shows up on Series X|S, and a
@@ -21,7 +28,7 @@
  */
 window.RPG_DATA = {
   updated: "October 2026",
-  version: "0.10.4",
+  version: "0.11.0",
 
   platforms: [
     { key: "pc", label: "PC or Steam Deck", short: "PC", coverage: "living", era: 1980 },
@@ -427,12 +434,11 @@ window.RPG_DATA = {
     { id: "ff7", title: "Final Fantasy VII", year: 1997, fame: 4, platforms: ["pc", "ps4", "xb1", "switch", "mobile", "ps1"], hours: 37,
       tags: ["turn-based", "party", "jrpg", "sci-fi", "story", "retro"], aka: ["ff7", "ffvii", "final fantasy 7", "original"],
       pitch: "The 1997 original, still compelling for its materia system and its story about a planet being drained dry." },
-    { id: "ff6", title: "Final Fantasy VI", year: 1994, fame: 3, platforms: ["snes", "ps1", "gba", "pc"], hours: 35, home: ["snes"],
+    { id: "ff6", title: "Final Fantasy VI", year: 1994, fame: 3, preferred: "ff6-pixel-remaster", platforms: ["snes", "ps1", "gba", "pc"], hours: 35, home: ["snes"],
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro", "emotional"], aka: ["ff6", "ffvi", "final fantasy 6", "final fantasy iii"],
       pitch: "Often called the series' peak, with a huge ensemble cast and a world that changes dramatically halfway through." },
-    { id: "ff6-pixel-remaster", title: "Final Fantasy VI", year: 2021, fame: 3, platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 35,
+    { id: "ff6-pixel-remaster", title: "Final Fantasy VI (Pixel Remaster)", year: 2021, fame: 3, of: "ff6", platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 35,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "emotional"], aka: ["ff6", "ffvi", "final fantasy 6", "pixel remaster"],
-      note: "The 2021 Pixel Remaster.",
       pitch: "The SNES original rebuilt with redrawn pixel art, a re-arranged score and quality-of-life fixes." },
     { id: "ff9", title: "Final Fantasy IX", year: 2000, fame: 3, platforms: ["pc", "ps4", "xb1", "switch", "mobile", "ps1"], hours: 40,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "emotional", "retro"], aka: ["ff9", "ffix", "final fantasy 9"],
@@ -611,15 +617,14 @@ window.RPG_DATA = {
       pitch: "An island-hopping adventure for the brothers, with timing-based battles and plenty of slapstick." },
 
     // Super Nintendo classics
-    { id: "ff4-snes", title: "Final Fantasy IV", year: 1991, fame: 2, platforms: ["snes", "ps1", "gba", "psp"], hours: 23, home: ["snes"],
+    { id: "ff4-snes", title: "Final Fantasy IV", year: 1991, fame: 2, preferred: "ff4-pixel-remaster", platforms: ["snes", "ps1", "gba", "psp"], hours: 23, home: ["snes"],
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro"], aka: ["ff4", "ffiv", "final fantasy 4", "final fantasy ii"],
       note: "On PSP it's part of Final Fantasy IV: The Complete Collection.",
       pitch: "The one that introduced the active-time battle system, with a cast that keeps changing as the story goes." },
-    { id: "ff4-pixel-remaster", title: "Final Fantasy IV", year: 2021, fame: 2, platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 23,
+    { id: "ff4-pixel-remaster", title: "Final Fantasy IV (Pixel Remaster)", year: 2021, fame: 2, of: "ff4-snes", platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 23,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story"], aka: ["ff4", "ffiv", "final fantasy 4", "pixel remaster"],
-      note: "The 2021 Pixel Remaster.",
       pitch: "The SNES original rebuilt with redrawn pixel art, a re-arranged score and quality-of-life fixes." },
-    { id: "ff4-3d-remake", title: "Final Fantasy IV", year: 2007, fame: 2, platforms: ["ds", "pc", "mobile"], hours: 25,
+    { id: "ff4-3d-remake", title: "Final Fantasy IV (3D Remake)", year: 2007, fame: 2, platforms: ["ds", "pc", "mobile"], hours: 25,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story"], aka: ["ff4", "ffiv", "final fantasy 4", "ff4 3d"],
       note: "A full 3D remake, first released on the DS.",
       pitch: "Cecil's story retold in 3D with voice acting and an expanded battle system, made for the DS." },
@@ -634,7 +639,7 @@ window.RPG_DATA = {
       tags: ["action", "party", "fantasy", "exploration", "cosy", "zelda-like", "retro"], aka: ["mana"],
       note: "On Switch it's part of the Collection of Mana.",
       pitch: "Real-time swordplay and a famous soundtrack, built for playing through with a friend beside you." },
-    { id: "secret-of-mana-remake", title: "Secret of Mana", year: 2018, fame: 2, series: "mana", platforms: ["pc", "ps4", "psvita", "mobile", "switch"], home: ["pc", "ps4", "switch"], hours: 20,
+    { id: "secret-of-mana-remake", title: "Secret of Mana (3D Remake)", year: 2018, fame: 2, series: "mana", platforms: ["pc", "ps4", "psvita", "mobile", "switch"], home: ["pc", "ps4", "switch"], hours: 20,
       tags: ["action", "party", "fantasy", "exploration", "cosy", "zelda-like"], aka: ["secret of mana remake"],
       note: "A full 3D remake of the 16-bit original.",
       pitch: "The SNES classic rebuilt in 3D, with a re-recorded soundtrack and a new voice cast." },
@@ -1389,7 +1394,7 @@ window.RPG_DATA = {
       tags: ["action", "party", "jrpg", "fantasy", "story", "retro", "zelda-like"], aka: ["seiken densetsu 3"],
       note: "On Switch it's part of the Collection of Mana, its first official English release.",
       pitch: "The legendary Japan-only Seiken Densetsu 3, finally in English: six heroes, three storylines, and a world that branches around your choices." },
-    { id: "trials-of-mana", title: "Trials of Mana", year: 2020, fame: 2, series: "mana", platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 25,
+    { id: "trials-of-mana", title: "Trials of Mana (3D Remake)", year: 2020, fame: 2, series: "mana", platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 25,
       tags: ["action", "party", "jrpg", "fantasy", "story", "builds", "zelda-like"], aka: ["seiken densetsu 3"],
       note: "A full 3D remake of the 16-bit original.",
       pitch: "The full 3D remake of Seiken Densetsu 3: pick three of six heroes, then take on the Mana Sword quest the West never got." },
@@ -1956,37 +1961,34 @@ window.RPG_DATA = {
       pitch: "A prequel told three times over through three protagonists; quietly one of the best-written chapters." },
 
     // Final Fantasy and Dragon Quest gaps
-    { id: "ff1", title: "Final Fantasy", year: 1987, fame: 2, platforms: ["nes", "ps1", "gba", "psp"], hours: 15,
+    { id: "ff1", title: "Final Fantasy", year: 1987, fame: 2, preferred: "ff1-pixel-remaster", platforms: ["nes", "ps1", "gba", "psp"], hours: 15,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro"], aka: ["ff1", "final fantasy 1"],
       pitch: "Where it all began: pick four classes, light the crystals, and save a world from a time loop." },
-    { id: "ff1-pixel-remaster", title: "Final Fantasy", year: 2021, fame: 2, platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 15,
+    { id: "ff1-pixel-remaster", title: "Final Fantasy (Pixel Remaster)", year: 2021, fame: 2, of: "ff1", platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 15,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story"], aka: ["ff1", "final fantasy 1", "pixel remaster"],
-      note: "The 2021 Pixel Remaster.",
       pitch: "The NES original rebuilt with redrawn pixel art, a re-arranged score and quality-of-life fixes." },
-    { id: "ff2", title: "Final Fantasy II", year: 1988, fame: 1, platforms: ["nes", "ps1", "gba", "psp"], hours: 20,
+    { id: "ff2", title: "Final Fantasy II", year: 1988, fame: 1, preferred: "ff2-pixel-remaster", platforms: ["nes", "ps1", "gba", "psp"], hours: 20,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro"], aka: ["ff2", "final fantasy 2"],
       pitch: "The odd one out, with a keyword-based story and a level-free system where you grow by doing." },
-    { id: "ff2-pixel-remaster", title: "Final Fantasy II", year: 2021, fame: 1, platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 20,
+    { id: "ff2-pixel-remaster", title: "Final Fantasy II (Pixel Remaster)", year: 2021, fame: 1, of: "ff2", platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 20,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story"], aka: ["ff2", "final fantasy 2", "pixel remaster"],
-      note: "The 2021 Pixel Remaster.",
       pitch: "The NES original rebuilt with redrawn pixel art, a re-arranged score and quality-of-life fixes." },
-    { id: "ff3", title: "Final Fantasy III", year: 1990, fame: 2, platforms: ["nes"], hours: 20,
+    { id: "ff3", title: "Final Fantasy III", year: 1990, fame: 2, preferred: "ff3-pixel-remaster", platforms: ["nes"], hours: 20,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro", "builds"], aka: ["ff3", "final fantasy 3"],
       pitch: "The game that introduced the job system, sending four orphans out to restore balance to the crystals." },
-    { id: "ff3-pixel-remaster", title: "Final Fantasy III", year: 2021, fame: 2, platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 20,
+    { id: "ff3-pixel-remaster", title: "Final Fantasy III (Pixel Remaster)", year: 2021, fame: 2, of: "ff3", platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 20,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "builds"], aka: ["ff3", "final fantasy 3", "pixel remaster"],
       note: "The 2021 Pixel Remaster, and the first official English release of the original 2D game.",
       pitch: "The long Japan-only NES original rebuilt with redrawn pixel art, a re-arranged score and quality-of-life fixes." },
-    { id: "ff3-3d-remake", title: "Final Fantasy III", year: 2006, fame: 2, platforms: ["ds", "pc", "mobile"], home: ["ds"], hours: 25,
+    { id: "ff3-3d-remake", title: "Final Fantasy III (3D Remake)", year: 2006, fame: 2, platforms: ["ds", "pc", "mobile"], home: ["ds"], hours: 25,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "builds"], aka: ["ff3", "final fantasy 3", "ff3 3d"],
       note: "A full 3D remake, first released on the DS.",
       pitch: "The Famicom original reborn in 3D with the same job system, rebuilt for the DS." },
-    { id: "ff5", title: "Final Fantasy V", year: 1992, fame: 2, platforms: ["snes", "ps1", "gba", "pc"], hours: 30, home: ["snes"],
+    { id: "ff5", title: "Final Fantasy V", year: 1992, fame: 2, preferred: "ff5-pixel-remaster", platforms: ["snes", "ps1", "gba", "pc"], hours: 30, home: ["snes"],
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro", "builds", "humour"], aka: ["ff5", "final fantasy 5"],
       pitch: "The job-system playground, with mix-and-match abilities and a famously light, adventurous tone." },
-    { id: "ff5-pixel-remaster", title: "Final Fantasy V", year: 2021, fame: 2, platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 30,
+    { id: "ff5-pixel-remaster", title: "Final Fantasy V (Pixel Remaster)", year: 2021, fame: 2, of: "ff5", platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 30,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "builds", "humour"], aka: ["ff5", "final fantasy 5", "pixel remaster"],
-      note: "The 2021 Pixel Remaster.",
       pitch: "The SNES original rebuilt with redrawn pixel art, a re-arranged score and quality-of-life fixes." },
     { id: "ff11", title: "Final Fantasy XI", year: 2002, fame: 1, platforms: ["pc"], hours: 80,
       tags: ["action", "party", "jrpg", "fantasy", "open-world", "exploration", "builds", "mmo"], aka: ["ff11", "final fantasy 11"],
@@ -2491,10 +2493,10 @@ window.RPG_DATA = {
     { id: "stranger-of-paradise", title: "Stranger of Paradise: Final Fantasy Origin", year: 2022, fame: 1, platforms: ["pc", "ps5", "ps4", "xsx", "xb1"], hours: 25,
       tags: ["action", "party", "jrpg", "dark-fantasy", "story", "challenge", "loot"], aka: ["stranger of paradise", "sop"],
       pitch: "A grim, gear-heavy retelling of the first Final Fantasy's story, built as a hard action game; gleefully daft." },
-    { id: "final-fantasy-adventure", title: "Final Fantasy Adventure", year: 1991, fame: 1, series: "mana", platforms: ["gb"], hours: 15,
+    { id: "final-fantasy-adventure", title: "Final Fantasy Adventure", year: 1991, fame: 1, series: "mana", preferred: "adventures-of-mana", platforms: ["gb"], hours: 15,
       tags: ["action", "solo", "fantasy", "story", "exploration", "retro"], aka: ["seiken densetsu", "mystic quest"], eu: "Mystic Quest",
       pitch: "The first Mana game (Seiken Densetsu): a real-time action adventure that set the template for Secret of Mana." },
-    { id: "adventures-of-mana", title: "Adventures of Mana", year: 2016, fame: 1, series: "mana", platforms: ["mobile", "psvita"], hours: 15,
+    { id: "adventures-of-mana", title: "Adventures of Mana", year: 2016, fame: 1, series: "mana", of: "final-fantasy-adventure", platforms: ["mobile", "psvita"], hours: 15,
       tags: ["action", "solo", "fantasy", "story", "exploration"], aka: ["adventures of mana"],
       note: "A 3D remake of the Game Boy's Final Fantasy Adventure.",
       pitch: "A faithful remake of the series' origin story, with the same wandering and stabbing, given a fresh coat of paint." },

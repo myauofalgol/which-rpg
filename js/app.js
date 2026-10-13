@@ -71,7 +71,7 @@
   const ORDINALS = ["Top pick", "Second pick", "Third pick"];
   const GAUGE_MAX = 120;
 
-  const state = { played: [], machines: [], native: false, home: false, different: false, length: "any", moods: [], fame: 50 };
+  const state = { played: [], machines: [], native: false, home: false, different: false, preferOriginal: false, length: "any", moods: [], fame: 50 };
 
   // ---------- Small helpers ----------
 
@@ -136,6 +136,7 @@
     if (params.get("n") === "1") state.native = true;
     if (params.get("h") === "1") state.home = true;
     if (params.get("d") === "1") state.different = true;
+    if (params.get("o") === "1") state.preferOriginal = true;
     const t = params.get("t");
     if (t && LENGTH_OPTIONS.some((o) => o.key === t)) state.length = t;
     const v = params.get("v");
@@ -152,7 +153,7 @@
   }
 
   function hasState() {
-    return !!(state.played.length || state.machines.length || state.native || state.home || state.different || state.moods.length || state.length !== "any" || state.fame !== 50);
+    return !!(state.played.length || state.machines.length || state.native || state.home || state.different || state.preferOriginal || state.moods.length || state.length !== "any" || state.fame !== 50);
   }
 
   // Built by hand so the commas stay readable rather than turning into %2C
@@ -163,6 +164,7 @@
     if (state.native) parts.push("n=1");
     if (state.home) parts.push("h=1");
     if (state.different) parts.push("d=1");
+    if (state.preferOriginal) parts.push("o=1");
     if (state.length !== "any") parts.push("t=" + state.length);
     if (state.moods.length) parts.push("v=" + state.moods.join(","));
     if (state.fame !== 50) parts.push("w=" + state.fame);
@@ -470,6 +472,22 @@
     announce(state.different
       ? "Looking for something different from your usual taste."
       : "Back to the closest matches to your taste.");
+  });
+
+  // A game with both an original and a modern edition is shown once. By default
+  // the modern one is shown; this prefers the original wherever it still runs.
+  const preferOriginalBox = $("#prefer-original");
+
+  function renderVersionToggle() {
+    preferOriginalBox.checked = state.preferOriginal;
+  }
+
+  preferOriginalBox.addEventListener("change", (e) => {
+    state.preferOriginal = e.target.checked;
+    changed();
+    announce(state.preferOriginal
+      ? "Showing original releases where you can play them."
+      : "Showing the modern edition of games where there is a choice.");
   });
 
   function renderLengths() {
@@ -798,6 +816,7 @@
     state.native = false;
     state.home = false;
     state.different = false;
+    state.preferOriginal = false;
     state.length = "any";
     state.moods = [];
     state.fame = 50;
@@ -874,6 +893,7 @@
     renderNativeToggle();
     renderHomeToggle();
     renderDifferentToggle();
+    renderVersionToggle();
     renderLengths();
     renderFame();
     renderMoods();
@@ -891,7 +911,7 @@
   typeDialogue();
 
   window.addEventListener("hashchange", () => {
-    state.played = []; state.machines = []; state.native = false; state.home = false; state.different = false; state.length = "any"; state.moods = []; state.fame = 50;
+    state.played = []; state.machines = []; state.native = false; state.home = false; state.different = false; state.preferOriginal = false; state.length = "any"; state.moods = []; state.fame = 50;
     search.value = "";
     closeOptions();
     readHash();

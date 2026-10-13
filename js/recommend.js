@@ -16,7 +16,10 @@
  *      + a small nudge for sequels or siblings of games you loved
  *      + a popularity nudge when the slider leans towards crowd-pleasers
  *        or hidden gems
- *   5. The top picks are spread across series so you don't get three Souls games -
+ *   5. A game with several editions (an original and a remaster) is shown once - as the
+ *      preferred edition by default, or the original when `preferOriginal` is set - and
+ *      counts as one game for the "have you played it" and series-variety rules.
+ *   6. The top picks are spread across series so you don't get three Souls games -
  *      unless you asked for a mood, in which case its games all come first, or
  *      unless the spread would leave the list short, in which case it is filled up.
  */
@@ -111,7 +114,24 @@
       home[g.id] = older.filter(function (k) { return era[k] === min; });
     });
 
-    return { data: data, idf: idf, vectors: vectors, byId: byId, fame: fame, home: home };
+    // Editions of the same game share a "lineage": an entry with `of` points back at its
+    // base game, and the base may name a `preferred` edition to show by default. Most
+    // games are their own single-entry lineage.
+    var baseOf = {};
+    var editionsOf = {};
+    games.forEach(function (g) {
+      var base = (g.of && byId[g.of]) ? g.of : g.id;
+      baseOf[g.id] = base;
+      (editionsOf[base] = editionsOf[base] || []).push(g.id);
+    });
+    var preferredOf = {};
+    Object.keys(editionsOf).forEach(function (base) {
+      var b = byId[base];
+      preferredOf[base] = (b && b.preferred && byId[b.preferred]) ? b.preferred : base;
+    });
+
+    return { data: data, idf: idf, vectors: vectors, byId: byId, fame: fame, home: home,
+             baseOf: baseOf, editionsOf: editionsOf, preferredOf: preferredOf };
   }
 
   function normalise(v) {
@@ -194,7 +214,14 @@
     var fameLean = (Math.max(0, Math.min(100, fameRaw)) - 50) / 50;
 
     var playedIds = {};
-    played.forEach(function (p) { playedIds[p.id] = p.feel; });
+    var playedBases = {};
+    played.forEach(function (p) {
+      playedIds[p.id] = p.feel;
+      // Mark the whole lineage played, so loving the SNES Final Fantasy VI does not
+      // bring its Pixel Remaster back as though it were a game you had not tried
+      var b = index.baseOf[p.id];
+      if (b) playedBases[b] = true;
+    });
 
     // Taste profile from played games
     var playedVec = {};
@@ -237,10 +264,16 @@
       if (p.feel === "bad") badSeries[g.series] = true;
     });
 
-    var eligible = 0;
-    var scored = [];
+    var preferOriginal = !!state.preferOriginal;
+
+    // Group the playable, unplayed entries by lineage, then keep one per lineage: the
+    // preferred edition by default, the original when "prefer originals" is on, and
+    // whichever edition your machines can actually run when the favoured one cannot.
+    var groups = {};
     games.forEach(function (g) {
       if (playedIds[g.id]) return;
+      var lineage = index.baseOf[g.id] || g.id;
+      if (playedBases[lineage]) return;
       // "Hide ports": keep only games whose own machine is one you picked, so a
       // SNES game ported to the GBA drops out when you tick the GBA. It only
       // bites once a machine is ticked, like the native-only filter.
@@ -250,8 +283,30 @@
       }
       var on = playableOn(g, machines, nativeOnly);
       if (!on.length) return;
+      (groups[lineage] = groups[lineage] || []).push({ game: g, on: on });
+    });
+
+    function firstById(list, id) {
+      for (var i = 0; i < list.length; i++) if (list[i].game.id === id) return list[i];
+      return null;
+    }
+
+    var eligible = 0;
+    var scored = [];
+    Object.keys(groups).forEach(function (lineage) {
+      var group = groups[lineage];
+      var chosen = group[0];
+      if (group.length > 1) {
+        var pref = index.preferredOf[lineage] || lineage;
+        var order = preferOriginal ? [lineage, pref] : [pref, lineage];
+        for (var k = 0; k < order.length; k++) {
+          var hit = firstById(group, order[k]);
+          if (hit) { chosen = hit; break; }
+        }
+      }
       eligible++;
 
+      var g = chosen.game;
       var taste = dot(profile, index.vectors[g.id]);
       var fit = lengthFit(g.hours, lengthKey);
       // Series nudges reward staying near your history, so they are left out
@@ -265,16 +320,16 @@
       var starter = g.starter ? (warm ? WEIGHTS.starterWarm : WEIGHTS.starterCold) : 0;
       var fameNudge = WEIGHTS.fame * fameLean * (index.fame[g.id] || 0);
       // Normally the closest match wins; "something different" rewards the least similar
-      var base = different ? WEIGHTS.different * -taste : taste;
+      var baseScore = different ? WEIGHTS.different * -taste : taste;
 
       scored.push({
         game: g,
-        on: on,
+        on: chosen.on,
         taste: taste,
         fit: fit,
         moodMatch: !different && hasMood && g.tags.some(function (t) { return moodSet[t] === true; }),
         length: lengthVerdict(g.hours, lengthKey),
-        score: base + WEIGHTS.lengthFit * fit + series + starter + fameNudge
+        score: baseScore + WEIGHTS.lengthFit * fit + series + starter + fameNudge
       });
     });
 
@@ -295,7 +350,7 @@
     var deferred = [];
     var seriesCount = {};
     scored.forEach(function (s) {
-      var key = s.game.series || s.game.id;
+      var key = s.game.series || index.baseOf[s.game.id] || s.game.id;
       var count = seriesCount[key] || 0;
       var cap = hasMood ? Infinity : (picks.length < topDistinct ? 1 : 2);
       if (count >= cap) {
@@ -313,7 +368,7 @@
     function byScore(a, b) { return b.score - a.score || a.game.title.localeCompare(b.game.title); }
     for (var i = 0; i < deferred.length; i++) {
       var d = deferred[i];
-      var dKey = d.game.series || d.game.id;
+      var dKey = d.game.series || index.baseOf[d.game.id] || d.game.id;
       if ((seriesCount[dKey] || 0) >= 2) continue;
       if (picks.length < limit) {
         picks.push(d);
@@ -322,7 +377,7 @@
       }
       if (d.score > picks[picks.length - 1].score) {
         var out = picks.pop();
-        var outKey = out.game.series || out.game.id;
+        var outKey = out.game.series || index.baseOf[out.game.id] || out.game.id;
         if (seriesCount[outKey]) seriesCount[outKey]--;
         picks.push(d);
         seriesCount[dKey] = (seriesCount[dKey] || 0) + 1;
