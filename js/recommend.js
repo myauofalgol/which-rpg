@@ -91,7 +91,27 @@
       fame[g.id] = (typeof t === "number" && t >= 1 && t <= 4) ? (t - 2.5) / 1.5 : 0;
     });
 
-    return { data: data, idf: idf, vectors: vectors, byId: byId, fame: fame };
+    // Where a game "lives": its oldest machine that isn't still growing, so a
+    // SNES game ported up to the GBA still points back at the SNES. PC, phones
+    // and the current consoles never count as the oldest, so a game on nothing
+    // but those lives on all of them. A game may set `home` by hand to override.
+    var era = {};
+    var living = {};
+    data.platforms.forEach(function (p) {
+      era[p.key] = typeof p.era === "number" ? p.era : Infinity;
+      if (p.coverage === "living") living[p.key] = true;
+    });
+    var home = {};
+    games.forEach(function (g) {
+      if (g.home && g.home.length) { home[g.id] = g.home.slice(); return; }
+      var older = g.platforms.filter(function (k) { return !living[k]; });
+      if (!older.length) { home[g.id] = g.platforms.slice(); return; }
+      var min = Infinity;
+      older.forEach(function (k) { if (era[k] < min) min = era[k]; });
+      home[g.id] = older.filter(function (k) { return era[k] === min; });
+    });
+
+    return { data: data, idf: idf, vectors: vectors, byId: byId, fame: fame, home: home };
   }
 
   function normalise(v) {
@@ -165,6 +185,7 @@
     var played = state.played || [];
     var machines = state.machines || [];
     var nativeOnly = !!state.native;
+    var homeOnly = !!state.home;
     var different = !!state.different;
     var moods = state.moods || [];
     var lengthKey = state.length || "any";
@@ -220,6 +241,13 @@
     var scored = [];
     games.forEach(function (g) {
       if (playedIds[g.id]) return;
+      // "Hide ports": keep only games whose own machine is one you picked, so a
+      // SNES game ported to the GBA drops out when you tick the GBA. It only
+      // bites once a machine is ticked, like the native-only filter.
+      if (homeOnly && machines.length) {
+        var where = index.home[g.id] || [];
+        if (!machines.some(function (m) { return where.indexOf(m) !== -1; })) return;
+      }
       var on = playableOn(g, machines, nativeOnly);
       if (!on.length) return;
       eligible++;

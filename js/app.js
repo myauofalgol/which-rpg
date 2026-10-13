@@ -71,7 +71,7 @@
   const ORDINALS = ["Top pick", "Second pick", "Third pick"];
   const GAUGE_MAX = 120;
 
-  const state = { played: [], machines: [], native: false, different: false, length: "any", moods: [], fame: 50 };
+  const state = { played: [], machines: [], native: false, home: false, different: false, length: "any", moods: [], fame: 50 };
 
   // ---------- Small helpers ----------
 
@@ -134,6 +134,7 @@
     const m = params.get("m");
     if (m) state.machines = m.split(",").filter((k) => platformByKey[k]);
     if (params.get("n") === "1") state.native = true;
+    if (params.get("h") === "1") state.home = true;
     if (params.get("d") === "1") state.different = true;
     const t = params.get("t");
     if (t && LENGTH_OPTIONS.some((o) => o.key === t)) state.length = t;
@@ -151,7 +152,7 @@
   }
 
   function hasState() {
-    return !!(state.played.length || state.machines.length || state.native || state.different || state.moods.length || state.length !== "any" || state.fame !== 50);
+    return !!(state.played.length || state.machines.length || state.native || state.home || state.different || state.moods.length || state.length !== "any" || state.fame !== 50);
   }
 
   // Built by hand so the commas stay readable rather than turning into %2C
@@ -160,6 +161,7 @@
     if (state.played.length) parts.push("p=" + state.played.map((x) => x.id + "." + CODE_BY_FEEL[x.feel]).join(","));
     if (state.machines.length) parts.push("m=" + state.machines.join(","));
     if (state.native) parts.push("n=1");
+    if (state.home) parts.push("h=1");
     if (state.different) parts.push("d=1");
     if (state.length !== "any") parts.push("t=" + state.length);
     if (state.moods.length) parts.push("v=" + state.moods.join(","));
@@ -435,6 +437,23 @@
       : "Including older games your machines can play.");
   });
 
+  // "Hide ports" keeps games whose own machine is one you ticked, so a SNES game
+  // ported to the GBA stops cluttering the GBA list. Like the native-only filter
+  // it stays hidden until a machine is ticked, since without one it does nothing.
+  const homeBox = $("#home-only");
+
+  function renderHomeToggle() {
+    homeBox.checked = state.home;
+  }
+
+  homeBox.addEventListener("change", (e) => {
+    state.home = e.target.checked;
+    changed();
+    announce(state.home
+      ? "Hiding ports of games from other machines."
+      : "Including ports of games from other machines.");
+  });
+
   // "Show me something different" flips the ranking away from your taste. It only
   // means anything once there is a profile to differ from, so it hides until then.
   const differentBox = $("#different-toggle");
@@ -536,6 +555,10 @@
         result.eligible + " games in the list are in the running.";
     }
     const machines = listJoin(state.machines.map(shortName));
+    if (state.home) {
+      return lead + ", games of " + machines + " with ports from other machines left out, " + len + fame + ". " +
+        result.eligible + " games in the list are games of your machines.";
+    }
     if (state.native) {
       return lead + ", made for " + machines + ", " + len + fame + ". " +
         result.eligible + " games in the list were released for your machines.";
@@ -731,7 +754,9 @@
     if (!result.picks.length) {
       out.append(emptyState(
         "Nothing left to suggest for those machines.",
-        state.native
+        state.home
+          ? "Try turning off \u201cHide ports from other machines\u201d, adding another machine, or removing a game from your played list."
+          : state.native
           ? "Try turning off \u201cOnly games made for these machines\u201d, adding another machine, or removing a game from your played list."
           : "Try adding another machine, or remove a game from your played list."
       ));
@@ -771,6 +796,7 @@
     state.played = [];
     state.machines = [];
     state.native = false;
+    state.home = false;
     state.different = false;
     state.length = "any";
     state.moods = [];
@@ -846,6 +872,7 @@
     renderQuick();
     renderMachines();
     renderNativeToggle();
+    renderHomeToggle();
     renderDifferentToggle();
     renderLengths();
     renderFame();
@@ -864,7 +891,7 @@
   typeDialogue();
 
   window.addEventListener("hashchange", () => {
-    state.played = []; state.machines = []; state.native = false; state.different = false; state.length = "any"; state.moods = []; state.fame = 50;
+    state.played = []; state.machines = []; state.native = false; state.home = false; state.different = false; state.length = "any"; state.moods = []; state.fame = 50;
     search.value = "";
     closeOptions();
     readHash();
