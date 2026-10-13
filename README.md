@@ -148,7 +148,7 @@ Each platform in `games.js` carries a `coverage` value, and the audit page at `c
 - **Xbox 360 and original Xbox games on modern consoles.** Only some of these run through backward compatibility, so games that do (like Fallout: New Vegas, Morrowind, and KOTOR) list Xbox One alongside their original machine and carry a note; the rest are Xbox 360 or Xbox only.
 - **Mobile is thin.** Only a handful of the classics have proper phone ports, so someone who picks only "Phone or tablet" will see a short list.
 - **Game Gear, Mega-CD, Dreamcast and TurboGrafx are just starting.** Only the dedicated RPGs are listed so far, so owners of any of them see a short list until each sweep is done. The TurboGrafx lists follow the North American library, as the console barely reached Europe.
-- **Retro consoles are covered as their original versions.** Super Nintendo, Mega Drive, PlayStation, Saturn, Nintendo 64, GameCube, Game Boy Advance, and Xbox games list the retro console (and modern platforms too, where the same version is still sold); where a remake or remaster exists, the card's note points to it.
+- **Retro consoles are covered as their original versions.** Super Nintendo, Mega Drive, PlayStation, Saturn, Nintendo 64, GameCube, Game Boy Advance, and Xbox games list the retro console (and modern platforms too, where the same version is still sold). Where a remake or remaster is the definitive modern version it may stand as its own entry, shown in place of the original; otherwise the card's `note` names it.
 
 ## Ideas for later
 
