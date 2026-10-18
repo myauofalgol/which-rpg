@@ -16,6 +16,8 @@
  *   note       optional; shown under the platforms line
  *   of         optional; the id of the base game this entry is an edition of (a remaster or port)
  *   preferred  optional, set on the base game; the id of the edition to show by default
+ *   fan        optional; a Japan-only game with an English fan translation patch, hidden
+ *              unless the picker's fan translations toggle is on
  *
  * Editions: where a game has both an original and a modern edition worth its own card,
  * the modern one sets `of` to the original's id, and the original sets `preferred` to the
@@ -28,7 +30,7 @@
  */
 window.RPG_DATA = {
   updated: "October 2026",
-  version: "0.11.2",
+  version: "0.12.0",
 
   platforms: [
     { key: "pc", label: "PC or Steam Deck", short: "PC", coverage: "living", era: 1980 },
@@ -656,6 +658,18 @@ window.RPG_DATA = {
     { id: "earthbound", title: "EarthBound", year: 1995, fame: 3, platforms: ["snes"], hours: 30,
       tags: ["turn-based", "party", "modern", "humour", "surreal", "story", "retro"], starter: true, aka: ["mother 2", "mother"],
       pitch: "Baseball bats, psychics, and a neighbourhood full of weirdness; funny and heartfelt until it gets quietly devastating." },
+    { id: "bahamut-lagoon", title: "Bahamut Lagoon", year: 1996, fame: 1, platforms: ["snes"], hours: 30,
+      tags: ["tactics", "party", "jrpg", "fantasy", "story", "retro"], aka: ["bahamut"],
+      fan: true, note: "Japan-only; play it via an English fan translation patch, so it needs an emulator or flashcart.",
+      pitch: "Squaresoft tactics with dragon-raising on the side and a branching story; a cult favourite fans translated by hand." },
+    { id: "fe4", title: "Fire Emblem: Genealogy of the Holy War", year: 1996, fame: 2, series: "fire-emblem", platforms: ["snes"], hours: 42,
+      tags: ["tactics", "party", "jrpg", "fantasy", "story", "politics", "retro"], aka: ["fe4", "seisen no keifu", "genealogy of the holy war"],
+      fan: true, note: "Japan-only; play it via an English fan translation patch, so it needs an emulator or flashcart.",
+      pitch: "Sprawling maps and a story that spans two generations; the Fire Emblem fans have long asked Nintendo to localise." },
+    { id: "fe5", title: "Fire Emblem: Thracia 776", year: 1999, fame: 1, series: "fire-emblem", platforms: ["snes"], hours: 36,
+      tags: ["tactics", "party", "jrpg", "fantasy", "challenge", "story", "retro"], aka: ["fe5", "thracia 776"],
+      fan: true, note: "Japan-only; play it via an English fan translation patch, so it needs an emulator or flashcart.",
+      pitch: "The series at its cruellest: a small rebel army, scarce resources, and a grim war story told between desperate escapes." },
     { id: "secret-of-mana", title: "Secret of Mana", year: 1993, fame: 2, series: "mana", platforms: ["snes", "switch"], hours: 20,
       tags: ["action", "party", "fantasy", "exploration", "cosy", "zelda-like", "retro"], aka: ["mana"],
       note: "On Switch it's part of the Collection of Mana.",
@@ -1570,6 +1584,10 @@ window.RPG_DATA = {
       tags: ["action", "party", "jrpg", "fantasy", "story", "retro"], aka: ["tales"],
       note: "The Super Famicom original never left Japan.",
       pitch: "The first Tales, finally in English: linear-motion battles and a time-travel epic." },
+    { id: "mother3", title: "Mother 3", year: 2006, fame: 2, series: "mother", platforms: ["gba"], hours: 27,
+      tags: ["turn-based", "party", "jrpg", "modern", "story", "emotional", "humour"], aka: ["earthbound 2"],
+      fan: true, note: "Japan-only; play it via an English fan translation patch, so it needs an emulator or flashcart.",
+      pitch: "A chapter-by-chapter tale of family and loss in a strange, funny, quietly devastating world." },
     { id: "boktai", title: "Boktai: The Sun Is in Your Hand", year: 2003, fame: 1, series: "boktai", platforms: ["gba"], hours: 20,
       tags: ["action", "solo", "sci-fi", "exploration", "story", "retro"], aka: ["boktai"],
       pitch: "Kojima's solar-powered vampire hunt; the cartridge literally read sunlight. Glorious nonsense." },

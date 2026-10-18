@@ -47,6 +47,16 @@
     ]);
   }
 
+  // A marker for the Japan-only games that only play in English once patched
+  function fanChip(g) {
+    if (!g.fan) return null;
+    const note = "Japan-only; playable via an English fan translation patch, with an emulator or flashcart";
+    return el("span", { class: "fan-chip", title: note }, [
+      el("span", { "aria-hidden": "true", text: "Fan translation" }),
+      el("span", { class: "sr-only", text: " (" + note + ")" })
+    ]);
+  }
+
   const LENGTH_OPTIONS = [
     { key: "short", label: "A weekend or two", detail: "under 20 hours" },
     { key: "medium", label: "A few weeks", detail: "20 to 45 hours" },
@@ -71,7 +81,7 @@
   const ORDINALS = ["Top pick", "Second pick", "Third pick"];
   const GAUGE_MAX = 120;
 
-  const state = { played: [], machines: [], native: false, home: false, different: false, preferOriginal: false, length: "any", moods: [], fame: 50 };
+  const state = { played: [], machines: [], native: false, home: false, different: false, preferOriginal: false, fan: false, length: "any", moods: [], fame: 50 };
 
   // ---------- Small helpers ----------
 
@@ -148,6 +158,7 @@
     if (params.get("h") === "1") state.home = true;
     if (params.get("d") === "1") state.different = true;
     if (params.get("o") === "1") state.preferOriginal = true;
+    if (params.get("f") === "1") state.fan = true;
     const t = params.get("t");
     if (t && LENGTH_OPTIONS.some((o) => o.key === t)) state.length = t;
     const v = params.get("v");
@@ -164,7 +175,7 @@
   }
 
   function hasState() {
-    return !!(state.played.length || state.machines.length || state.native || state.home || state.different || state.preferOriginal || state.moods.length || state.length !== "any" || state.fame !== 50);
+    return !!(state.played.length || state.machines.length || state.native || state.home || state.different || state.preferOriginal || state.fan || state.moods.length || state.length !== "any" || state.fame !== 50);
   }
 
   // Built by hand so the commas stay readable rather than turning into %2C
@@ -176,6 +187,7 @@
     if (state.home) parts.push("h=1");
     if (state.different) parts.push("d=1");
     if (state.preferOriginal) parts.push("o=1");
+    if (state.fan) parts.push("f=1");
     if (state.length !== "any") parts.push("t=" + state.length);
     if (state.moods.length) parts.push("v=" + state.moods.join(","));
     if (state.fame !== 50) parts.push("w=" + state.fame);
@@ -290,7 +302,7 @@
         onmousedown: (e) => e.preventDefault(),
         onclick: () => addGame(g.id),
         onmousemove: () => { if (active !== i) { active = i; paintActive(); } }
-      }, [el("span", null, [gameName(g), regionMark(g)]), el("span", { class: "year", text: g.year })]);
+      }, [el("span", null, [gameName(g), regionMark(g), fanChip(g)]), el("span", { class: "year", text: g.year })]);
       listbox.append(li);
     });
     search.setAttribute("aria-activedescendant", "game-opt-" + active);
@@ -501,6 +513,26 @@
       : "Showing the modern edition of games where there is a choice.");
   });
 
+  // Japan-only games with English fan translations are opt-in: they need a
+  // patched ROM and an emulator or flashcart, so they are no ordinary machine
+  // pick. The section hides itself when the catalogue lists none.
+  const fanBox = $("#fan-toggle");
+  const fanSection = $("#fan-section");
+  const hasFanGames = DATA.games.some((g) => g.fan);
+
+  function renderFanToggle() {
+    fanBox.checked = state.fan;
+    fanSection.hidden = !hasFanGames;
+  }
+
+  fanBox.addEventListener("change", (e) => {
+    state.fan = e.target.checked;
+    changed();
+    announce(state.fan
+      ? "Including Japan-only games with English fan translations."
+      : "Hiding fan-translated games.");
+  });
+
   function renderLengths() {
     const box = $("#lengths");
     box.textContent = "";
@@ -687,7 +719,7 @@
     return el("article", { class: "pick window", "aria-labelledby": "pick-" + g.id }, [
       el("p", { class: "nameplate", text: ORDINALS[rank] }),
       el("h3", { class: "pick-title", id: "pick-" + g.id }, [
-        gameName(g), regionMark(g), el("span", { class: "pick-year", text: g.year })
+        gameName(g), regionMark(g), fanChip(g), el("span", { class: "pick-year", text: g.year })
       ]),
       el("p", { class: "pitch", text: g.pitch }),
       el("div", { class: "why" }, [
@@ -740,7 +772,7 @@
     const fame = fameChip(g);
     return el("li", { class: "more-item" }, [
       el("div", { class: "more-top" }, [
-        el("span", { class: "more-title" }, [gameName(g), regionMark(g)]),
+        el("span", { class: "more-title" }, [gameName(g), regionMark(g), fanChip(g)]),
         el("span", { class: "more-meta" }, [
           "About " + g.hours + " hours" + (verdict && s.length !== "fits" ? ", " + verdict : "") + (fame ? " \u00b7 " : ""),
           fame
@@ -835,6 +867,7 @@
     state.home = false;
     state.different = false;
     state.preferOriginal = false;
+    state.fan = false;
     state.length = "any";
     state.moods = [];
     state.fame = 50;
@@ -912,6 +945,7 @@
     renderHomeToggle();
     renderDifferentToggle();
     renderVersionToggle();
+    renderFanToggle();
     renderLengths();
     renderFame();
     renderMoods();
@@ -929,7 +963,7 @@
   typeDialogue();
 
   window.addEventListener("hashchange", () => {
-    state.played = []; state.machines = []; state.native = false; state.home = false; state.different = false; state.preferOriginal = false; state.length = "any"; state.moods = []; state.fame = 50;
+    state.played = []; state.machines = []; state.native = false; state.home = false; state.different = false; state.preferOriginal = false; state.fan = false; state.length = "any"; state.moods = []; state.fame = 50;
     search.value = "";
     closeOptions();
     readHash();

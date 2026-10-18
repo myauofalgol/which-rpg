@@ -710,6 +710,20 @@ button, input { font: inherit; color: inherit; }
 .fame-3 { color: var(--mint); }
 .fame-4 { color: var(--gold); }
 
+/* The marker for Japan-only games playable via an English fan translation */
+.fan-chip {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 6px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: var(--amber);
+  white-space: nowrap;
+  cursor: help;
+}
+
 .fame-key {
   display: grid;
   gap: 4px;

@@ -206,6 +206,7 @@
     var machines = state.machines || [];
     var nativeOnly = !!state.native;
     var homeOnly = !!state.home;
+    var fanOn = !!state.fan;
     var different = !!state.different;
     var moods = state.moods || [];
     var lengthKey = state.length || "any";
@@ -274,6 +275,9 @@
       if (playedIds[g.id]) return;
       var lineage = index.baseOf[g.id] || g.id;
       if (playedBases[lineage]) return;
+      // Japan-only games with English fan translations stay hidden unless asked
+      // for: there is no official release to buy, so they are no ordinary pick
+      if (g.fan && !fanOn) return;
       // "Hide ports": keep only games whose own machine is one you picked, so a
       // SNES game ported to the GBA drops out when you tick the GBA. It only
       // bites once a machine is ticked, like the native-only filter.

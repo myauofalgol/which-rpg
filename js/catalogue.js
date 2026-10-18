@@ -73,6 +73,16 @@
     });
   }
 
+  // A marker for the Japan-only games that only play in English once patched
+  function fanChip(g) {
+    if (!g.fan) return null;
+    const note = "Japan-only; playable via an English fan translation patch, with an emulator or flashcart";
+    return el("span", { class: "fan-chip", title: note }, [
+      el("span", { "aria-hidden": "true", text: "Fan translation" }),
+      el("span", { class: "sr-only", text: " (" + note + ")" })
+    ]);
+  }
+
   function entriesFor(platformKey) {
     const older = Engine.BACKWARD[platformKey] || [];
     const entries = [];
@@ -123,11 +133,13 @@
     DATA.platforms.forEach((p) => {
       const entries = entriesFor(p.key);
       const viaCount = entries.filter((e) => e.via).length;
+      const fanCount = entries.filter((e) => e.game.fan).length;
       const id = "mach-" + p.key;
 
       nav.append(el("a", { href: "#" + id, text: p.short, class: "audit-chip" }));
 
       const count = entries.length + (entries.length === 1 ? " game" : " games") +
+        (fanCount ? " \u00b7 " + fanCount + (fanCount === 1 ? " fan translation" : " fan translations") : "") +
         (viaCount ? " \u00b7 " + viaCount + " via backward compatibility" : "");
 
       const list = entries.length
@@ -137,6 +149,7 @@
             el("span", { class: "audit-title" }, [gameName(e.game), regionMark(e.game)]),
             el("span", { class: "audit-meta", text: " " + e.game.year + " \u00b7 " + e.game.hours + " hours" + (chip ? " \u00b7 " : "") }),
             chip,
+            e.game.fan ? fanChip(e.game) : null,
             e.via ? el("span", { class: "audit-meta audit-via", text: " \u00b7 " + shortName(e.via) + " version" }) : null,
             e.game.note ? el("p", { class: "audit-note", text: e.game.note }) : null
           ]);
@@ -200,6 +213,7 @@
   document.querySelector("#audit-summary").textContent =
     DATA.games.length + " games across " + DATA.platforms.length + " machines. " +
     "Entries marked with another machine, like \u201cPS4 version\u201d, run through backward compatibility. " +
+    "Games with a \u201cFan translation\u201d chip are Japan-only, playable via an English fan translation patch with an emulator or flashcart. " +
     "Each game carries a 1-4 fame tier, shown beside it, that the picker\u2019s slider leans on:";
 
   const fameKey = document.querySelector("#fame-key");
