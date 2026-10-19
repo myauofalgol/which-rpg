@@ -211,6 +211,7 @@
     var topDistinct = opts.topDistinct || 3;
     var games = index.data.games;
     var played = state.played || [];
+    var skipped = state.skipped || [];
     var machines = state.machines || [];
     var nativeOnly = !!state.native;
     var homeOnly = !!state.home;
@@ -230,6 +231,14 @@
       // bring its Pixel Remaster back as though it were a game you had not tried
       var b = index.baseOf[p.id];
       if (b) playedBases[b] = true;
+    });
+
+    // Skipping is only a hide: unlike a played verdict, it leaves the taste profile
+    // and every weighting untouched. Skipping one edition hides the whole lineage.
+    var skippedBases = {};
+    skipped.forEach(function (id) {
+      var b = index.baseOf[id];
+      if (b) skippedBases[b] = true;
     });
 
     // Taste profile from played games
@@ -283,6 +292,7 @@
       if (playedIds[g.id]) return;
       var lineage = index.baseOf[g.id] || g.id;
       if (playedBases[lineage]) return;
+      if (skippedBases[lineage]) return;
       // Japan-only games with English fan translations stay hidden unless asked
       // for: there is no official release to buy, so they are no ordinary pick
       if (g.fan && !fanOn) return;

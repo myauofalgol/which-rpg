@@ -49,6 +49,8 @@ So under the hood, this is a small content-based recommender, the same broad ide
 
 **Moods are a second, optional profile.** If you tick "Little or no combat" and "A strong story", those tags get blended in alongside your played games (or used on their own if you haven't added any). A ticked mood pulls harder than your history does, so a craving can genuinely reshape the list; your played games still decide the pecking order among games that fit it. "Card games" favours RPGs built around cards or deck-building. The "Where it's from" group leans the list towards Japanese or Western studios. This is about who made the game rather than its style: a Japanese action RPG counts as Japanese, and a Western-made JRPG-style game counts as Western.
 
+**You can skip a title without judging it.** The Skip button on a suggestion hides that game (and any other edition of it) from the current list without adding it to your played games, so your taste profile and the weightings stay exactly as they were. Skips are kept in the shared link, and the "Bring back skipped titles" button restores them all.
+
 **You can ask for something different.** The "Show me something different" toggle flips the ranking away from your taste: rather than the closest matches, it favours the games least like the ones you've played, while still respecting your machines and the time you have. It appears once you've added at least one played game or a mood, and it is for when you want a change of genre instead of another game in your comfort zone.
 
 **Each game you could actually play is scored as:**
@@ -126,7 +128,7 @@ Everything you choose is kept in the address bar, so the "Copy link to these pic
 #p=bg3.l,dos2.l,skyrim.d&m=pc,ps5&t=long&v=sci-fi
 ```
 
-`p` is the played list (`.l` loved, `.f` fine, `.b` wasn't good, `.d` not for me), `m` is machines, `n=1` restricts to games made for those machines (ignored when no machines are chosen), `h=1` hides ports from other machines (likewise ignored with no machines chosen), `d=1` turns on "show me something different", `o=1` prefers original releases over modern remasters, `f=1` includes Japan-only games with English fan translations, `t` is the length (`short`, `medium`, `long`, or `epic`), `v` is moods (including `cards`, `japanese`, and `western`), and `w` is the popularity slider (0 hidden gems to 100 crowd-pleasers; omitted when it's in the middle). Because it's a hash rather than a query string, none of it is sent to GitHub's servers.
+`p` is the played list (`.l` loved, `.f` fine, `.b` wasn't good, `.d` not for me), `s` is the skipped list (titles hidden without changing the profile), `m` is machines, `n=1` restricts to games made for those machines (ignored when no machines are chosen), `h=1` hides ports from other machines (likewise ignored with no machines chosen), `d=1` turns on "show me something different", `o=1` prefers original releases over modern remasters, `f=1` includes Japan-only games with English fan translations, `t` is the length (`short`, `medium`, `long`, or `epic`), `v` is moods (including `cards`, `japanese`, and `western`), and `w` is the popularity slider (0 hidden gems to 100 crowd-pleasers; omitted when it's in the middle). Because it's a hash rather than a query string, none of it is sent to GitHub's servers.
 
 ## Coming back later
 

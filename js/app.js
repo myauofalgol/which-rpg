@@ -81,7 +81,7 @@
   const ORDINALS = ["Top pick", "Second pick", "Third pick"];
   const GAUGE_MAX = 120;
 
-  const state = { played: [], machines: [], native: false, home: false, different: false, preferOriginal: false, fan: false, length: "any", moods: [], fame: 50 };
+  const state = { played: [], skipped: [], machines: [], native: false, home: false, different: false, preferOriginal: false, fan: false, length: "any", moods: [], fame: 50 };
 
   // ---------- Small helpers ----------
 
@@ -152,6 +152,14 @@
         }
       });
     }
+    const s = params.get("s");
+    if (s) {
+      s.split(",").forEach((id) => {
+        if (byId[id] && !state.skipped.includes(id) && !state.played.some((p) => p.id === id)) {
+          state.skipped.push(id);
+        }
+      });
+    }
     const m = params.get("m");
     if (m) state.machines = m.split(",").filter((k) => platformByKey[k]);
     if (params.get("n") === "1") state.native = true;
@@ -175,13 +183,14 @@
   }
 
   function hasState() {
-    return !!(state.played.length || state.machines.length || state.native || state.home || state.different || state.preferOriginal || state.fan || state.moods.length || state.length !== "any" || state.fame !== 50);
+    return !!(state.played.length || state.skipped.length || state.machines.length || state.native || state.home || state.different || state.preferOriginal || state.fan || state.moods.length || state.length !== "any" || state.fame !== 50);
   }
 
   // Built by hand so the commas stay readable rather than turning into %2C
   function encodeState() {
     const parts = [];
     if (state.played.length) parts.push("p=" + state.played.map((x) => x.id + "." + CODE_BY_FEEL[x.feel]).join(","));
+    if (state.skipped.length) parts.push("s=" + state.skipped.join(","));
     if (state.machines.length) parts.push("m=" + state.machines.join(","));
     if (state.native) parts.push("n=1");
     if (state.home) parts.push("h=1");
@@ -345,6 +354,7 @@
 
   function addGame(id, feel) {
     if (!byId[id] || state.played.some((p) => p.id === id)) return;
+    state.skipped = state.skipped.filter((x) => x !== id);
     state.played.push({ id: id, feel: feel || "loved" });
     search.value = "";
     closeOptions();
@@ -696,11 +706,30 @@
     return ["Not for me", el("span", { class: "sr-only", text: ", mark " + g.title + " as not for me and stop suggesting it" })];
   }
 
+  function skipButtonChildren(g) {
+    return ["Skip", el("span", { class: "sr-only", text: " " + gameName(g) })];
+  }
+
   function addFromCard(id, feel) {
     if (!byId[id]) return;
     addGame(id, feel);
     // addGame redraws the picks and throws away the button that was clicked,
     // so put focus somewhere sensible rather than dropping it on the body
+    const target = $("#results");
+    if (target) target.focus({ preventScroll: true });
+  }
+
+  // Skipping only hides the title for now; it never touches the taste profile
+  function skipGame(id) {
+    if (!byId[id] || state.skipped.includes(id) || state.played.some((p) => p.id === id)) return;
+    state.skipped.push(id);
+    changed();
+    announce("Skipped " + gameName(byId[id]) + " without changing your taste profile.");
+  }
+
+  function skipFromCard(id) {
+    if (!byId[id]) return;
+    skipGame(id);
     const target = $("#results");
     if (target) target.focus({ preventScroll: true });
   }
@@ -758,7 +787,12 @@
         el("button", {
           type: "button", class: "btn btn-quiet pick-dismiss",
           onclick: () => addFromCard(g.id, "disliked")
-        }, dismissButtonChildren(g))
+        }, dismissButtonChildren(g)),
+        el("button", {
+          type: "button", class: "btn btn-quiet pick-skip",
+          title: "Hide this title without changing your taste profile",
+          onclick: () => skipFromCard(g.id)
+        }, skipButtonChildren(g))
       ])
     ]);
   }
@@ -798,7 +832,12 @@
         el("button", {
           type: "button", class: "more-add more-dismiss",
           onclick: () => addFromCard(g.id, "disliked")
-        }, dismissButtonChildren(g))
+        }, dismissButtonChildren(g)),
+        el("button", {
+          type: "button", class: "more-add more-skip",
+          title: "Hide this title without changing your taste profile",
+          onclick: () => skipFromCard(g.id)
+        }, skipButtonChildren(g))
       ])
     ]);
   }
@@ -820,16 +859,27 @@
     const result = Engine.recommend(index, state, { limit: 9 });
     summary.textContent = summaryText(result);
 
+    const unskip = $("#unskip");
+    unskip.hidden = !state.skipped.length;
+    if (state.skipped.length) {
+      unskip.textContent = "Bring back " + state.skipped.length + " skipped " +
+        (state.skipped.length === 1 ? "title" : "titles");
+    }
+
     if (!result.picks.length) {
+      const skipped = state.skipped.length;
+      const rest = skipped
+        ? "You've skipped " + skipped + " title" + (skipped === 1 ? "" : "s") + ". Bring some back, add another machine, or remove a game from your played list."
+        : state.home
+        ? "Try turning off \u201cHide ports from other machines\u201d, adding another machine, or removing a game from your played list."
+        : state.native
+        ? "Try turning off \u201cOnly games made for these machines\u201d, adding another machine, or removing a game from your played list."
+        : "Try adding another machine, or remove a game from your played list.";
       out.append(emptyState(
-        "Nothing left to suggest for those machines.",
-        state.home
-          ? "Try turning off \u201cHide ports from other machines\u201d, adding another machine, or removing a game from your played list."
-          : state.native
-          ? "Try turning off \u201cOnly games made for these machines\u201d, adding another machine, or removing a game from your played list."
-          : "Try adding another machine, or remove a game from your played list."
+        state.machines.length ? "Nothing left to suggest for those machines." : "Nothing left to suggest.",
+        rest
       ));
-      announce("No picks for those machines.", 500);
+      announce(skipped ? "No picks left. Bring back a skipped title or change your filters." : "No picks for those machines.", 500);
       return;
     }
 
@@ -861,8 +911,18 @@
     }
   });
 
+  $("#unskip").addEventListener("click", () => {
+    const n = state.skipped.length;
+    if (!n) return;
+    state.skipped = [];
+    changed();
+    announce("Brought back " + n + " skipped title" + (n === 1 ? "" : "s") + ".");
+    $("#results").focus({ preventScroll: true });
+  });
+
   $("#reset").addEventListener("click", () => {
     state.played = [];
+    state.skipped = [];
     state.machines = [];
     state.native = false;
     state.home = false;
@@ -964,7 +1024,7 @@
   typeDialogue();
 
   window.addEventListener("hashchange", () => {
-    state.played = []; state.machines = []; state.native = false; state.home = false; state.different = false; state.preferOriginal = false; state.fan = false; state.length = "any"; state.moods = []; state.fame = 50;
+    state.played = []; state.skipped = []; state.machines = []; state.native = false; state.home = false; state.different = false; state.preferOriginal = false; state.fan = false; state.length = "any"; state.moods = []; state.fame = 50;
     search.value = "";
     closeOptions();
     readHash();
