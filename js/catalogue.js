@@ -1,17 +1,12 @@
 /*
  * The audit page: every game in the catalogue, machine by machine.
- * Each machine lists its native games plus anything older it can still run
- * through backward compatibility, marked the same way the pick cards mark it.
+ * A machine lists the games whose `platforms` name it; the picker's automatic
+ * backward compatibility is not expanded here.
  */
 (function () {
   "use strict";
 
   const DATA = window.RPG_DATA;
-  const Engine = window.RPGRecommend;
-
-  const platformByKey = {};
-  DATA.platforms.forEach((p) => { platformByKey[p.key] = p; });
-  function shortName(key) { return platformByKey[key] ? platformByKey[key].short : key; }
 
   // The footer toggle flips the few games that were renamed between regions
   const NAME_KEY = "which-rpg-names";
@@ -84,21 +79,8 @@
   }
 
   function entriesFor(platformKey) {
-    const older = Engine.BACKWARD[platformKey] || [];
-    const entries = [];
-    DATA.games.forEach((g) => {
-      if (g.platforms.indexOf(platformKey) !== -1) {
-        entries.push({ game: g, via: null });
-        return;
-      }
-      for (let i = 0; i < older.length; i++) {
-        if (g.platforms.indexOf(older[i]) !== -1) {
-          entries.push({ game: g, via: older[i] });
-          return;
-        }
-      }
-    });
-    entries.sort((a, b) => a.game.title.localeCompare(b.game.title));
+    const entries = DATA.games.filter((g) => g.platforms.indexOf(platformKey) !== -1);
+    entries.sort((a, b) => a.title.localeCompare(b.title));
     return entries;
   }
 
@@ -132,26 +114,23 @@
     main.textContent = "";
     DATA.platforms.forEach((p) => {
       const entries = entriesFor(p.key);
-      const viaCount = entries.filter((e) => e.via).length;
-      const fanCount = entries.filter((e) => e.game.fan).length;
+      const fanCount = entries.filter((g) => g.fan).length;
       const id = "mach-" + p.key;
 
       nav.append(el("a", { href: "#" + id, text: p.short, class: "audit-chip" }));
 
       const count = entries.length + (entries.length === 1 ? " game" : " games") +
-        (fanCount ? " \u00b7 " + fanCount + (fanCount === 1 ? " fan translation" : " fan translations") : "") +
-        (viaCount ? " \u00b7 " + viaCount + " via backward compatibility" : "");
+        (fanCount ? " \u00b7 " + fanCount + (fanCount === 1 ? " fan translation" : " fan translations") : "");
 
       const list = entries.length
-        ? el("ul", { class: "audit-list" }, entries.map((e) => {
-          const chip = fameChip(e.game);
+        ? el("ul", { class: "audit-list" }, entries.map((g) => {
+          const chip = fameChip(g);
           return el("li", null, [
-            el("span", { class: "audit-title" }, [gameName(e.game), regionMark(e.game)]),
-            el("span", { class: "audit-meta", text: " " + e.game.year + " \u00b7 " + e.game.hours + " hours" + (chip ? " \u00b7 " : "") }),
+            el("span", { class: "audit-title" }, [gameName(g), regionMark(g)]),
+            el("span", { class: "audit-meta", text: " " + g.year + " \u00b7 " + g.hours + " hours" + (chip ? " \u00b7 " : "") }),
             chip,
-            e.game.fan ? fanChip(e.game) : null,
-            e.via ? el("span", { class: "audit-meta audit-via", text: " \u00b7 " + shortName(e.via) + " version" }) : null,
-            e.game.note ? el("p", { class: "audit-note", text: e.game.note }) : null
+            g.fan ? fanChip(g) : null,
+            g.note ? el("p", { class: "audit-note", text: g.note }) : null
           ]);
         }))
         : el("p", { class: "hint", text: "Nothing listed for this machine yet." });
@@ -212,7 +191,7 @@
 
   document.querySelector("#audit-summary").textContent =
     DATA.games.length + " games across " + DATA.platforms.length + " machines. " +
-    "Entries marked with another machine, like \u201cPS4 version\u201d, run through backward compatibility. " +
+    "Backward compatibility is left to the picker, though a few Xbox One games that run that way are kept and marked in their notes. " +
     "Games with a \u201cFan translation\u201d chip are Japan-only, playable via an English fan translation patch with an emulator or flashcart. " +
     "Each game carries a 1-4 fame tier, shown beside it, that the picker\u2019s slider leans on:";
 
