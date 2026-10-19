@@ -517,7 +517,7 @@ window.RPG_DATA = {
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "cosy"], starter: true, aka: ["dq11", "dqxi", "dragon quest 11"],
       pitch: "Pure, comforting classic JRPG: a chosen hero, a lovable party, and a world that keeps on giving." },
     { id: "dq3", title: "Dragon Quest III", year: 1988, fame: 2, series: "dragon-quest", preferred: "dq3-hd2d", platforms: ["nes", "gbc"], hours: 30,
-      tags: ["turn-based", "party", "jrpg", "fantasy", "retro", "builds"], aka: ["dq3", "dragon quest 3"],
+      tags: ["turn-based", "party", "jrpg", "fantasy", "retro", "builds"], aka: ["dragon warrior iii", "dq3", "dragon quest 3"],
       pitch: "The class-based classic: build your own party of classes and set out to save the world." },
     { id: "dq3-hd2d", title: "Dragon Quest III (HD-2D Remake)", year: 2024, fame: 2, series: "dragon-quest", of: "dq3", platforms: ["pc", "ps5", "xsx", "switch"], hours: 30,
       tags: ["turn-based", "party", "jrpg", "fantasy", "retro", "builds"], aka: ["dq3", "dragon quest 3", "hd-2d remake"],
