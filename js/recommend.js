@@ -63,9 +63,17 @@
     different: 1
   };
 
+  // Where a game was made is offered as a mood without appearing in every tags list:
+  // Japanese studios are the catalogue's default, and anything else says so up front.
+  var ORIGIN_TAG = { jp: "japanese", west: "western" };
+
   function buildIndex(data) {
     var games = data.games;
     var n = games.length;
+    games.forEach(function (g) {
+      var tag = ORIGIN_TAG[g.origin || "jp"];
+      if (tag && g.tags.indexOf(tag) === -1) g.tags.push(tag);
+    });
     var df = {};
     games.forEach(function (g) {
       g.tags.forEach(function (t) { df[t] = (df[t] || 0) + 1; });
@@ -444,6 +452,9 @@
     // sentence never claims a trait for a game that doesn't have it.
     function sharedWith(list) {
       return game.tags.filter(function (t) {
+        var meta = index.data.tags[t];
+        // Where a game was made is not a taste trait worth explaining
+        if (meta && meta.group === "origin") return false;
         return list.every(function (m) { return m.game.tags.indexOf(t) !== -1; });
       }).sort(function (a, b) { return index.idf[b] - index.idf[a]; });
     }

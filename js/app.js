@@ -572,7 +572,8 @@
     box.textContent = "";
     const groups = [
       { key: "play", title: "How it plays" },
-      { key: "feel", title: "How it feels" }
+      { key: "feel", title: "How it feels" },
+      { key: "origin", title: "Where it's from" }
     ];
     groups.forEach((grp) => {
       const keys = Object.keys(DATA.tags).filter((k) => DATA.tags[k].mood && DATA.tags[k].group === grp.key);
