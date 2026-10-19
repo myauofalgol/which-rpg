@@ -670,7 +670,7 @@ window.RPG_DATA = {
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro"], aka: ["the after years", "ff4 the after years"],
       note: "On PSP it's part of Final Fantasy IV: The Complete Collection; first sold in chapters on WiiWare and mobile.",
       pitch: "An episodic sequel set 17 years after Final Fantasy IV, following Ceodore and a returning cast across short chapters." },
-    { id: "earthbound", title: "EarthBound", year: 1995, fame: 3, platforms: ["snes"], hours: 30,
+    { id: "earthbound", title: "EarthBound", year: 1995, fame: 3, series: "mother", platforms: ["snes"], hours: 30,
       tags: ["turn-based", "party", "modern", "humour", "surreal", "story", "retro"], starter: true, aka: ["mother 2", "mother"],
       pitch: "Baseball bats, psychics, and a neighbourhood full of weirdness; funny and heartfelt until it gets quietly devastating." },
     { id: "bahamut-lagoon", title: "Bahamut Lagoon", year: 1996, fame: 1, platforms: ["snes"], hours: 30,
@@ -2319,10 +2319,14 @@ window.RPG_DATA = {
       pitch: "A cosy remake of Yellow with Pokémon GO-style catching; the friendliest entry point in the series." },
 
     // Mother
-    { id: "earthbound-beginnings", title: "Mother (EarthBound Beginnings)", year: 1989, fame: 2, series: "mother", platforms: ["switch"], hours: 15,
-      tags: ["turn-based", "solo", "jrpg", "modern", "story", "retro", "emotional", "surreal"], aka: ["earthbound beginnings", "mother 1"],
-      note: "Playable as EarthBound Beginnings on Nintendo Switch Online.",
+    { id: "earthbound-beginnings", title: "EarthBound Beginnings", year: 1989, fame: 2, series: "mother", platforms: ["wiiu", "switch"], hours: 15,
+      tags: ["turn-based", "solo", "jrpg", "modern", "story", "retro", "emotional", "surreal"], aka: ["mother"],
+      note: "First released in English on Wii U Virtual Console in 2015, and later on Nintendo Switch Online.",
       pitch: "The first EarthBound: a boy, a baseball bat, and a strange, melancholy trip across America." },
+    { id: "mother", title: "Mother", year: 1989, fame: 2, series: "mother", of: "earthbound-beginnings", platforms: ["nes"], hours: 15,
+      tags: ["turn-based", "solo", "jrpg", "modern", "story", "retro", "emotional", "surreal"], aka: ["mother 1", "earthbound zero"],
+      fan: true, note: "Japan-only on the NES; play it via the English fan translation patch (the shelved 1990 localization, circulated as EarthBound Zero), so it needs an emulator or flashcart.",
+      pitch: "The first EarthBound, in its original 8-bit form: a boy, a baseball bat, and a strange, melancholy trip across America." },
 
     // Monster collecting and hunting
     { id: "mh-stories", title: "Monster Hunter Stories", year: 2016, fame: 2, series: "monster-hunter", platforms: ["3ds", "switch", "pc", "mobile"], hours: 30,
