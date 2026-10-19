@@ -2055,7 +2055,7 @@ window.RPG_DATA = {
       tags: ["action", "party", "jrpg", "fantasy", "open-world", "story", "social", "mmo"], aka: ["ff14", "final fantasy 14"],
       pitch: "The redeemed MMO with a genuinely great story; a free trial covers the whole base game and first expansion." },
     { id: "dq4", title: "Dragon Quest IV: Chapters of the Chosen", year: 2007, fame: 1, series: "dragon-quest", platforms: ["ds", "mobile", "nes"], hours: 25, home: ["ds", "nes"],
-      tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro"], aka: ["dq4", "dragon quest 4"],
+      tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro"], aka: ["dragon warrior iv", "dq4", "dragon quest 4"],
       pitch: "A novel structure: separate chapters introduce each party member before they gather around the hero." },
     { id: "dq6", title: "Dragon Quest VI: Realms of Revelation", year: 2010, fame: 1, series: "dragon-quest", platforms: ["ds", "mobile"], hours: 30,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro", "builds"], aka: ["dq6", "dragon quest 6"],
