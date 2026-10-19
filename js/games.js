@@ -1427,10 +1427,14 @@ window.RPG_DATA = {
       pitch: "A co-op dungeon crawler where your Digimon levels up with you; grind, loot, repeat." },
 
     // Official English releases of games whose originals stayed in Japan
-    { id: "trials-of-mana-snes", title: "Trials of Mana", year: 1995, fame: 2, series: "mana", platforms: ["switch"], hours: 25,
+    { id: "trials-of-mana-snes", title: "Trials of Mana", year: 1995, fame: 2, series: "mana", of: "seiken-densetsu-3", platforms: ["switch"], hours: 25,
       tags: ["action", "party", "jrpg", "fantasy", "story", "retro", "zelda-like"], aka: ["seiken densetsu 3"],
       note: "On Switch it's part of the Collection of Mana, its first official English release.",
       pitch: "The legendary Japan-only Seiken Densetsu 3, finally in English: six heroes, three storylines, and a world that branches around your choices." },
+    { id: "seiken-densetsu-3", title: "Seiken Densetsu 3", year: 1995, fame: 2, series: "mana", preferred: "trials-of-mana-snes", platforms: ["snes"], hours: 25,
+      tags: ["action", "party", "jrpg", "fantasy", "story", "retro", "zelda-like"], aka: ["trials of mana", "sd3"],
+      fan: true, note: "The Super Famicom original was never officially released in English; play it via the English fan translation patch, so it needs an emulator or flashcart.",
+      pitch: "Six heroes, three storylines, and a branching world; the Japan-only classic, played the way most people first met it." },
     { id: "trials-of-mana", title: "Trials of Mana (3D Remake)", year: 2020, fame: 2, series: "mana", platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 25,
       tags: ["action", "party", "jrpg", "fantasy", "story", "builds", "zelda-like"], aka: ["seiken densetsu 3"],
       note: "A full 3D remake of the 16-bit original.",
