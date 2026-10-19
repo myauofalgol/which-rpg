@@ -2027,6 +2027,7 @@ window.RPG_DATA = {
       pitch: "The NES original rebuilt with redrawn pixel art, a re-arranged score and quality-of-life fixes." },
     { id: "ff3", title: "Final Fantasy III", year: 1990, fame: 2, preferred: "ff3-pixel-remaster", platforms: ["nes"], hours: 20,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "retro", "builds"], aka: ["ff3", "final fantasy 3"],
+      fan: true, note: "The Famicom original was never officially released in English; the SNES game North America knew as Final Fantasy III was actually Final Fantasy VI. Play it via the English fan translation patch, so it needs an emulator or flashcart.",
       pitch: "The game that introduced the job system, sending four orphans out to restore balance to the crystals." },
     { id: "ff3-pixel-remaster", title: "Final Fantasy III (Pixel Remaster)", year: 2021, fame: 2, of: "ff3", platforms: ["pc", "ps4", "xsx", "switch", "mobile"], hours: 20,
       tags: ["turn-based", "party", "jrpg", "fantasy", "story", "builds"], aka: ["ff3", "final fantasy 3", "pixel remaster"],
