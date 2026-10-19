@@ -1,7 +1,7 @@
 /*
  * The audit page: every game in the catalogue, machine by machine.
- * A machine lists the games whose `platforms` name it; the picker's automatic
- * backward compatibility is not expanded here.
+ * Each machine lists the games made for it: automatic backward compatibility
+ * is not expanded here, and the hand-listed Xbox One entries are left out too.
  */
 (function () {
   "use strict";
@@ -78,8 +78,18 @@
     ]);
   }
 
+  // Xbox One is the one machine with hand-listed backward-compatibility
+  // entries, told apart by their note; the audit keeps them off its Xbox One
+  // list, which shows only the games made for the console.
+  function xboxBackCompat(game) {
+    return !!game.note && game.note.toLowerCase().indexOf("xbox via backward compatibility") === 0;
+  }
+
   function entriesFor(platformKey) {
-    const entries = DATA.games.filter((g) => g.platforms.indexOf(platformKey) !== -1);
+    const entries = DATA.games.filter((g) =>
+      g.platforms.indexOf(platformKey) !== -1 &&
+      !(platformKey === "xb1" && xboxBackCompat(g))
+    );
     entries.sort((a, b) => a.title.localeCompare(b.title));
     return entries;
   }
@@ -191,7 +201,7 @@
 
   document.querySelector("#audit-summary").textContent =
     DATA.games.length + " games across " + DATA.platforms.length + " machines. " +
-    "Backward compatibility is left to the picker, though a few Xbox One games that run that way are kept and marked in their notes. " +
+    "Backward compatibility is left to the picker: each machine lists only the games made for it. " +
     "Games with a \u201cFan translation\u201d chip are Japan-only, playable via an English fan translation patch with an emulator or flashcart. " +
     "Each game carries a 1-4 fame tier, shown beside it, that the picker\u2019s slider leans on:";
 
