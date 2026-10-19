@@ -210,6 +210,10 @@ window.RPG_DATA = {
     { id: "hades", title: "Hades", year: 2020, fame: 3, platforms: ["pc", "ps5", "ps4", "xsx", "xb1", "switch"], hours: 22,
       tags: ["action", "solo", "roguelite", "fantasy", "story", "challenge", "builds"],
       pitch: "Fight your way out of the underworld again and again; every run moves the story and your power forward." },
+    { id: "baroque-remake", title: "Baroque (Remake)", year: 2007, fame: 2, platforms: ["ps2", "wii"], hours: 12,
+      tags: ["action", "solo", "roguelite", "post-apoc", "surreal", "story", "challenge", "dark-fantasy"],
+      note: "A remake of the Japan-only 1998 Saturn original, rebuilt in 3D with a third-person camera and reworked combat; an optional first-person view is included.",
+      pitch: "A bleak, surreal roguelike set in a world ruined by the Blaze, where dying is how the story moves forward." },
 
     // Party-based western RPGs
     { id: "bg3", title: "Baldur's Gate 3", year: 2023, fame: 4, series: "baldurs-gate", platforms: ["pc", "ps5", "xsx"], hours: 70,
