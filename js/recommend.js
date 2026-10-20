@@ -165,13 +165,21 @@
   // Which of your machines can play this game, and how. With none chosen,
   // there is no constraint: every platform the game runs on counts, natively.
   // When nativeOnly is set, a game only counts if it was made for the machine
-  // itself, so backward-compatible picks are left out.
+  // itself, so backward-compatible picks are left out. Steam Deck is not a
+  // platform of its own: it plays PC games Valve rates Verified or Playable,
+  // which is what the game's `deck` field records.
   function playableOn(game, machines, nativeOnly) {
     if (!machines.length) {
       return game.platforms.map(function (k) { return { machine: k, via: null }; });
     }
     var out = [];
     machines.forEach(function (m) {
+      if (m === "steamdeck") {
+        if (game.deck === 3 || game.deck === 2) {
+          out.push({ machine: m, via: null, deck: game.deck });
+        }
+        return;
+      }
       if (game.platforms.indexOf(m) !== -1) {
         out.push({ machine: m, via: null });
         return;
@@ -293,15 +301,18 @@
       var lineage = index.baseOf[g.id] || g.id;
       if (playedBases[lineage]) return;
       if (skippedBases[lineage]) return;
-      // Japan-only games with English fan translations stay hidden unless asked
-      // for: there is no official release to buy, so they are no ordinary pick
+      // Fan-translated versions stay hidden unless asked for: there is no official
+      // English release of this version to buy, so they are no ordinary pick
       if (g.fan && !fanOn) return;
       // "Hide ports": keep only games whose own machine is one you picked, so a
       // SNES game ported to the GBA drops out when you tick the GBA. It only
-      // bites once a machine is ticked, like the native-only filter.
+      // bites once a machine is ticked, like the native-only filter. Steam Deck
+      // counts as PC here, since every Deck game is a PC game.
       if (homeOnly && machines.length) {
         var where = index.home[g.id] || [];
-        if (!machines.some(function (m) { return where.indexOf(m) !== -1; })) return;
+        if (!machines.some(function (m) {
+          return where.indexOf(m === "steamdeck" ? "pc" : m) !== -1;
+        })) return;
       }
       var on = playableOn(g, machines, nativeOnly);
       if (!on.length) return;

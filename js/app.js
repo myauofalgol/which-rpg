@@ -57,6 +57,22 @@
     ]);
   }
 
+  // Valve's Steam Deck rating, shown wherever a game carries one
+  function deckChip(g) {
+    if (g.deck !== 2 && g.deck !== 3) return null;
+    const verified = g.deck === 3;
+    const note = verified
+      ? "Valve rates this game Steam Deck Verified: it works out of the box"
+      : "Valve rates this game Steam Deck Playable: it runs, but may need manual tweaks";
+    return el("span", {
+      class: "deck-chip " + (verified ? "deck-verified" : "deck-playable"),
+      title: note
+    }, [
+      el("span", { "aria-hidden": "true", text: verified ? "Deck Verified" : "Deck Playable" }),
+      el("span", { class: "sr-only", text: " (" + note + ")" })
+    ]);
+  }
+
   const LENGTH_OPTIONS = [
     { key: "short", label: "A weekend or two", detail: "under 20 hours" },
     { key: "medium", label: "A few weeks", detail: "20 to 45 hours" },
@@ -457,10 +473,13 @@
   // The native-only filter only has meaning once a machine is ticked, so it is
   // hidden until then. It never clears a saved preference on its own.
   const nativeBox = $("#native-only");
+  const nativeOpt = $("#native-opt");
   const nativeWrap = $("#machine-filter");
 
   function renderNativeToggle() {
     nativeBox.checked = state.native;
+    const deckOnly = state.machines.length === 1 && state.machines[0] === "steamdeck";
+    nativeOpt.hidden = deckOnly;
     nativeWrap.hidden = !state.machines.length;
   }
 
@@ -626,6 +645,11 @@
       return lead + ", from every machine, " + len + fame + ". " +
         result.eligible + " games in the list are in the running.";
     }
+    if (state.machines.length === 1 && state.machines[0] === "steamdeck") {
+      const homeNote = state.home ? ", with ports from other machines left out" : "";
+      return lead + ", Steam Deck Verified or Playable games" + homeNote + ", " + len + fame + ". " +
+        result.eligible + " games in the list are rated for Deck.";
+    }
     const machines = listJoin(state.machines.map(shortName));
     if (state.home) {
       return lead + ", games of " + machines + " with ports from other machines left out, " + len + fame + ". " +
@@ -672,7 +696,13 @@
   }
 
   function playLine(on) {
-    return on.map((o) => shortName(o.machine) + (o.via ? " (" + shortName(o.via) + " version)" : "")).join(", ");
+    return on.map((o) => {
+      if (o.via) return shortName(o.machine) + " (" + shortName(o.via) + " version)";
+      if (o.machine === "steamdeck" && o.deck) {
+        return "Steam Deck (" + (o.deck === 3 ? "Verified" : "Playable") + ")";
+      }
+      return shortName(o.machine);
+    }).join(", ");
   }
 
   function gauge(hours) {
@@ -749,7 +779,7 @@
     return el("article", { class: "pick window", "aria-labelledby": "pick-" + g.id }, [
       el("p", { class: "nameplate", text: ORDINALS[rank] }),
       el("h3", { class: "pick-title", id: "pick-" + g.id }, [
-        gameName(g), regionMark(g), fanChip(g), el("span", { class: "pick-year", text: g.year })
+        gameName(g), regionMark(g), deckChip(g), fanChip(g), el("span", { class: "pick-year", text: g.year })
       ]),
       el("p", { class: "pitch", text: g.pitch }),
       el("div", { class: "why" }, [
@@ -807,7 +837,7 @@
     const fame = fameChip(g);
     return el("li", { class: "more-item" }, [
       el("div", { class: "more-top" }, [
-        el("span", { class: "more-title" }, [gameName(g), regionMark(g), fanChip(g)]),
+        el("span", { class: "more-title" }, [gameName(g), regionMark(g), deckChip(g), fanChip(g)]),
         el("span", { class: "more-meta" }, [
           "About " + g.hours + " hours" + (verdict && s.length !== "fits" ? ", " + verdict : "") + (fame ? " \u00b7 " : ""),
           fame

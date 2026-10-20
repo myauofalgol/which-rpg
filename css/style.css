@@ -376,6 +376,7 @@ button, input { font: inherit; color: inherit; }
 .opt-radio .mark::before { content: "\25B6"; }
 .opt-radio input:checked ~ .mark { visibility: visible; }
 .opt-radio:hover input:not(:checked) ~ .mark { visibility: visible; color: var(--faint); }
+.opt[hidden] { display: none; }
 
 /* Multiple choice: a small pixel box that fills in */
 .opt-check .mark {
@@ -725,6 +726,21 @@ button, input { font: inherit; color: inherit; }
   white-space: nowrap;
   cursor: help;
 }
+
+/* Valve's Steam Deck rating */
+.deck-chip {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 6px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  white-space: nowrap;
+  cursor: help;
+}
+.deck-verified { color: var(--mint); }
+.deck-playable { color: var(--amber); }
 
 .fame-key {
   display: grid;

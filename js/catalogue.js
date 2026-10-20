@@ -78,6 +78,22 @@
     ]);
   }
 
+  // Valve's Steam Deck rating, shown wherever a game carries one
+  function deckChip(g) {
+    if (g.deck !== 2 && g.deck !== 3) return null;
+    const verified = g.deck === 3;
+    const note = verified
+      ? "Valve rates this game Steam Deck Verified: it works out of the box"
+      : "Valve rates this game Steam Deck Playable: it runs, but may need manual tweaks";
+    return el("span", {
+      class: "deck-chip " + (verified ? "deck-verified" : "deck-playable"),
+      title: note
+    }, [
+      el("span", { "aria-hidden": "true", text: verified ? "Deck Verified" : "Deck Playable" }),
+      el("span", { class: "sr-only", text: " (" + note + ")" })
+    ]);
+  }
+
   // Xbox One is the one machine with hand-listed backward-compatibility
   // entries, told apart by their note; the audit keeps them off its Xbox One
   // list, which shows only the games made for the console.
@@ -86,10 +102,11 @@
   }
 
   function entriesFor(platformKey) {
-    const entries = DATA.games.filter((g) =>
-      g.platforms.indexOf(platformKey) !== -1 &&
-      !(platformKey === "xb1" && xboxBackCompat(g))
-    );
+    const entries = DATA.games.filter((g) => {
+      if (platformKey === "steamdeck") return g.deck === 2 || g.deck === 3;
+      return g.platforms.indexOf(platformKey) !== -1 &&
+        !(platformKey === "xb1" && xboxBackCompat(g));
+    });
     entries.sort((a, b) => a.title.localeCompare(b.title));
     return entries;
   }
@@ -139,6 +156,7 @@
             el("span", { class: "audit-title" }, [gameName(g), regionMark(g)]),
             el("span", { class: "audit-meta", text: " " + g.year + " \u00b7 " + g.hours + " hours" + (chip ? " \u00b7 " : "") }),
             chip,
+            deckChip(g),
             g.fan ? fanChip(g) : null,
             g.note ? el("p", { class: "audit-note", text: g.note }) : null
           ]);
@@ -163,7 +181,12 @@
           count,
           p.coverage === "complete" ? el("span", { class: "audit-complete", text: "Complete NA/EU list" }) : null
         ]),
-        el("div", { class: "audit-body", id: bodyId, hidden: !open }, [list])
+        el("div", { class: "audit-body", id: bodyId, hidden: !open }, [
+          p.key === "steamdeck"
+            ? el("p", { class: "hint", text: "Only PC games Valve currently rates Steam Deck Verified or Playable are listed here." })
+            : null,
+          list
+        ])
       ]));
     });
   }
@@ -202,6 +225,7 @@
   document.querySelector("#audit-summary").textContent =
     DATA.games.length + " games across " + DATA.platforms.length + " machines. " +
     "Backward compatibility is left to the picker: each machine lists only the games made for it. " +
+    "Steam Deck is the exception: it lists the PC games Valve currently rates Verified or Playable. " +
     "Games with a \u201cFan translation\u201d chip are Japan-only, playable via an English fan translation patch with an emulator or flashcart. " +
     "Each game carries a 1-4 fame tier, shown beside it, that the picker\u2019s slider leans on:";
 
