@@ -1,6 +1,6 @@
 # Which RPG should I play next?
 
-A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, found them lacking, or bounced off them), which machines you own (including a Steam Deck list limited to games Valve rates Verified or Playable), and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 1000 games with a short explanation for each pick. There's also an audit page at `catalogue.html` that lays every game out machine by machine. The footer's flag switch flips between regional game names where they differ.
+A small, static web page that suggests your next RPG. You tell it which RPGs you've played (and whether you loved them, thought they were fine, found them lacking, or bounced off them), which machines you own (including a Steam Deck list limited to games Valve rates Verified or Playable), and how long you want to sink into the next one, and it ranks a hand-curated catalogue of around 1,200 games with a short explanation for each pick. There's also an audit page at `catalogue.html` that lays every game out machine by machine. The footer's flag switch flips between regional game names where they differ.
 
 There's no build step, no framework, and no server: just HTML, CSS, and a few plain JavaScript files, which makes it a perfect fit for GitHub Pages.
 
