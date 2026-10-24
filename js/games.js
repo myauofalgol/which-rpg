@@ -37,7 +37,7 @@
  */
 window.RPG_DATA = {
   updated: "October 2026",
-  version: "0.15.4",
+  version: "0.15.5",
 
   platforms: [
     { key: "pc", label: "PC", short: "PC", coverage: "living", era: 1980 },
