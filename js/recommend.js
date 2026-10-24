@@ -56,6 +56,9 @@
     sameSeriesDisliked: -0.15,
     // A poor game says less about its series than an outright bad fit does
     sameSeriesBad: -0.08,
+    // Fan translations need a patched ROM and an emulator, so they get a small
+    // friction penalty even when the fan toggle is on
+    fan: -0.08,
     // The most the popularity slider can move a game at either extreme
     fame: 0.2,
     // The most a critic score can count against a game: 75 is neutral, 50 or
@@ -380,6 +383,7 @@
         if (g.series && badSeries[g.series]) series += WEIGHTS.sameSeriesBad;
       }
       var starter = g.starter ? (warm ? WEIGHTS.starterWarm : WEIGHTS.starterCold) : 0;
+      var fan = g.fan ? WEIGHTS.fan : 0;
       var fameNudge = WEIGHTS.fame * fameLean * (index.fame[g.id] || 0);
       var reception = receptionPenalty(index.review[g.id], index.reviewLevels);
       // Normally the closest match wins; "something different" rewards the least similar
@@ -392,7 +396,7 @@
         fit: fit,
         moodMatch: !different && hasMood && g.tags.some(function (t) { return moodSet[t] === true; }),
         length: lengthVerdict(g.hours, lengthKey),
-        score: baseScore + WEIGHTS.lengthFit * fit + series + starter + fameNudge + reception
+        score: baseScore + WEIGHTS.lengthFit * fit + series + starter + fan + fameNudge + reception
       });
     });
 

@@ -58,6 +58,7 @@ So under the hood, this is a small content-based recommender, the same broad ide
 - how closely it matches your profile (cosine similarity),
 - plus how well its length fits the time you said you have,
 - plus a small nudge if it shares a series with something you loved (or a penalty if it shares one with something you didn't),
+- minus a small friction penalty for fan-translated versions, even when the fan toggle is on,
 - plus a tiny bonus for widely loved "starter" games, which matters most when there's nothing else to go on,
 - plus a nudge for famous games, or against them, when the popularity slider is off-centre,
 - minus a penalty when critics rated it poorly, if it has a review score.
@@ -175,7 +176,7 @@ Each platform in `games.js` carries a `coverage` value, and the audit page at `c
 - **Steam Deck is a rating, not a platform.** The Steam Deck option lists only the PC games Valve currently rates Verified or Playable, using the `deck` field, and the list is partial until every PC entry has been checked. Nearly everything listed for PC is on Steam, but ratings vary and can change with patches, so check the store before buying; PC lists the whole computer catalogue.
 - **Xbox 360 and original Xbox games on modern consoles.** Only some of these run through backward compatibility, so games that do (like Fallout: New Vegas, Morrowind, and KOTOR) list Xbox One alongside their original machine and carry a note; the rest are Xbox 360 or Xbox only.
 - **Mobile is thin.** Only a handful of the classics have proper phone ports, so someone who picks only "Phone or tablet" will see a short list.
-- **Fan translations are opt-in.** Japan-only games with English translation patches stay hidden until you tick "Include Japan-only games with English fan translations" in the picker; they need a patched ROM and an emulator or flashcart, and they are marked on the audit page.
+- **Fan translations are opt-in.** Japan-only games with English translation patches stay hidden until you tick "Include Japan-only games with English fan translations" in the picker; they need a patched ROM and an emulator or flashcart, are marked on the audit page, and carry a small ranking penalty so they do not crowd out official releases.
 - **Game Gear, Mega-CD, Dreamcast and TurboGrafx are just starting.** Only the dedicated RPGs are listed so far, so owners of any of them see a short list until each sweep is done. The TurboGrafx lists follow the North American library, as the console barely reached Europe.
 - **Retro consoles are covered as their original versions.** Super Nintendo, Mega Drive, PlayStation, Saturn, Nintendo 64, GameCube, Game Boy Advance, and Xbox games list the retro console (and modern platforms too, where the same version is still sold). Where a remake or remaster is the definitive modern version it may stand as its own entry, shown in place of the original; otherwise the card's `note` names it.
 
