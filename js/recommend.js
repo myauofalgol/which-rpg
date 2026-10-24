@@ -58,10 +58,10 @@
     sameSeriesBad: -0.08,
     // The most the popularity slider can move a game at either extreme
     fame: 0.2,
-    // How much a mixed or poor critic score can count against a game. This is
-    // deliberately separate from fame: fame is how widely known a game is,
-    // reception is how well critics received it.
-    reception: 0.1,
+    // The most a critic score can count against a game: 75 is neutral, 50 or
+    // lower takes the full penalty. This is deliberately separate from fame:
+    // fame is how widely known a game is, reception is how critics received it.
+    reception: 0.4,
     starterCold: 0.12,
     starterWarm: 0.02,
     // How hard "show me something different" pulls against your taste profile
