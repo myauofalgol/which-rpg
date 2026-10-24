@@ -406,16 +406,28 @@
     scored = scored.filter(function (s) { return s.fit > 0; })
       .concat(scored.filter(function (s) { return s.fit === 0; }));
 
-    // Keep the headline picks varied: one per series in the top few, two per series overall.
-    // A mood switches this off: everything tagged with the mood comes before anything merely
-    // related, even if that means three Castlevanias in a row.
+    // Keep the headline picks varied: one per series in the top few, two per series
+    // overall when no mood is active. A mood normally switches this off so everything
+    // tagged with the mood comes first, but when enough different series match the
+    // mood, the top three still keep one per series.
+    var moodSeries = {};
+    if (hasMood) {
+      scored.forEach(function (s) {
+        if (!s.moodMatch) return;
+        moodSeries[s.game.series || index.baseOf[s.game.id] || s.game.id] = true;
+      });
+    }
+    var spreadMoods = hasMood && Object.keys(moodSeries).length >= topDistinct;
+
     var picks = [];
     var deferred = [];
     var seriesCount = {};
     scored.forEach(function (s) {
       var key = s.game.series || index.baseOf[s.game.id] || s.game.id;
       var count = seriesCount[key] || 0;
-      var cap = hasMood ? Infinity : (picks.length < topDistinct ? 1 : 2);
+      var cap;
+      if (picks.length < topDistinct && (!hasMood || spreadMoods)) cap = 1;
+      else cap = hasMood ? Infinity : 2;
       if (count >= cap) {
         deferred.push(s);
         return;
@@ -464,6 +476,27 @@
         if (a.moodMatch !== b.moodMatch) return a.moodMatch ? -1 : 1;
         return b.score - a.score || a.game.title.localeCompare(b.game.title);
       });
+    }
+
+    // The second-chance and fill steps can reorder the list, so finish by restoring
+    // the top-three variety rule: swap a same-series pick down for a later pick from
+    // a different series when one is available.
+    if (!hasMood || spreadMoods) {
+      var topKeys = {};
+      for (var t = 0; t < Math.min(topDistinct, picks.length); t++) {
+        var tKey = picks[t].game.series || index.baseOf[picks[t].game.id] || picks[t].game.id;
+        if (!topKeys[tKey]) { topKeys[tKey] = true; continue; }
+        for (var u = t + 1; u < picks.length; u++) {
+          var uKey = picks[u].game.series || index.baseOf[picks[u].game.id] || picks[u].game.id;
+          if (topKeys[uKey]) continue;
+          if (hasMood && !picks[u].moodMatch) continue;
+          var swap = picks[t];
+          picks[t] = picks[u];
+          picks[u] = swap;
+          topKeys[uKey] = true;
+          break;
+        }
+      }
     }
 
     picks.forEach(function (s) { s.why = explain(index, s.game, played, moods, warm, different); });
