@@ -197,7 +197,10 @@
       });
     }
     const m = params.get("m");
-    if (m) state.machines = m.split(",").filter((k) => platformByKey[k]);
+    if (m) {
+      const requested = m.split(",").filter((k) => platformByKey[k]);
+      state.machines = machinePlatforms().map((x) => x.key).filter((k) => requested.includes(k));
+    }
     if (params.get("n") === "1") state.native = true;
     if (params.get("h") === "1") state.home = true;
     if (params.get("d") === "1") state.different = true;
@@ -468,18 +471,27 @@
 
   // ---------- Machines, length, moods ----------
 
+  // PC stays first as the evergreen platform; everything else is newest first.
+  function machinePlatforms() {
+    return DATA.platforms.slice().sort((a, b) => {
+      if (a.key === "pc") return -1;
+      if (b.key === "pc") return 1;
+      return b.era - a.era;
+    });
+  }
+
   function renderMachines() {
     const box = $("#machines");
     box.textContent = "";
-    DATA.platforms.forEach((p) => {
+    machinePlatforms().forEach((p) => {
       box.append(el("label", { class: "opt opt-check" }, [
         el("input", {
           type: "checkbox", value: p.key, checked: state.machines.includes(p.key),
           onchange: (e) => {
             if (e.target.checked) state.machines.push(p.key);
             else state.machines = state.machines.filter((k) => k !== p.key);
-            // Keep machines in catalogue order so links and summaries are stable
-            state.machines = DATA.platforms.map((x) => x.key).filter((k) => state.machines.includes(k));
+            // Keep machines in display order so links and summaries match the list
+            state.machines = machinePlatforms().map((x) => x.key).filter((k) => state.machines.includes(k));
             changed();
             renderNativeToggle();
           }
