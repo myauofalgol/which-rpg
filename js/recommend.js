@@ -16,6 +16,7 @@
  *      + a small nudge for sequels or siblings of games you loved
  *      + a popularity nudge when the slider leans towards crowd-pleasers
  *        or hidden gems
+ *      - a small penalty when critics rated the game poorly, if it has a score
  *   5. A game with several editions (an original and a remaster) is shown once - as the
  *      preferred edition by default, or the original when `preferOriginal` is set - and
  *      counts as one game for the "have you played it" and series-variety rules.
@@ -57,6 +58,10 @@
     sameSeriesBad: -0.08,
     // The most the popularity slider can move a game at either extreme
     fame: 0.2,
+    // How much a mixed or poor critic score can count against a game. This is
+    // deliberately separate from fame: fame is how widely known a game is,
+    // reception is how well critics received it.
+    reception: 0.1,
     starterCold: 0.12,
     starterWarm: 0.02,
     // How hard "show me something different" pulls against your taste profile
@@ -102,6 +107,16 @@
       fame[g.id] = (typeof t === "number" && t >= 1 && t <= 4) ? (t - 2.5) / 1.5 : 0;
     });
 
+    // Optional critic scores, kept apart from fame. An edition with no score is
+    // neutral, so obscure and retro games are not punished for never being rated.
+    var review = {};
+    games.forEach(function (g) {
+      var r = g.review;
+      var score = r && typeof r.score === "number" && isFinite(r.score) ? r.score : null;
+      review[g.id] = (score !== null && score >= 0 && score <= 100) ? score : null;
+    });
+    var reviewLevels = data.reviewLevels || { mixedBelow: 75, floor: 50 };
+
     // Where a game "lives": its oldest machine that isn't still growing, so a
     // SNES game ported up to the GBA still points back at the SNES. PC, phones
     // and the current consoles never count as the oldest, so a game on nothing
@@ -138,8 +153,9 @@
       preferredOf[base] = (b && b.preferred && byId[b.preferred]) ? b.preferred : base;
     });
 
-    return { data: data, idf: idf, vectors: vectors, byId: byId, fame: fame, home: home,
-             baseOf: baseOf, editionsOf: editionsOf, preferredOf: preferredOf };
+    return { data: data, idf: idf, vectors: vectors, byId: byId, fame: fame, review: review,
+             reviewLevels: reviewLevels, home: home, baseOf: baseOf, editionsOf: editionsOf,
+             preferredOf: preferredOf };
   }
 
   function normalise(v) {
@@ -211,6 +227,19 @@
     if (hours > range.max) return "longer";
     if (hours < range.min) return "shorter";
     return "fits";
+  }
+
+  // Scores at or above the mixed threshold are left alone. Below it the penalty
+  // ramps up, reaching full strength at the floor. An unrated game scores 0, so
+  // it is neither rewarded nor punished for having no reviews.
+  function receptionPenalty(score, levels) {
+    if (typeof score !== "number" || !isFinite(score)) return 0;
+    levels = levels || { mixedBelow: 75, floor: 50 };
+    if (score >= levels.mixedBelow) return 0;
+    var span = levels.mixedBelow - levels.floor;
+    if (span <= 0) return 0;
+    var lean = (score - levels.mixedBelow) / span;
+    return WEIGHTS.reception * Math.max(-1, lean);
   }
 
   function recommend(index, state, opts) {
@@ -352,6 +381,7 @@
       }
       var starter = g.starter ? (warm ? WEIGHTS.starterWarm : WEIGHTS.starterCold) : 0;
       var fameNudge = WEIGHTS.fame * fameLean * (index.fame[g.id] || 0);
+      var reception = receptionPenalty(index.review[g.id], index.reviewLevels);
       // Normally the closest match wins; "something different" rewards the least similar
       var baseScore = different ? WEIGHTS.different * -taste : taste;
 
@@ -362,7 +392,7 @@
         fit: fit,
         moodMatch: !different && hasMood && g.tags.some(function (t) { return moodSet[t] === true; }),
         length: lengthVerdict(g.hours, lengthKey),
-        score: baseScore + WEIGHTS.lengthFit * fit + series + starter + fameNudge
+        score: baseScore + WEIGHTS.lengthFit * fit + series + starter + fameNudge + reception
       });
     });
 
@@ -502,6 +532,7 @@
     recommend: recommend,
     playableOn: playableOn,
     lengthFit: lengthFit,
+    receptionPenalty: receptionPenalty,
     LENGTHS: LENGTHS,
     BACKWARD: BACKWARD
   };

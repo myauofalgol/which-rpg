@@ -133,6 +133,26 @@
     });
   }
 
+  const REVIEW_LEVELS = DATA.reviewLevels || { mixedBelow: 75, floor: 50, mixedLabel: "Mixed reception" };
+
+  function reviewInfo(g) {
+    const r = g.review;
+    if (!r || typeof r.score !== "number" || !isFinite(r.score) || r.score < 0 || r.score > 100) return null;
+    return { score: r.score, source: r.source || "Metacritic" };
+  }
+
+  // A critic score below the mixed cut-off, kept separate from the fame chip
+  function reviewChip(g) {
+    const r = reviewInfo(g);
+    if (!r || r.score >= REVIEW_LEVELS.mixedBelow) return null;
+    const tone = r.score < REVIEW_LEVELS.floor ? "critics were negative" : "critics were mixed";
+    const note = r.source + " score " + r.score + "/100: " + tone;
+    return el("span", { class: "review-chip", title: note }, [
+      el("span", { "aria-hidden": "true", text: REVIEW_LEVELS.mixedLabel }),
+      el("span", { class: "sr-only", text: " (" + note + ")" })
+    ]);
+  }
+
   // "A", "A and B", "A, B, and C" (Oxford comma, always)
   function listJoin(items) {
     if (items.length <= 1) return items.join("");
@@ -769,6 +789,8 @@
     const why = s.why;
     const verdict = verdictText(s);
     const fame = fameChip(g);
+    const review = reviewInfo(g);
+    const reception = reviewChip(g);
     const moodChips = why.moods.length
       ? el("div", { class: "why-moods" }, [
         el("span", { class: "why-moods-label", id: "mood-" + g.id, text: "Matches your mood:" }),
@@ -779,7 +801,8 @@
     return el("article", { class: "pick window", "aria-labelledby": "pick-" + g.id }, [
       el("p", { class: "nameplate", text: ORDINALS[rank] }),
       el("h3", { class: "pick-title", id: "pick-" + g.id }, [
-        gameName(g), regionMark(g), deckChip(g), fanChip(g), el("span", { class: "pick-year", text: g.year })
+        gameName(g), regionMark(g), deckChip(g), fanChip(g), reception,
+        el("span", { class: "pick-year", text: g.year })
       ]),
       el("p", { class: "pitch", text: g.pitch }),
       el("div", { class: "why" }, [
@@ -798,7 +821,9 @@
         el("dt", { text: "Play on" }),
         el("dd", { text: playLine(s.on) }),
         fame ? el("dt", { text: "Fame" }) : null,
-        fame ? el("dd", null, [fame]) : null
+        fame ? el("dd", null, [fame]) : null,
+        review ? el("dt", { text: "Reviews" }) : null,
+        review ? el("dd", { text: review.score + "/100 on " + review.source }) : null
       ]),
       g.note ? el("p", { class: "note", text: g.note }) : null,
       el("div", { class: "pick-actions" }, [
@@ -835,12 +860,15 @@
     else if (why.moods.length) reason = "Matches " + listJoin(why.moods.map((t) => DATA.tags[t].mood.toLowerCase()));
     const verdict = verdictText(s);
     const fame = fameChip(g);
+    const review = reviewInfo(g);
+    const reception = reviewChip(g);
     return el("li", { class: "more-item" }, [
       el("div", { class: "more-top" }, [
-        el("span", { class: "more-title" }, [gameName(g), regionMark(g), deckChip(g), fanChip(g)]),
+        el("span", { class: "more-title" }, [gameName(g), regionMark(g), deckChip(g), fanChip(g), reception]),
         el("span", { class: "more-meta" }, [
           "About " + g.hours + " hours" + (verdict && s.length !== "fits" ? ", " + verdict : "") + (fame ? " \u00b7 " : ""),
-          fame
+          fame,
+          review ? " \u00b7 " + review.score + "/100 " + review.source : null
         ])
       ]),
       el("span", { class: "more-pitch", text: g.pitch }),

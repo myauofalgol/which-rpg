@@ -68,6 +68,21 @@
     });
   }
 
+  const REVIEW_LEVELS = DATA.reviewLevels || { mixedBelow: 75, floor: 50, mixedLabel: "Mixed reception" };
+
+  // A critic score below the mixed cut-off, kept separate from the fame chip
+  function reviewChip(g) {
+    const r = g.review;
+    if (!r || typeof r.score !== "number" || !isFinite(r.score) || r.score < 0 || r.score > 100 || r.score >= REVIEW_LEVELS.mixedBelow) return null;
+    const source = r.source || "Metacritic";
+    const tone = r.score < REVIEW_LEVELS.floor ? "critics were negative" : "critics were mixed";
+    const note = source + " score " + r.score + "/100: " + tone;
+    return el("span", { class: "review-chip", title: note }, [
+      el("span", { "aria-hidden": "true", text: REVIEW_LEVELS.mixedLabel }),
+      el("span", { class: "sr-only", text: " (" + note + ")" })
+    ]);
+  }
+
   // A marker for the Japan-only games that only play in English once patched
   function fanChip(g) {
     if (!g.fan) return null;
@@ -152,10 +167,13 @@
       const list = entries.length
         ? el("ul", { class: "audit-list" }, entries.map((g) => {
           const chip = fameChip(g);
+          const reception = reviewChip(g);
+          const review = g.review && typeof g.review.score === "number" && isFinite(g.review.score) && g.review.score >= 0 && g.review.score <= 100 ? g.review : null;
           return el("li", null, [
             el("span", { class: "audit-title" }, [gameName(g), regionMark(g)]),
-            el("span", { class: "audit-meta", text: " " + g.year + " \u00b7 " + g.hours + " hours" + (chip ? " \u00b7 " : "") }),
+            el("span", { class: "audit-meta", text: " " + g.year + " \u00b7 " + g.hours + " hours" + (review ? " \u00b7 " + review.score + "/100 " + (review.source || "Metacritic") : "") + (chip || reception ? " \u00b7 " : "") }),
             chip,
+            reception,
             deckChip(g),
             g.fan ? fanChip(g) : null,
             g.note ? el("p", { class: "audit-note", text: g.note }) : null
@@ -227,6 +245,7 @@
     "Backward compatibility is left to the picker: each machine lists only the games made for it. " +
     "Steam Deck is the exception: it lists the PC games Valve currently rates Verified or Playable. " +
     "Games with a \u201cFan translation\u201d chip are Japan-only, playable via an English fan translation patch with an emulator or flashcart. " +
+    "Games with a \u201cMixed reception\u201d chip have a low Metacritic or OpenCritic score, which the picker treats as a small penalty; unrated games stay neutral. " +
     "Each game carries a 1-4 fame tier, shown beside it, that the picker\u2019s slider leans on:";
 
   const fameKey = document.querySelector("#fame-key");

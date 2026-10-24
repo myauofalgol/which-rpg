@@ -59,9 +59,12 @@ So under the hood, this is a small content-based recommender, the same broad ide
 - plus how well its length fits the time you said you have,
 - plus a small nudge if it shares a series with something you loved (or a penalty if it shares one with something you didn't),
 - plus a tiny bonus for widely loved "starter" games, which matters most when there's nothing else to go on,
-- plus a nudge for famous games, or against them, when the popularity slider is off-centre.
+- plus a nudge for famous games, or against them, when the popularity slider is off-centre,
+- minus a small penalty when critics rated it poorly, if it has a review score.
 
 **The popularity slider leans the list.** Every game carries a hand-set fame tier from 1 (a deep cut) to 4 (a household name). Sliding towards crowd-pleasers nudges the famous games up and the obscure ones down; sliding towards hidden gems does the reverse. In the middle it does nothing at all, and your taste profile still decides the order within each leaning.
+
+**Critical reception is a soft signal, not a filter.** An edition can carry an optional 0-100 Metacritic or OpenCritic score in its `review` field. Scores at 75 or above are left alone; below that a small penalty grows as the score falls, reaching full strength at 50 or lower. Unrated games are neutral, so a Japan-only or retro title is not punished for never being reviewed. The score is kept separate from the fame tier: fame is how widely known a game is, reception is how critics received it, and the two are counted independently. A game with a mixed score carries a "Mixed reception" chip on its card, with the source and score in its tooltip; the exact figure also appears in the card's facts.
 
 Length is a soft preference with a hard edge: a game a little over your range just loses a few points and gets flagged as "longer than you asked for", but anything more than double (or less than half) your range is held back until everything that fits has been shown. A 100-hour Persona game is never your top pick for a weekend.
 
@@ -73,7 +76,7 @@ Length is a soft preference with a hard edge: a game a little over your range ju
 
 All the weights live in the `WEIGHTS` object in `recommend.js`, so if you think length should matter more, or moods should count less, that's the place to tune.
 
-**A game with several editions is shown once.** Where a game lists both an original and a modern edition (the Final Fantasy Pixel Remasters, Adventures of Mana), the picker treats them as one game: it shows the edition your machines can best run, favouring the modern one, and the "Prefer original releases" box in the sidebar switches it back to the original where you can still play it. Playing either edition counts as playing the game, so the other is never suggested back at you.
+**A game with several editions is shown once.** Where a game lists both an original and a modern edition (the Final Fantasy Pixel Remasters, Adventures of Mana), the picker treats them as one game: it shows the edition your machines can best run, favouring the modern one, and the "Prefer original releases" box in the sidebar switches it back to the original where you can still play it. Playing either edition counts as playing the game, so the other is never suggested back at you. A review score belongs to the edition it was given to, so a well-received remaster and a poorly received original are judged separately.
 
 ## How do I add or fix a game?
 
@@ -94,6 +97,7 @@ A few rules of thumb:
 - **`hours`** is a rough main-story figure. [HowLongToBeat](https://howlongtobeat.com/)'s "Main Story" number is a sensible source.
 - **`origin`** is optional: use `"west"` for a game made by a Western studio, or `"other"` for a studio outside Japan and the West (for example, Chinese or Korean developers). Japanese studios are the default and need no field. The picker turns this into the "From Japan" and "From the West" mood options. Origin is about the studio that developed the game, not its publisher or its style, so a Western-made JRPG-style game is still `"west"`.
 - **`fame`** is the 1-4 popularity tier the slider leans on. The tier names live in `fameLevels` near the top of the file (Deep cut, Known to RPG fans, Well-known, Household name) and are shown as a chip on the pick cards and the audit page, which makes sweeping for outliers easy. Edit `fameLevels` to reword them.
+- **`review`** is an optional critic score for this edition, e.g. `review: { score: 58, source: "Metacritic" }`. Use a 0-100 Metacritic or OpenCritic figure. A score below the `mixedBelow` cut-off in `reviewLevels` (75 by default) gets a small ranking penalty and a "Mixed reception" chip; the exact score and source are shown on the card. Unrated games stay neutral, so retro and obscure titles are not punished for lacking a score. Keep it separate from `fame`: popularity and critical reception are different things.
 - **`tags`** should come from the `tags` object near the top of the file. Five to eight tags per game works well; too few and the game rarely matches anything, too many and it matches everything a little.
 - **`series`** is optional but worth setting for sequels, so they get grouped sensibly.
 - **`aka`** is an optional list of search aliases, which is how "bg3" finds Baldur's Gate 3 and "ff7" finds every Final Fantasy VII.
@@ -151,6 +155,7 @@ Each platform in `games.js` carries a `coverage` value, and the audit page at `c
 
 - **Hours are approximate.** They're rough main-story figures, and side content in most of these games can easily double them.
 - **Fame tiers are rough guesses.** The 1-4 fame tier is a hand-set hunch rather than sales data, so treat the slider as a lean rather than a ranking. If a result feels wrong, check the game's tier on the audit page and adjust it in `games.js`.
+- **Review scores are optional and partial.** Coverage is best for well-known games; many deep cuts, retro titles, and Japan-only releases have no Metacritic or OpenCritic figure, so they stay neutral. Aggregate scores can change as more reviews arrive, so check the source before treating one as current.
 - **Platforms change.** The lists reflect what could be confirmed as of October 2026, but ports and remasters arrive constantly, so check the store before buying. The footer's `version` looks after itself: `.github/workflows/version.yml` bumps the patch number on every push that touches the site and pushes it as its own commit, then `.github/workflows/deploy.yml` builds and deploys once it sees that commit, while a hand-edited version is left alone — use that for major bumps (changes that break shared links) and minor ones (new platforms or features). Keep `updated` current for catalogue changes.
 - **Steam Deck is a rating, not a platform.** The Steam Deck option lists only the PC games Valve currently rates Verified or Playable, using the `deck` field, and the list is partial until every PC entry has been checked. Nearly everything listed for PC is on Steam, but ratings vary and can change with patches, so check the store before buying; PC lists the whole computer catalogue.
 - **Xbox 360 and original Xbox games on modern consoles.** Only some of these run through backward compatibility, so games that do (like Fallout: New Vegas, Morrowind, and KOTOR) list Xbox One alongside their original machine and carry a note; the rest are Xbox 360 or Xbox only.
