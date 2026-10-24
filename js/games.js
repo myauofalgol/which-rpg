@@ -1428,7 +1428,7 @@ window.RPG_DATA = {
       tags: ["turn-based", "party", "jrpg", "fantasy", "exploration", "story", "retro"], starter: true, aka: ["skies of arcadia"],
       note: "The GameCube version is the enhanced Skies of Arcadia Legends.",
       pitch: "Sky pirates, airships, and a world of floating islands; one of the warmest, most swashbuckling RPGs ever made." },
-    { id: "skies-of-arcadia-legends", title: "Skies of Arcadia Legends", year: 2002, fame: 2, review: { score: 84, source: "Metacritic" }, of: "skies-of-arcadia", platforms: ["gamecube"], hours: 45, preferred: "skies-of-arcadia"
+    { id: "skies-of-arcadia-legends", title: "Skies of Arcadia Legends", year: 2002, fame: 2, review: { score: 84, source: "Metacritic" }, of: "skies-of-arcadia", platforms: ["gamecube"], hours: 45,
       tags: ["turn-based", "party", "jrpg", "fantasy", "exploration", "story", "retro"], starter: true, aka: ["skies of arcadia legends", "skies of arcadia"],
       note: "The enhanced GameCube version, with extra content and a lower encounter rate.",
       pitch: "The Dreamcast classic rebuilt for GameCube, with extra content, new characters, and fewer random battles." },
