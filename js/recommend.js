@@ -20,7 +20,7 @@
  *   5. A game with several editions (an original and a remaster) is shown once - as the
  *      preferred edition by default, or the original when `preferOriginal` is set - and
  *      counts as one game for the "have you played it" and series-variety rules.
- *   6. The top picks are spread across series so you don't get three Souls games -
+ *   6. The top picks are spread across series so you don't get three games from one series -
  *      unless you asked for a mood, in which case its games all come first, or
  *      unless the spread would leave the list short, in which case it is filled up.
  */
